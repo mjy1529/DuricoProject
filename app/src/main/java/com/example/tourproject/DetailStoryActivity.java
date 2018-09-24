@@ -40,7 +40,7 @@ public class DetailStoryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.app_bar_menu_back :
+            case R.id.action_home :
                 Intent intent = new Intent(DetailStoryActivity.this, StoryListActivity.class);
                 startActivity(intent);
                 return true ;

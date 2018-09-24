@@ -5,9 +5,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +28,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoryListActivity extends AppCompatActivity implements  ViewFlipperAction.ViewFlipperCallback, AdapterView.OnItemClickListener{
+public class StoryListActivity extends AppCompatActivity implements  ViewFlipperAction.ViewFlipperCallback{
+
+    Toolbar toolbar; //툴바설정
 
     //베스트 이미지 화면을 위한 변수
     ViewFlipper flipper;
@@ -33,22 +41,18 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
     String dbName = "test1.db";
     ArrayList<String> arrlist = null; //Storys table에 있는 모든 레코드의 title을 담는 변수
     ArrayList<String> arr_id_list = null;//Storys table에 있는 모든 레코드의 story_id를 담는 변수
+    ArrayList<String> arr_storycnt_list = null;
 
     //list를 이용하기 위한 변수
     ArrayAdapter<String> Adapter;
     ListView list;
 
-    //뒤로가기 버튼을 위한 메소드
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_actions, menu) ;
-        return true ;
-    }
+    //액션바 홈버튼 동작을 위한 메소드
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.app_bar_menu_back :
-                Intent intent = new Intent(StoryListActivity.this, StoryMainActivity.class);
+            case android.R.id.home:
+                Intent intent = new Intent(StoryListActivity.this, MainSelectActivity.class);
                 startActivity(intent);
                 return true ;
             default :
@@ -62,18 +66,73 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_list);
 
+        Toolbar  myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.home)).getBitmap();
+        bitmap = Bitmap.createScaledBitmap(bitmap, 90, 90, true);
+        actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
+
         //db 생성 메소드
         createDatabase();
 
         arrlist = new ArrayList<String>();
         arr_id_list = new ArrayList<String>();
+        arr_storycnt_list = new ArrayList<String>();
         //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
         selectData();
-
-        Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrlist);
+        for(int i = 0; i < arr_id_list.size(); i++)
+            selectcnt(Integer.parseInt(arr_id_list.get(i)));
+        ArrayList<ItemDataStoryList> oData = new ArrayList<>();
+        for (int i=0; i<arr_id_list.size(); i++)
+        {
+            ItemDataStoryList oItem = new ItemDataStoryList();
+            oItem.strTitle = arrlist.get(i);
+            oItem.strDate = arr_storycnt_list.get(i) + "개의 이야기가 있습니다.";
+            oData.add(oItem);
+        }
+        //Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrlist);
         list = (ListView) findViewById(R.id.l_view);
-        list.setAdapter(Adapter);
-        list.setOnItemClickListener(this);
+        ListAdapterStoryList oAdapter = new ListAdapterStoryList(oData);
+        list.setAdapter(oAdapter);
+        Log.i("dddddddd","deew3dddd");
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("ddddd","ddddd");
+                //선택된 위치를 저장하는 변수
+                final Integer selectedPos = i;
+                //큰 스토리에 대한 대략적인 설명을 위한 dialog
+                AlertDialog.Builder alertDlg = new AlertDialog.Builder(view.getContext());
+                //dialog에 제목
+                alertDlg.setTitle(arrlist.get(selectedPos));
+                alertDlg.setPositiveButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDlg.setNegativeButton(R.string.button_start, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String position = arr_id_list.get(selectedPos);
+                        dialog.dismiss();
+                        Intent intent = new Intent(StoryListActivity.this, DetailStoryActivity.class);
+                        //story_id를 넘겨준다
+                        intent.putExtra("p_id", position);
+                        startActivity(intent);
+                    }
+                });
+                //story_id에 해당하는 explanation을 검색해서 dialog에 뿌린다
+                String sql = "select explanation from Storys where story_id=" + arr_id_list.get(selectedPos);
+                Cursor result = database.rawQuery(sql, null);
+                result.moveToFirst();
+                alertDlg.setMessage(result.getString(0));
+                alertDlg.show();
+            }
+        });
 
         //UI
         flipper = (ViewFlipper) findViewById(R.id.flipper_bestImage);
@@ -95,10 +154,11 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         flipper.addView(view1);
         flipper.addView(view2);
         flipper.addView(view3);
+
         //리스너설정 - 좌우 터치시 화면넘어가기
         flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
     }
-
+/*
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
         //선택된 위치를 저장하는 변수
@@ -131,7 +191,7 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         alertDlg.setMessage(result.getString(0));
         alertDlg.show();
     }
-
+*/
     //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
     public void selectData(){
         String sql = "select * from Storys";
@@ -143,6 +203,18 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
             result.moveToNext();
         }
         result.close();
+    }
+
+    public void selectcnt(int id){
+        String sql = "select count(*) as cnt from DetailStorys where story_id="+id;
+        Cursor result = database.rawQuery(sql, null);
+        String r = "";
+        result.moveToFirst();
+        while(!result.isAfterLast()){
+            arr_storycnt_list.add(result.getString(0));
+            result.moveToNext();
+        }
+            result.close();
     }
 
     //db에 있는 table을 생성하는 메소드

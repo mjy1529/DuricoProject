@@ -1,10 +1,17 @@
 package com.example.tourproject;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ViewFlipper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewFlipperAction implements View.OnTouchListener {
 
@@ -37,6 +44,7 @@ public class ViewFlipperAction implements View.OnTouchListener {
 
         indexCallback.onFlipperActionCallback(currentIndex); //인덱스 업데이트
     }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         //터치시작
