@@ -35,6 +35,8 @@ public class ListviewAdapter extends BaseAdapter {
         icon.setImageBitmap(listviewitem.getIcon());
         TextView name=(TextView)convertView.findViewById(R.id.textview);
         name.setText(listviewitem.getName());
+        TextView addr = (TextView)convertView.findViewById(R.id.textview2);
+        addr.setText(listviewitem.getAddr());
         return convertView;
     }
 
