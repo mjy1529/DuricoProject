@@ -63,25 +63,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         edit= (EditText)findViewById(R.id.edit);
         listView = (ListView)findViewById(R.id.listview);
         setGps();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                //listView = (ListView)findViewById(R.id.list);
-                Log.i("관련들어왔어요",Double.toString(mapx));
-                Log.i("관련들어왔어요",Double.toString(mapy));
-                find(mapx, mapy);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        //text.setText(data);
-                        adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
-                        listView.setAdapter(adapter);
-                    }
-                });
-            }
-        }).start();
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), overView.class);
@@ -102,8 +84,27 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
-                Log.i("관련들어왔어요", Double.toString(mapx));
+                Log.i("지금관련들어왔어요", Double.toString(mapx));
             }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    //listView = (ListView)findViewById(R.id.list);
+                    Log.i("여기관련들어왔어요",Double.toString(mapx));
+                    Log.i("여기나야관련들어왔어요",Double.toString(mapy));
+                    find(mapx, mapy);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            //text.setText(data);
+                            adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
+                            listView.setAdapter(adapter);
+                        }
+                    });
+                }
+            }).start();
         }
         public void onProviderDisabled(String provider) {
         }
