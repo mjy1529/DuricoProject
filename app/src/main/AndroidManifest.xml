@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tourproject">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,7 +29,8 @@
         <activity android:name=".PlaceMainActivity" />
         <activity android:name=".StoryMainActivity" />
         <activity android:name=".Listviewitem" />
-        <activity android:name=".ListviewAdapter"/>
+        <activity android:name=".ListviewAdapter" />
+        <activity android:name=".MapActivity"></activity>
     </application>
 
 </manifest>

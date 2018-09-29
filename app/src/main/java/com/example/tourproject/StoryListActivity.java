@@ -28,6 +28,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+//layout : activity_story_list, viewflipper1, viewflipper2, viewflipper3, listview_item_storylist
+//src : ViewFlipperAction, ItemDataStoryList, ListAdapterStoryList
+//anim, menu
 public class StoryListActivity extends AppCompatActivity implements  ViewFlipperAction.ViewFlipperCallback{
 
     Toolbar toolbar; //툴바설정
@@ -71,8 +74,9 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.home)).getBitmap();
-        bitmap = Bitmap.createScaledBitmap(bitmap, 90, 90, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
         actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
 
         //db 생성 메소드
@@ -101,36 +105,16 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("ddddd","ddddd");
                 //선택된 위치를 저장하는 변수
                 final Integer selectedPos = i;
-                //큰 스토리에 대한 대략적인 설명을 위한 dialog
-                AlertDialog.Builder alertDlg = new AlertDialog.Builder(view.getContext());
-                //dialog에 제목
-                alertDlg.setTitle(arrlist.get(selectedPos));
-                alertDlg.setPositiveButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alertDlg.setNegativeButton(R.string.button_start, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String position = arr_id_list.get(selectedPos);
-                        dialog.dismiss();
-                        Intent intent = new Intent(StoryListActivity.this, DetailStoryActivity.class);
-                        //story_id를 넘겨준다
-                        intent.putExtra("p_id", position);
-                        startActivity(intent);
-                    }
-                });
-                //story_id에 해당하는 explanation을 검색해서 dialog에 뿌린다
-                String sql = "select explanation from Storys where story_id=" + arr_id_list.get(selectedPos);
-                Cursor result = database.rawQuery(sql, null);
-                result.moveToFirst();
-                alertDlg.setMessage(result.getString(0));
-                alertDlg.show();
+
+                String position = arr_id_list.get(selectedPos);
+                Intent intent = new Intent(StoryListActivity.this, MapActivity.class);
+                //story_id를 넘겨준다
+                intent.putExtra("p_id", position);
+                intent.putExtra("m_id", 1);
+                intent.putExtra("p_title", arrlist.get(Integer.parseInt(position) - 1));
+                startActivity(intent);
             }
         });
 
@@ -158,40 +142,7 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         //리스너설정 - 좌우 터치시 화면넘어가기
         flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
     }
-/*
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
-        //선택된 위치를 저장하는 변수
-        final Integer selectedPos = i;
-        //큰 스토리에 대한 대략적인 설명을 위한 dialog
-        AlertDialog.Builder alertDlg = new AlertDialog.Builder(view.getContext());
-        //dialog에 제목
-        alertDlg.setTitle(arrlist.get(selectedPos));
-        alertDlg.setPositiveButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDlg.setNegativeButton(R.string.button_start, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String position = arr_id_list.get(selectedPos);
-                dialog.dismiss();
-                Intent intent = new Intent(StoryListActivity.this, DetailStoryActivity.class);
-                //story_id를 넘겨준다
-                intent.putExtra("p_id", position);
-                startActivity(intent);
-            }
-        });
-        //story_id에 해당하는 explanation을 검색해서 dialog에 뿌린다
-        String sql = "select explanation from Storys where story_id=" + arr_id_list.get(selectedPos);
-        Cursor result = database.rawQuery(sql, null);
-        result.moveToFirst();
-        alertDlg.setMessage(result.getString(0));
-        alertDlg.show();
-    }
-*/
+
     //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
     public void selectData(){
         String sql = "select * from Storys";
@@ -206,7 +157,8 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
     }
 
     public void selectcnt(int id){
-        String sql = "select count(*) as cnt from DetailStorys where story_id="+id;
+        String sql = "select count(*) as cnt from Map2 where story_id="+id;
+        Log.i("ddddd", sql);
         Cursor result = database.rawQuery(sql, null);
         String r = "";
         result.moveToFirst();
@@ -220,16 +172,22 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
     //db에 있는 table을 생성하는 메소드
     public void createTable(){
         try{
-            database.execSQL("CREATE TABLE Storys (story_id INTEGER PRIMARY KEY, title TEXT, explanation TEXT);");
-            database.execSQL("CREATE TABLE DetailStorys (detailStory_id INTEGER PRIMARY KEY, title TEXT, story_id INTEGER, state INTEGER, place INTEGER);");
-            database.execSQL("CREATE TABLE Views (view_id INTEGER, content TEXT, story_id INTEGER, detailStory_id INTEGER);");
-            database.execSQL("INSERT INTO Storys VALUES(1, '조선건국1', '조선건국에대한설명이다');");
-            database.execSQL("INSERT INTO Storys VALUES(2, '3.1운동', '조선건국에대한설명이다');");
-            database.execSQL("INSERT INTO DetailStorys VALUES(1, '새로운정치세력의등장', 1, 1, 0);");
-            database.execSQL("INSERT INTO DetailStorys VALUES(2, '정도전의유배', 1, 3, 1);");
-            database.execSQL("INSERT INTO DetailStorys VALUES(3, '혁명을 일으키기로 마음먹은 정도전', 1, 2, 0);");
-            database.execSQL("INSERT INTO Views VALUES(1, '권문세족이 등장했다', 1, 1);");
-            database.execSQL("INSERT INTO Views VALUES(2, '신진사대부가 등장했다', 1, 1);");
+            database.execSQL("CREATE TABLE Storys (story_id INTEGER PRIMARY KEY, title TEXT);");
+            database.execSQL("CREATE TABLE Map1 (map1_id INTEGER PRIMARY KEY, story_id INTEGER, state INTEGER);");
+            database.execSQL("CREATE TABLE Map2 (map2_id INTEGER, title TEXT, explantion TEXT, state INTEGER, story_id INTEGER, map1_id INTEGER);");
+            database.execSQL("CREATE TABLE Views (view_id INTEGER, content TEXT, story_id INTEGER, map1_id INTEGER, map2_id INTEGER);");
+            database.execSQL("INSERT INTO Storys VALUES(1, '조선건국1');");
+            database.execSQL("INSERT INTO Storys VALUES(2, '3.1운동');");
+            database.execSQL("INSERT INTO Map1 VALUES(1, 1, 1);");
+            database.execSQL("INSERT INTO Map1 VALUES(2, 1, 0);");
+            database.execSQL("INSERT INTO Map1 VALUES(3, 1, 0);");
+            database.execSQL("INSERT INTO Map2 VALUES(1, '새로운 정치세력의 등장', '새로운 정치세력이 등장했다.', 1, 1, 1);");
+            database.execSQL("INSERT INTO Map2 VALUES(2, '정도전의 유배', '새로운 정치세력이 등장했다.', 3, 1, 1);");
+            database.execSQL("INSERT INTO Map2 VALUES(3, '혁명을 일으키기로 마음먹은 정도전', '새로운 정치세력이 등장했다.', 2, 1, 1);");
+            database.execSQL("INSERT INTO Map2 VALUES(1, '최영과 이성계', '새로운 정치세력이 등장했다.', 1, 1, 2);");
+            database.execSQL("INSERT INTO Map2 VALUES(2, '혁명을 일으키기로 마음먹은 정도전', '새로운 정치세력이 등장했다.', 3, 1, 2);");
+            database.execSQL("INSERT INTO Views VALUES(1, '권문세족이 등장했다', 1, 1, 1);");
+            database.execSQL("INSERT INTO Views VALUES(2, '신진사대부가 등장했다', 1, 1, 1);");
         }catch(Exception e){
             e.printStackTrace();
         }
