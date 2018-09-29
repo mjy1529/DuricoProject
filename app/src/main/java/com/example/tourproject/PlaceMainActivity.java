@@ -92,7 +92,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                 /*tMapPoint = tmapgps.getLocation();
                 mapy = tMapPoint.getLatitude();
                 mapx = tMapPoint.getLongitude();*/
-
+                Log.i("관련들어왔어요","으아카캌카아아아카앜아캉ㅇ캌앙캉카");
                 Log.i("관련들어왔어요",Double.toString(mapx));
                 Log.i("관련들어왔어요",Double.toString(mapy));
                 //tmapgps.CloseGps();
