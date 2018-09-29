@@ -9,16 +9,20 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements ImageButton.OnClickListener{
 
     //StoryListActivity에서 받아온 story_id
     String id;
@@ -28,6 +32,10 @@ public class MapActivity extends AppCompatActivity {
     String dbName = "test1.db";
 
     ArrayList<String> arr_mstate_list = null;
+    RecyclerView mHorizonView;
+    VerticalAdapter mAdapter;
+
+    ImageButton btns[];
 
     //액션바 홈버튼 동작을 위한 메소드
     @Override
@@ -63,24 +71,41 @@ public class MapActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("p_id");
         mid = bundle.getString("m_id");
-        String storyTitle = bundle.getString("p_title");
-        TextView tv = (TextView) findViewById(R.id.storyTitle);
-        tv.setText(storyTitle);
 
-        ImageView iv[] = new ImageView[3];
-        iv[0] = (ImageView) findViewById(R.id.imageView1);
-        iv[1] = (ImageView) findViewById(R.id.imageView2);
-        iv[2] = (ImageView) findViewById(R.id.imageView3);
+        btns = new ImageButton[3];
+        btns[0] = (ImageButton) findViewById(R.id.imageView1);
+        btns[1] = (ImageButton) findViewById(R.id.imageView2);
+        btns[2] = (ImageButton) findViewById(R.id.imageView3);
 
-        arr_mstate_list = new ArrayList<String>();
-        selectData(Integer.parseInt(id));
-        for(int i = 0; i < arr_mstate_list.size(); i++) {
-            Log.i("ddddwk", arr_mstate_list.get(i));
-            if (arr_mstate_list.get(i).equals("1"))
-                iv[i].setImageResource(R.drawable.img2);
-            else
-                iv[i].setImageResource(R.drawable.img1);
-        }
+        btns[0].setBackgroundResource(R.drawable.img1);
+        btns[1].setBackgroundResource(R.drawable.img1);
+        btns[2].setBackgroundResource(R.drawable.img1);
+        btns[0].setOnClickListener(this);
+        btns[1].setOnClickListener(this);
+        btns[2].setOnClickListener(this);
+        onbtn();
+        viewcheck();
+    }
+
+    public void viewcheck(){
+        mHorizonView = (RecyclerView) findViewById(R.id.horizon_list);
+        ArrayList<HorizonData> data = new ArrayList<>();
+        for(int i = 0; i < 3; i++)
+            data.add(new HorizonData(R.drawable.gyeongbokpalace,mid+"-"+(i+1)));
+        final LinearLayoutManager mLayoutManger = new LinearLayoutManager(this);
+        mLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
+        mHorizonView.setLayoutManager(mLayoutManger);
+        mAdapter = new VerticalAdapter();
+        mAdapter.setData(data);
+        mHorizonView.setAdapter(mAdapter);
+    }
+
+    public void onbtn(){
+       btns[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.img2);
+    }
+
+    public void offbtn(){
+        btns[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.img1);
     }
 
     public void selectData(int id){
@@ -102,6 +127,30 @@ public class MapActivity extends AppCompatActivity {
             database = SQLiteDatabase.openOrCreateDatabase(file, null);
         }catch (SQLiteException e){
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageView1:
+                offbtn();
+                mid = "1";
+                onbtn();
+                viewcheck();
+                break;
+            case R.id.imageView2:
+                offbtn();
+                mid = "2";
+                onbtn();
+                viewcheck();
+                break;
+            case R.id.imageView3:
+                offbtn();
+                mid = "3";
+                onbtn();
+                viewcheck();
+                break;
         }
     }
 }

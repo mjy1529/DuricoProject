@@ -12,6 +12,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,22 +24,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-//layout : activity_story_list, viewflipper1, viewflipper2, viewflipper3, listview_item_storylist
-//src : ViewFlipperAction, ItemDataStoryList, ListAdapterStoryList
-//anim, menu
-public class StoryListActivity extends AppCompatActivity implements  ViewFlipperAction.ViewFlipperCallback{
+
+//activity_story_list
+//layout : horizon_recycler_items
+//src : HorizonAdapter, HorizonData, HorizonViewHolder (http://diordna.tistory.com/19?category=677940), RecyclerItemClickListener
+public class StoryListActivity extends AppCompatActivity {
 
     Toolbar toolbar; //툴바설정
-
-    //베스트 이미지 화면을 위한 변수
-    ViewFlipper flipper;
-    List<ImageView> indexes;
 
     //db를 이용하기 위한 변수
     SQLiteDatabase database = null;
@@ -49,6 +49,8 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
     //list를 이용하기 위한 변수
     ArrayAdapter<String> Adapter;
     ListView list;
+    RecyclerView mHorizonView;
+    HorizonAdapter mAdapter;
 
     //액션바 홈버튼 동작을 위한 메소드
     @Override
@@ -74,73 +76,46 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.home)).getBitmap();
         bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
         actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
 
         //db 생성 메소드
         createDatabase();
-
         arrlist = new ArrayList<String>();
         arr_id_list = new ArrayList<String>();
         arr_storycnt_list = new ArrayList<String>();
         //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
         selectData();
+
         for(int i = 0; i < arr_id_list.size(); i++)
             selectcnt(Integer.parseInt(arr_id_list.get(i)));
-        ArrayList<ItemDataStoryList> oData = new ArrayList<>();
+        mHorizonView = (RecyclerView) findViewById(R.id.horizon_list);
+        ArrayList<HorizonData> data = new ArrayList<>();
         for (int i=0; i<arr_id_list.size(); i++)
-        {
-            ItemDataStoryList oItem = new ItemDataStoryList();
-            oItem.strTitle = arrlist.get(i);
-            oItem.strDate = arr_storycnt_list.get(i) + "개의 이야기가 있습니다.";
-            oData.add(oItem);
-        }
-        //Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrlist);
-        list = (ListView) findViewById(R.id.l_view);
-        ListAdapterStoryList oAdapter = new ListAdapterStoryList(oData);
-        list.setAdapter(oAdapter);
-        Log.i("dddddddd","deew3dddd");
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            data.add(new HorizonData(R.drawable.gyeongbokpalace,arrlist.get(i)));
+        final LinearLayoutManager mLayoutManger = new LinearLayoutManager(this);
+        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mHorizonView.setLayoutManager(mLayoutManger);
+        mAdapter = new HorizonAdapter();
+        mAdapter.setData(data);
+        mHorizonView.setAdapter(mAdapter);
+        mHorizonView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mHorizonView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //선택된 위치를 저장하는 변수
-                final Integer selectedPos = i;
-
-                String position = arr_id_list.get(selectedPos);
+            public void onItemClick(View view, int position) {
+                String selectedID = arr_id_list.get(position);
                 Intent intent = new Intent(StoryListActivity.this, MapActivity.class);
                 //story_id를 넘겨준다
-                intent.putExtra("p_id", position);
-                intent.putExtra("m_id", 1);
-                intent.putExtra("p_title", arrlist.get(Integer.parseInt(position) - 1));
+                intent.putExtra("p_id", selectedID);
+                intent.putExtra("m_id", "1");
                 startActivity(intent);
             }
-        });
 
-        //UI
-        flipper = (ViewFlipper) findViewById(R.id.flipper_bestImage);
-        ImageView index0 = (ImageView)findViewById(R.id.imageView_imgIndex0);
-        ImageView index1 = (ImageView)findViewById(R.id.imageView_imgIndex1);
-        ImageView index2 = (ImageView)findViewById(R.id.imageView_imgIndex2);
-        //인덱스리스트
-        indexes = new ArrayList<>();
-        indexes.add(index0);
-        indexes.add(index1);
-        indexes.add(index2);
-        //xml을 inflate 하여 flipper view에 추가하기
-        //inflate
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View view1 = inflater.inflate(R.layout.viewflipper1, flipper, false);
-        View view2 = inflater.inflate(R.layout.viewflipper2, flipper, false);
-        View view3 = inflater.inflate(R.layout.viewflipper3, flipper, false);
-        //inflate 한 view 추가
-        flipper.addView(view1);
-        flipper.addView(view2);
-        flipper.addView(view3);
+            @Override
+            public void onLongItemClick(View view, int position) {
 
-        //리스너설정 - 좌우 터치시 화면넘어가기
-        flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
+            }
+        }));
     }
 
     //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
@@ -176,8 +151,10 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
             database.execSQL("CREATE TABLE Map1 (map1_id INTEGER PRIMARY KEY, story_id INTEGER, state INTEGER);");
             database.execSQL("CREATE TABLE Map2 (map2_id INTEGER, title TEXT, explantion TEXT, state INTEGER, story_id INTEGER, map1_id INTEGER);");
             database.execSQL("CREATE TABLE Views (view_id INTEGER, content TEXT, story_id INTEGER, map1_id INTEGER, map2_id INTEGER);");
-            database.execSQL("INSERT INTO Storys VALUES(1, '조선건국1');");
-            database.execSQL("INSERT INTO Storys VALUES(2, '3.1운동');");
+            database.execSQL("INSERT INTO Storys VALUES(1, '조\n선\n건\n국\n1');");
+            database.execSQL("INSERT INTO Storys VALUES(2, '3\n.\n1\n운\n동');");
+            database.execSQL("INSERT INTO Storys VALUES(3, '조\n선\n건\n국\n2');");
+            database.execSQL("INSERT INTO Storys VALUES(4, '경\n복\n궁');");
             database.execSQL("INSERT INTO Map1 VALUES(1, 1, 1);");
             database.execSQL("INSERT INTO Map1 VALUES(2, 1, 0);");
             database.execSQL("INSERT INTO Map1 VALUES(3, 1, 0);");
@@ -212,19 +189,4 @@ public class StoryListActivity extends AppCompatActivity implements  ViewFlipper
         database.close();
     }
 
-    //베스트 이미지 화면을 위한 메소드
-    @Override
-    public void onFlipperActionCallback(int position){
-        for(int i=0; i<indexes.size(); i++){
-            ImageView index = indexes.get(i);
-            //현재화면의 인덱스 위치면 노란색
-            if(i == position){
-                index.setImageResource(R.drawable.c_yellow);
-            }
-            //그외
-            else{
-                index.setImageResource(R.drawable.yellow);
-            }
-        }
-    }
 }

@@ -7,75 +7,32 @@
     android:orientation="vertical"
     tools:context=".StoryListActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:minHeight="?android:attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="스토리"
-                    android:textColor="#fff"
-                    android:textSize="20sp"/>
-            </FrameLayout>
-        </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@null"
+        android:minHeight="?android:attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-        android:id="@+id/linearLayout_bestImage"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
 
-        <ViewFlipper
-            android:id="@+id/flipper_bestImage"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:text="스토리 선택"
+            android:layout_margin="8dp"/>
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="30dp"
+            android:id="@+id/horizon_list"
             android:layout_width="match_parent"
-            android:layout_marginTop="200dp"
-            android:layout_height="35dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"/>
 
-            <ImageView
-                android:id="@+id/imageView_imgIndex0"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:padding="3dp"
-                android:src="@drawable/yellow" />
-
-            <ImageView
-                android:id="@+id/imageView_imgIndex1"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:padding="3dp"
-                android:src="@drawable/yellow" />
-
-            <ImageView
-                android:id="@+id/imageView_imgIndex2"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:padding="3dp"
-                android:src="@drawable/yellow" />
-        </LinearLayout>
     </FrameLayout>
-
-
-    <ListView
-        android:id="@+id/l_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -11,23 +11,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/storyTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#fff"
-                android:textSize="20sp"/>
-        </FrameLayout>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -35,71 +21,47 @@
         android:layout_height="120dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView1"
-            android:layout_width="30dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:layout_weight="10"/>
-        <ImageView
+            android:layout_weight="10" />
+
+        <ImageButton
             android:id="@+id/imageView2"
-            android:layout_width="30dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_weight="10" />
-        <ImageView
+
+        <ImageButton
             android:id="@+id/imageView3"
-            android:layout_width="30dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_weight="10" />
+
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="207dp"
-            android:layout_height="269dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="72dp"
-            android:layout_marginRight="45dp"
-            android:layout_weight="10" />
-
-        <ImageButton
-            android:id="@+id/btn1"
-            android:layout_width="47dp"
-            android:layout_height="60dp"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="27dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/number1" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="TextView" />
 
-        <ImageButton
-            android:id="@+id/btn2"
-            android:layout_width="47dp"
-            android:layout_height="60dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="33dp"
-            android:layout_marginTop="137dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/number2" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="40dp"
+            android:id="@+id/horizon_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-        <ImageButton
-            android:id="@+id/btn3"
-            android:layout_width="47dp"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="57dp"
-            android:layout_marginLeft="55dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/number3" />
     </RelativeLayout>
 
 </LinearLayout>
