@@ -1,5 +1,7 @@
 package com.example.tourproject;
 
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 public class VerticalAdapter extends RecyclerView.Adapter<HorizonViewHolder>{
-    private ArrayList<HorizonData> horizonDatas;
+    private ArrayList<VerticalData> verticalDatas;
 
-    public void setData(ArrayList<HorizonData> list){
-        horizonDatas = list;
+    public void setData(ArrayList<VerticalData> list){
+        verticalDatas = list;
     }
 
     @Override
@@ -28,14 +30,24 @@ public class VerticalAdapter extends RecyclerView.Adapter<HorizonViewHolder>{
 
     @Override
     public void onBindViewHolder(HorizonViewHolder holder, int position) {
-        HorizonData data = horizonDatas.get(position);
+        VerticalData data = verticalDatas.get(position);
 
         holder.description.setText(data.getText());
         holder.icon.setImageResource(data.getImg());
+       if(data.getState() != 1 && data.getState() != 0) {
+           ColorMatrix matrix = new ColorMatrix();
+           matrix.setSaturation(0);
+           ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+           holder.icon.setColorFilter(cf);
+       }
+       else{
+          holder.icon.clearColorFilter();
+          holder.icon.invalidate();
+       }
     }
 
     @Override
     public int getItemCount() {
-        return horizonDatas.size();
+        return verticalDatas.size();
     }
 }

@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".ViewsActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@null"
+        android:minHeight="?android:attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="425dp"
         android:layout_height="417dp"
@@ -16,7 +25,9 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:layout_weight="1"
+            android:src="@drawable/gyeongbokpalace"
             app:srcCompat="@android:color/holo_orange_light" />
     </LinearLayout>
 
@@ -32,12 +43,6 @@
             android:layout_weight="1"
             android:text="TextView" />
 
-        <Button
-            android:id="@+id/nextView"
-            android:layout_width="108dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
 
     </LinearLayout>
 

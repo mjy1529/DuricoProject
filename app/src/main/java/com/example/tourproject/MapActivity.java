@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
+import android.graphics.ColorMatrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,9 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+//activity_map
+//layout : vertical_recycler_items
+//src : VerticalnAdapter, VerticalData, HorizonViewHolder (http://diordna.tistory.com/19?category=677940), RecyclerItemClickListener
 public class MapActivity extends AppCompatActivity implements ImageButton.OnClickListener{
 
     //StoryListActivity에서 받아온 story_id
@@ -31,7 +36,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     SQLiteDatabase database = null;
     String dbName = "test1.db";
 
-    ArrayList<String> arr_mstate_list = null;
+    ArrayList<String> arr_m2state_list = null;
     RecyclerView mHorizonView;
     VerticalAdapter mAdapter;
 
@@ -55,6 +60,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        arr_m2state_list = new ArrayList<String>();
         //db 생성 메소드
         createDatabase();
 
@@ -64,7 +70,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.list)).getBitmap();
-        bitmap = Bitmap.createScaledBitmap(bitmap, 80, 90, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
         actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
 
         //StoryListActivity에서 보낸 story_id를 저장
@@ -83,15 +89,36 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         btns[0].setOnClickListener(this);
         btns[1].setOnClickListener(this);
         btns[2].setOnClickListener(this);
+        offbtn();
         onbtn();
+        selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
         viewcheck();
+
+        mHorizonView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mHorizonView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if(arr_m2state_list.get(position).equals("1") || arr_m2state_list.get(position).equals("0")) {
+                    Intent intent = new Intent(MapActivity.this, ViewsActivity.class);
+                    //story_id를 넘겨준다
+                    intent.putExtra("p_id", id);
+                    intent.putExtra("m_id", mid);
+                    intent.putExtra("m2_id", position + 1);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
     }
 
     public void viewcheck(){
         mHorizonView = (RecyclerView) findViewById(R.id.horizon_list);
-        ArrayList<HorizonData> data = new ArrayList<>();
+        ArrayList<VerticalData> data = new ArrayList<>();
         for(int i = 0; i < 3; i++)
-            data.add(new HorizonData(R.drawable.gyeongbokpalace,mid+"-"+(i+1)));
+            data.add(new VerticalData(R.drawable.gyeongbokpalace, mid + "-" + (i + 1), Integer.parseInt(arr_m2state_list.get(i))));
         final LinearLayoutManager mLayoutManger = new LinearLayoutManager(this);
         mLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
         mHorizonView.setLayoutManager(mLayoutManger);
@@ -108,13 +135,14 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         btns[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.img1);
     }
 
-    public void selectData(int id){
-        String sql = "select * from Map1 where story_id="+id;
+    public void selectDatas(String sql){
+        String r = "";
         Log.i("dddd", sql);
         Cursor result = database.rawQuery(sql, null);
         result.moveToFirst();
         while(!result.isAfterLast()){
-            arr_mstate_list.add(result.getString(2));
+            Log.i("두부", result.getString(0));
+            arr_m2state_list.add(result.getString(0));
             result.moveToNext();
         }
         result.close();
