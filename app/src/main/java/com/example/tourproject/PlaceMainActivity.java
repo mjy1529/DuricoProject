@@ -9,8 +9,10 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -50,9 +52,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     double mapx;
     double mapy;
     String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
-    TMapGpsManager tmapgps = null;
-    TMapPoint tMapPoint = null;
-    private boolean m_bTrackingMode = true;
 
 
 
@@ -63,46 +62,20 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
         edit= (EditText)findViewById(R.id.edit);
         listView = (ListView)findViewById(R.id.listview);
-        /*TMapView tMapView = new TMapView(this);
-        tMapView.setSKTMapApiKey("5e9803e3-81c4-4567-813b-eba6981d2035");*/
-
-        /*tmapgps = new TMapGpsManager(PlaceMainActivity.this);
-        tmapgps.setMinTime(1000);
-        tmapgps.setMinDistance(5);
-
-        tmapgps.setProvider(tmapgps.NETWORK_PROVIDER);//연결된 인터넷으로 현 위치를 받음. 실내일 때 유용
-        tmapgps.setProvider(tmapgps.GPS_PROVIDER);//GPS로 현 위치를 잡음
-
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
-            }
-            return;
-        }
-        tmapgps.OpenGps();*/
         setGps();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
                 //listView = (ListView)findViewById(R.id.list);
-
-                /*tMapPoint = tmapgps.getLocation();
-                mapy = tMapPoint.getLatitude();
-                mapx = tMapPoint.getLongitude();*/
-                Log.i("관련들어왔어요","으아카캌카아아아카앜아캉ㅇ캌앙캉카");
                 Log.i("관련들어왔어요",Double.toString(mapx));
                 Log.i("관련들어왔어요",Double.toString(mapy));
-                //tmapgps.CloseGps();
-                getXmlData0();
+                find(mapx, mapy);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
                         //text.setText(data);
-
                         adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
                         listView.setAdapter(adapter);
                     }
@@ -122,7 +95,23 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             }
         });
     }
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
 
+            if (location != null) {
+                mapy = location.getLatitude();
+                mapx = location.getLongitude();
+                Log.i("관련들어왔어요", Double.toString(mapx));
+            }
+        }
+        public void onProviderDisabled(String provider) {
+        }
+        public void onProviderEnabled(String provider) {
+        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    };
     //Button을 클릭했을 때 자동으로 호출되는 callback method....
     public void mOnClick(View v){
         switch( v.getId() ){
@@ -134,9 +123,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                     public void run() {
                         // TODO Auto-generated method stub
                        //listView = (ListView)findViewById(R.id.list);
-                        getXmlData1();
-                        getXmlData2();
-
+                        getXmlData(12);
+                        getXmlData(14);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -169,12 +157,12 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         return bm;
     }
     //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
-    void getXmlData0(){
+    void find(double longi, double lati) {
         String str= edit.getText().toString();//EditText에 작성된 Text얻어오기
         String location = URLEncoder.encode(str);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
 
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+mapx+"&mapY="+mapy+"&radius=1500";
+                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000";
 
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
@@ -197,7 +185,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
-                Log.i("관련들어왔어요","ddddddd");
+                //Log.i("관련들어왔어요","ddddddd");
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -253,14 +241,15 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
+            Log.i("find 함수 끝냈다",Double.toString(mapy));
         }
     }//getXmlData method....
-    void getXmlData1(){
+    void getXmlData(int num){
         String str= edit.getText().toString();//EditText에 작성된 Text얻어오기
         String location = URLEncoder.encode(str);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
 
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&contentTypeId=12&keyword="+location;
+                "&MobileOS=ETC&MobileApp=AppTest&contentTypeId=" +num + "&keyword="+location;
 
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
@@ -278,7 +267,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            data.clear();//getXmlData2에는 없음
+            if(num == 12)
+                data.clear();//getXmlData2에는 없음
             xpp.next();
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
@@ -341,96 +331,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             //TODO Auto-generated catch blocke.printStackTrace();
         }
     }//getXmlData method....
-    void getXmlData2(){
-        String str= edit.getText().toString();//EditText에 작성된 Text얻어오기
-        String location = URLEncoder.encode(str);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
-
-        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&contentTypeId=14&keyword="+location;
-
-        try {
-            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
-            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
-
-            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
-            XmlPullParser xpp= factory.newPullParser();
-            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
-
-            String tag;
-            Bitmap imagesrc = null;
-            String title = "";
-            String content_id = "";
-            String addr = "";
-            String contentType_id = "";
-            String mapx = "";
-            String mapy = "";
-            xpp.next();
-            Listviewitem item1 = null;
-            int eventType= xpp.getEventType();
-            while( eventType != XmlPullParser.END_DOCUMENT ){
-                switch( eventType ){
-                    case XmlPullParser.START_DOCUMENT:
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        tag= xpp.getName();//테그 이름 얻어오기
-
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-                        else if(tag.equals("addr1")){
-                            xpp.next();
-                            addr = xpp.getText();
-                        }
-                        else if(tag.equals("firstimage")){
-                            xpp.next();
-                            imagesrc = getImageBitmap(xpp.getText());
-                        }
-                        else if(tag.equals("contentid")){
-                            xpp.next();
-                            content_id = xpp.getText();
-                        }
-                        else if(tag.equals("contenttypeid")){
-                            xpp.next();
-                            contentType_id = xpp.getText();
-                        }
-                        else if(tag.equals("mapx")){
-                            xpp.next();
-                            mapx = xpp.getText();
-                        }
-                        else if(tag.equals("mapy")){
-                            xpp.next();
-                            mapy = xpp.getText();
-                        }
-                        else if(tag.equals("title")){
-                            xpp.next();
-                            title = xpp.getText();
-                            if(title != null) {
-                                item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
-                                data.add(item1);
-                            }
-                        }
-                        break;
-
-                    case XmlPullParser.TEXT:
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        tag= xpp.getName(); //테그 이름 얻어오기
-
-                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
-                            break;
-                }
-
-                eventType= xpp.next();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            //TODO Auto-generated catch blocke.printStackTrace();
-        }
-
-    }//getXmlData method....
-
     @Override
     public void onClick(View v) {
 
@@ -442,48 +342,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000, // 통지사이의 최소 시간간격 (miliSecond)
+                100, // 통지사이의 최소 시간간격 (miliSecond)
                 1, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
 
-            if (location != null) {
-                mapy = location.getLatitude();
-                mapx = location.getLongitude();
-
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                            }
-                        });
-
-                    }
-                }).start();
-            }
-
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
 
 }//MainActivity class..
 
