@@ -81,7 +81,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         });
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), overView.class);
+                Intent intent = new Intent(getApplicationContext(), overView2000.class);
                 //intent.putExtra("img", data.get(position).getIcon());
                 intent.putExtra("title", data2.get(position).getName());
                 intent.putExtra("content_id", data2.get(position).getContent_id());
