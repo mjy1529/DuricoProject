@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".StoryListActivity" />
-        <activity android:name=".DetailStoryActivity" />
         <activity android:name=".ViewsActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".overView" />
