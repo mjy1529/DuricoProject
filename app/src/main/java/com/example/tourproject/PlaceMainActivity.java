@@ -45,10 +45,13 @@ import static android.content.ContentValues.TAG;
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{
 
     ListView listView;
+    ListView listView2;
     EditText edit;
     TextView text;
     ArrayList<Listviewitem> data = new ArrayList<>();
+    ArrayList<Listviewitem> data2 = new ArrayList<>();
     ListviewAdapter adapter;
+    ListviewAdapter adapter2;
     double mapx;
     double mapy;
     String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
@@ -60,8 +63,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_main);
 
-        edit= (EditText)findViewById(R.id.edit);
-        listView = (ListView)findViewById(R.id.listview);
+        listView = (ListView)findViewById(R.id.listview300);
+        listView2 = (ListView)findViewById(R.id.listview2000);
         setGps();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -73,6 +76,18 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                 intent.putExtra("contentType_id", data.get(position).getContentType_id());
                 intent.putExtra("mapx", data.get(position).getMapx());
                 intent.putExtra("mapy", data.get(position).getMapy());
+                startActivity(intent);
+            }
+        });
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), overView.class);
+                //intent.putExtra("img", data.get(position).getIcon());
+                intent.putExtra("title", data2.get(position).getName());
+                intent.putExtra("content_id", data2.get(position).getContent_id());
+                intent.putExtra("contentType_id", data2.get(position).getContentType_id());
+                intent.putExtra("mapx", data2.get(position).getMapx());
+                intent.putExtra("mapy", data2.get(position).getMapy());
                 startActivity(intent);
             }
         });
@@ -93,7 +108,10 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                     //listView = (ListView)findViewById(R.id.list);
                     Log.i("여기관련들어왔어요",Double.toString(mapx));
                     Log.i("여기나야관련들어왔어요",Double.toString(mapy));
-                    find(mapx, mapy);
+                    find(mapx, mapy, 12);
+                    find(mapx, mapy, 14);
+                    find2000(mapx, mapy, 12);
+                    find2000(mapx, mapy, 14);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -101,6 +119,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                             //text.setText(data);
                             adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
                             listView.setAdapter(adapter);
+                            adapter2=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data2);
+                            listView2.setAdapter(adapter);
                         }
                     });
                 }
@@ -114,32 +134,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         }
     };
     //Button을 클릭했을 때 자동으로 호출되는 callback method....
-    public void mOnClick(View v){
-        switch( v.getId() ){
-            case R.id.button:
-                //Android 4.0 이상 부터는 네트워크를 이용할 때 반드시 Thread 사용해야 함
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                       //listView = (ListView)findViewById(R.id.list);
-                        getXmlData(12);
-                        getXmlData(14);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                    // TODO Auto-generated method stub
-                                //text.setText(data);
-                                listView.setAdapter(adapter);
-                            }
-                        });
-                    }
-                }).start();
-                break;
-
-        }
-    }//mOnClick method..
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -158,12 +152,9 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         return bm;
     }
     //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
-    void find(double longi, double lati) {
-        String str= edit.getText().toString();//EditText에 작성된 Text얻어오기
-        String location = URLEncoder.encode(str);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
-
+    void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000";
+                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
 
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
@@ -225,6 +216,90 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data.add(item1);
+                            }
+                        }
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        tag= xpp.getName(); //테그 이름 얻어오기
+                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
+                            break;
+                }
+                eventType= xpp.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO Auto-generated catch blocke.printStackTrace();
+            Log.i("find 함수 끝냈다",Double.toString(mapy));
+        }
+    }//getXmlData method....
+    void find2000(double longi, double lati, int contentTypeNum) {
+        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
+                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
+
+        try {
+            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
+            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
+
+            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
+            XmlPullParser xpp= factory.newPullParser();
+            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
+
+            String tag;
+            Bitmap imagesrc = null;
+            String title = "";
+            String content_id = "";
+            String addr = "";
+            String contentType_id = "";
+            String mapx = "";
+            String mapy = "";
+            data2.clear();
+            xpp.next();
+            Listviewitem item1 = null;
+            int eventType= xpp.getEventType();
+            while( eventType != XmlPullParser.END_DOCUMENT ){
+                //Log.i("관련들어왔어요","ddddddd");
+                switch( eventType ){
+                    case XmlPullParser.START_DOCUMENT:
+                        break;
+
+                    case XmlPullParser.START_TAG:
+                        tag= xpp.getName();//테그 이름 얻어오기
+
+                        if(tag.equals("item")) ;// 첫번째 검색결과
+                        else if(tag.equals("addr1")){
+                            xpp.next();
+                            addr = xpp.getText();
+                        }
+                        else if(tag.equals("firstimage")){
+                            xpp.next();
+                            imagesrc = getImageBitmap(xpp.getText());
+                        }
+                        else if(tag.equals("contentid")){
+                            xpp.next();
+                            content_id = xpp.getText();
+                        }
+                        else if(tag.equals("contenttypeid")){
+                            xpp.next();
+                            contentType_id = xpp.getText();
+                        }
+                        else if(tag.equals("mapx")){
+                            xpp.next();
+                            mapx = xpp.getText();
+                        }
+                        else if(tag.equals("mapy")){
+                            xpp.next();
+                            mapy = xpp.getText();
+                        }
+                        else if(tag.equals("title")){
+                            xpp.next();
+                            title = xpp.getText();
+                            if(title != null) {
+                                item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
+                                data2.add(item1);
                             }
                         }
                         break;
