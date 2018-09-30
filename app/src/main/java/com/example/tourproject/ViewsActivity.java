@@ -40,6 +40,8 @@ public class ViewsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(ViewsActivity.this, MapActivity.class);
+                intent.putExtra("p_id", s_id);
+                intent.putExtra("m_id", m_id);
                 startActivity(intent);
                 return true ;
             default :
@@ -99,7 +101,7 @@ public class ViewsActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(ViewsActivity.this, MapActivity.class);
                     intent.putExtra("p_id", s_id);
-                    intent.putExtra("m_id", s_id);
+                    intent.putExtra("m_id", m_id);
                     startActivity(intent);
                 }
                 else{

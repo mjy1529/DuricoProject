@@ -31,19 +31,29 @@
             app:srcCompat="@android:color/holo_orange_light" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="167dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
+            android:layout_margin="10dp"
             android:layout_height="167dp"
             android:layout_weight="1"
             android:text="TextView" />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="32dp"
+            android:layout_marginRight="17dp"
+            android:text="터치로 다음 이야기 보기 >" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

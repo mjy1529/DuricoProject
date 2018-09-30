@@ -60,7 +60,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        arr_m2state_list = new ArrayList<String>();
         //db 생성 메소드
         createDatabase();
 
@@ -117,7 +116,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public void viewcheck(){
         mHorizonView = (RecyclerView) findViewById(R.id.horizon_list);
         ArrayList<VerticalData> data = new ArrayList<>();
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < arr_m2state_list.size(); i++)
             data.add(new VerticalData(R.drawable.gyeongbokpalace, mid + "-" + (i + 1), Integer.parseInt(arr_m2state_list.get(i))));
         final LinearLayoutManager mLayoutManger = new LinearLayoutManager(this);
         mLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
@@ -136,6 +135,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void selectDatas(String sql){
+        arr_m2state_list = new ArrayList<String>();
         String r = "";
         Log.i("dddd", sql);
         Cursor result = database.rawQuery(sql, null);
@@ -165,18 +165,21 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 offbtn();
                 mid = "1";
                 onbtn();
+                selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
             case R.id.imageView2:
                 offbtn();
                 mid = "2";
                 onbtn();
+                selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
             case R.id.imageView3:
                 offbtn();
                 mid = "3";
                 onbtn();
+                selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
         }
