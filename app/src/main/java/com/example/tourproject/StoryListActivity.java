@@ -57,7 +57,7 @@ public class StoryListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(StoryListActivity.this, MainSelectActivity.class);
+                Intent intent = new Intent(StoryListActivity.this, MainActivity.class);
                 startActivity(intent);
                 return true ;
             default :
