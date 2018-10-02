@@ -38,7 +38,8 @@
         <activity android:name=".Listviewitem" />
         <activity android:name=".ListviewAdapter" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".GachaActivity"></activity>
+        <activity android:name=".GachaActivity" />
+        <activity android:name=".CardBoxActivity" />
     </application>
 
 </manifest>

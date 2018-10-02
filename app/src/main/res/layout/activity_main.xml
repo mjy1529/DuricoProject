@@ -10,8 +10,13 @@
     <ImageView
         android:id="@+id/imageCard"
         android:layout_width="match_parent"
-        android:layout_height="469dp" />
+        android:layout_height="249dp" />
 
+    <Button
+        android:id="@+id/btnCard"
+        android:layout_width="123dp"
+        android:layout_height="172dp"
+        android:text="test" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
