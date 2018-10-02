@@ -33,6 +33,7 @@
         <activity android:name=".ViewsActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".overView" />
+        <activity android:name=".overView2000" />
         <activity android:name=".PlaceMainActivity" />
         <activity android:name=".Listviewitem" />
         <activity android:name=".ListviewAdapter" />
