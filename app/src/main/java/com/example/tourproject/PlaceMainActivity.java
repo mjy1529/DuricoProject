@@ -1,6 +1,9 @@
 package com.example.tourproject;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.media.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -55,8 +59,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     double mapx;
     double mapy;
     String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
                     find2000(mapx, mapy, 14);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -119,8 +122,10 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                             //text.setText(data);
                             adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
                             listView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                             adapter2=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data2);
                             listView2.setAdapter(adapter);
+                            adapter2.notifyDataSetChanged();
                         }
                     });
                 }

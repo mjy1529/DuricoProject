@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent" android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/service_start"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="서비스시작" />
+
+    <Button
+        android:id="@+id/service_end"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="서비스종료" />
 
     <ImageView
         android:id="@+id/imageCard"

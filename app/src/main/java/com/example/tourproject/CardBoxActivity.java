@@ -31,6 +31,7 @@ public class CardBoxActivity extends AppCompatActivity implements ViewFlipperAct
     RecyclerView mHorizonView2;
     GridAdapter mAdapter;
 
+
     //액션바 홈버튼 동작을 위한 메소드
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,7 +58,6 @@ public class CardBoxActivity extends AppCompatActivity implements ViewFlipperAct
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.home)).getBitmap();
         bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
         actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
-
 
         //UI
         flipper = (ViewFlipper) findViewById(R.id.flipper_card);

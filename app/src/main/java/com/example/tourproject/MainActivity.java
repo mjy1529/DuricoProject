@@ -1,13 +1,28 @@
 package com.example.tourproject;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
-
+    private Button serviceStart, serviceEnd;
+    ArrayList<Listviewitem> data = new ArrayList<>();
+    double mapx;
+    double mapy;
+    PlaceMainActivity placeMainActivity = new PlaceMainActivity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +36,25 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
+
+        serviceStart = (Button)findViewById(R.id.service_start);
+        serviceEnd = (Button)findViewById(R.id.service_end);
+        serviceStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,MyService.class);
+                startService(intent);
+            }
+        });
+        serviceEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Service 끝",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,MyService.class);
+                stopService(intent);
+            }
+        });
     }
 
     @Override
@@ -43,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 intent = new Intent(MainActivity.this, GachaActivity.class);
                 startActivity(intent);
                 break;
+            /*case R.id.service_start:
+                Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
+                intent = new Intent(MainActivity.this,MyService.class);
+                startService(intent);
+                break;
+            case R.id.service_end:
+                Toast.makeText(getApplicationContext(),"Service 끝",Toast.LENGTH_SHORT).show();
+                intent = new Intent(MainActivity.this,MyService.class);
+                stopService(intent);
+                break;*/
         }
     }
 }
