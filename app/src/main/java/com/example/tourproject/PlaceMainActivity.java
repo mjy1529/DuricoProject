@@ -1,9 +1,6 @@
 package com.example.tourproject;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +9,8 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.media.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,12 +18,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.skt.Tmap.TMapGpsManager;
-import com.skt.Tmap.TMapMarkerItem;
-import com.skt.Tmap.TMapPoint;
-import com.skt.Tmap.TMapTapi;
-import com.skt.Tmap.TMapView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -42,9 +29,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
+import static com.example.tourproject.MyService.data;
+import static com.example.tourproject.MyService.data2;
+import static com.example.tourproject.MyService.mapx;
+import static com.example.tourproject.MyService.mapy;
 
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{
 
@@ -52,12 +42,12 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     ListView listView2;
     EditText edit;
     TextView text;
-    ArrayList<Listviewitem> data = new ArrayList<>();
-    ArrayList<Listviewitem> data2 = new ArrayList<>();
+    //ArrayList<Listviewitem> data = new ArrayList<>();
+    //ArrayList<Listviewitem> data2 = new ArrayList<>();
     ListviewAdapter adapter;
     ListviewAdapter adapter2;
-    double mapx;
-    double mapy;
+    //double mapx = mapx;
+    //double mapy;
     String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
 
     @Override
@@ -67,8 +57,19 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
-        setGps();
+        if(data.size() == 0){
+            data.clear();
+            data2.clear();
+            setGps();
+        }
 
+        Log.i("mapx 전달됐어요", Double.toString(mapx));
+        adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
+        listView2.setAdapter(adapter);
+        adapter2.notifyDataSetChanged();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), overView.class);
@@ -120,10 +121,10 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                         public void run() {
                             // TODO Auto-generated method stub
                             //text.setText(data);
-                            adapter=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data);
+                            adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-                            adapter2=new ListviewAdapter(PlaceMainActivity.this,R.layout.item, data2);
+                            adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
                             listView2.setAdapter(adapter);
                             adapter2.notifyDataSetChanged();
                         }
@@ -420,7 +421,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     public void setGps() {
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
                 100, // 통지사이의 최소 시간간격 (miliSecond)

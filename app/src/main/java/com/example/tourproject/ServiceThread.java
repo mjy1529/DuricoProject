@@ -1,6 +1,7 @@
 package com.example.tourproject;
 
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class ServiceThread extends Thread{
     double mapx;
     double mapy;
     getMyGps getmygps = new getMyGps();
-    MainActivity mainActivity = new MainActivity();
+    MyService myService = new MyService();
 
     public ServiceThread(Handler handler){
         this.handler = handler;
@@ -25,12 +26,12 @@ public class ServiceThread extends Thread{
             this.isRun = false;
         }
     }
-
     public void run(){
         //반복적으로 수행할 작업을 한다.
         while(isRun){
             handler.sendEmptyMessage(0);//쓰레드에 있는 핸들러에게 메세지를 보냄
             try{
+                Log.i("이곳에서 작업이 반복됩니다.", Double.toString(mapx));
                 Thread.sleep(10000); //10초씩 쉰다.
             }catch (Exception e) {}
         }
@@ -38,4 +39,5 @@ public class ServiceThread extends Thread{
     class getMyGps extends PlaceMainActivity {
 
     }
+
 }
