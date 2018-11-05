@@ -1,8 +1,13 @@
 package com.example.tourproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -50,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         });
     }
 
+    private NetworkInfo getNetworkInfo(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo;
+    }
     @Override
     public void onClick(View v) {
         Intent intent;
@@ -67,8 +77,26 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.btnPick:
-                intent = new Intent(MainActivity.this, GachaActivity.class);
-                startActivity(intent);
+                NetworkInfo mNetworkState = getNetworkInfo();
+                if(mNetworkState != null && mNetworkState.isConnected()){
+                    if(mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE){
+                        Log.i("인터넷 연결됨", "인터넷 연결됨");
+                        intent = new Intent(MainActivity.this, GachaActivity.class);
+                        startActivity(intent);
+                    }
+                }
+                else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle("네트워크");
+                    alert.setMessage("네트워크가 연결되지 않았습니다.");
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
+                }
                 break;
             /*case R.id.service_start:
                 Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
