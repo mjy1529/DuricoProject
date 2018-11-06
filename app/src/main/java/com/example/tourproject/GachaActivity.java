@@ -167,7 +167,7 @@ public class GachaActivity extends AppCompatActivity{
         Log.i("여기 mendtime 함수", Long.toString(mEndTime));
         //editor.putLong("endTime", mEndTime);
         editor.putLong("endTime", EndTime);
-        editor.apply();;
+        editor.apply();
     }
     private NetworkInfo getNetworkInfo(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
