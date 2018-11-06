@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.tourproject.CardBox.CardBoxActivity;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 intent = new Intent(MainActivity.this, GachaActivity.class);
                 startActivity(intent);
                 break;
-            /*case R.id.service_start:
+            case R.id.service_start:
                 Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
                 intent = new Intent(MainActivity.this,MyService.class);
                 startService(intent);
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 Toast.makeText(getApplicationContext(),"Service 끝",Toast.LENGTH_SHORT).show();
                 intent = new Intent(MainActivity.this,MyService.class);
                 stopService(intent);
-                break;*/
+                break;
         }
     }
 }

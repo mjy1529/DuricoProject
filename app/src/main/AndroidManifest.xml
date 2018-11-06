@@ -40,7 +40,7 @@
         <activity android:name=".ListviewAdapter" />
         <activity android:name=".MainActivity" />
         <activity android:name=".GachaActivity" />
-        <activity android:name=".CardBoxActivity" />
+        <activity android:name=".CardBox.CardBoxActivity" />
         <service
             android:name=".MyService"
             android:enabled="true"

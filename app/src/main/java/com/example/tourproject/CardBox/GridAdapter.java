@@ -1,17 +1,23 @@
-package com.example.tourproject;
+package com.example.tourproject.CardBox;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.example.tourproject.R;
+
 import java.util.ArrayList;
 
 public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>{
-    private ArrayList<GridData> gridDatas;
+    private Context context;
+    private ArrayList<CardData> cardDataList;
 
-    public void setData(ArrayList<GridData> list){
-        gridDatas = list;
+    public GridAdapter(Context context, ArrayList<CardData> cardDataList) {
+        this.context = context;
+        this.cardDataList = cardDataList;
     }
 
     @Override
@@ -22,19 +28,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>{
                 .inflate(R.layout.grid_recycler_items, parent, false);
 
         GridViewHolder holder = new GridViewHolder(view);
-
         return holder;
     }
 
     @Override
     public void onBindViewHolder(GridViewHolder holder, int position) {
-        GridData data = gridDatas.get(position);
-
-        holder.icon.setImageResource(data.getImg());
+        CardData data = cardDataList.get(position);
+        Glide.with(context).load(data.getCard_image()).into(holder.grid_card_image);
     }
 
     @Override
     public int getItemCount() {
-        return gridDatas.size();
+        return cardDataList.size();
     }
 }
