@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -112,10 +113,14 @@ public class GachaActivity extends AppCompatActivity{
 
         public void run() {
             try {
-                TrueTime.build().initialize();
+                TrueTime.build().withNtpHost("time.google.com").initialize();
                 Log.e("TrueTime", "Connected");
-            } catch (IOException e) {
+            } catch (SocketTimeoutException e) {
                 e.printStackTrace();
+                Log.e("TrueTime", "SocketError");
+            }catch(IOException e){
+                e.printStackTrace();
+                Log.e("TrueTime", "Error");
             }
         }
     }
