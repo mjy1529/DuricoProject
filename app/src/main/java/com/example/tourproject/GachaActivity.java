@@ -34,7 +34,9 @@ import com.instacart.library.truetime.TrueTime;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,48 +63,76 @@ public class GachaActivity extends AppCompatActivity{
     TextView cardcontent;
     LinearLayout card;
 
+    private final MyHandler mHandler = new MyHandler(this);
+    private Thread backgroundThread;
+    private boolean running = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gacha);
-        ThreadB A = new ThreadB();
-        A.start();
-        synchronized(A) {
-            try {
-                // b.wait()메소드를 호출.
-                // 메인쓰레드는 정지
-                // ThreadB가 5번 값을 더한 후 notify를 호출하게 되면 wait에서 깨어남
-                System.out.println("b가 완료될때까지 기다립니다.");
-                A.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            mTextViewCountDown = findViewById(R.id.txt_time);
 
-            mButtonStartPause = findViewById(R.id.btn_pick);
-            if (!mTimerRunning) {
-                resetTimer();
-            }
-            mButtonStartPause.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!mTimerRunning) {
-                        Date noReallyThisIsTheTrueDateAndTime = TrueTime.now();
-                        EndTime = noReallyThisIsTheTrueDateAndTime.getTime() + START_TIME_IN_MILLIS;
-                        Log.i("date", noReallyThisIsTheTrueDateAndTime.toString());
-                        mEndTime = SystemClock.elapsedRealtime() + START_TIME_IN_MILLIS;
-                        Log.i("시작", Long.toString(mEndTime));
-                        resetTimer();
-                        startTimer();
-                        MyCustomAlertDialog();
-                    }
+        backgroundThread = new Thread(new BackgroundThread());
+        setRunning(true);
+        backgroundThread.start();
+
+        try {
+            backgroundThread.join();
+        }catch(InterruptedException e) {
+            Log.i("TRUETIMEWAIT", "ERROR");
+            e.printStackTrace();
+        }
+
+        mTextViewCountDown = findViewById(R.id.txt_time);
+        mButtonStartPause = findViewById(R.id.btn_pick);
+        if (!mTimerRunning) {
+            resetTimer();
+        }
+        mButtonStartPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mTimerRunning) {
+                    Date noReallyThisIsTheTrueDateAndTime = TrueTime.now();
+                    EndTime = noReallyThisIsTheTrueDateAndTime.getTime() + START_TIME_IN_MILLIS;
+                    Log.i("date", noReallyThisIsTheTrueDateAndTime.toString());
+                    mEndTime = SystemClock.elapsedRealtime() + START_TIME_IN_MILLIS;
+                    Log.i("시작", Long.toString(mEndTime));
+                    resetTimer();
+                    startTimer();
+                    MyCustomAlertDialog();
                 }
+            }
+        });
+    }
 
-            });
+    void setRunning(boolean b) {
+        running = b;
+    }
+
+    public class BackgroundThread implements Runnable {
+
+        public void run() {
+            try {
+                TrueTime.build().withNtpHost("time.google.com").initialize();
+                Log.e("TrueTime", "Connected");
+            } catch (SocketTimeoutException e) {
+                e.printStackTrace();
+                Log.e("TrueTime", "SocketError");
+            }catch(IOException e){
+                e.printStackTrace();
+                Log.e("TrueTime", "Error");
+            }
+        }
+    }
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<GachaActivity> mActivity;
+
+        public MyHandler(GachaActivity activity) {
+            mActivity = new WeakReference<GachaActivity>(activity);
         }
 
     }
-
 
     private void startTimer(){
 
@@ -180,41 +210,37 @@ public class GachaActivity extends AppCompatActivity{
         NetworkInfo mNetworkState = getNetworkInfo();
         if(mNetworkState != null && mNetworkState.isConnected()){
             if(mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE){
-                ThreadB A = new ThreadB();
-                A.start();
-                synchronized(A) {
-                    try {
-                        // b.wait()메소드를 호출.
-                        // 메인쓰레드는 정지
-                        // ThreadB가 5번 값을 더한 후 notify를 호출하게 되면 wait에서 깨어남
-                        System.out.println("b가 완료될때까지 기다립니다.");
-                        A.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                backgroundThread = new Thread(new BackgroundThread());
+                setRunning(true);
+                backgroundThread.start();
+                try {
+                    backgroundThread.join();
+                }catch(InterruptedException e) {
+                    Log.i("TRUETIMEWAIT", "ERROR");
+                    e.printStackTrace();
+                }
 
-                    mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
-                    Log.i("여기를 들어오는 거야?", Long.toString(mTimeLeftInMillis));
-                    mTimerRunning = prefs.getBoolean("timerRunning", false);
+                SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+                Log.i("여기를 들어오는 거야?", Long.toString(mTimeLeftInMillis));
+                mTimerRunning = prefs.getBoolean("timerRunning", false);
 
-                    updateCountDownText();
-                    updateButtons();
+                updateCountDownText();
+                updateButtons();
 
-                    if (mTimerRunning) {
-                        EndTime = prefs.getLong("endTime", 0);
-                        //mEndTime = prefs.getLong("endTime", 0);
-                        Log.i("여기를 들어오는 거니? mendtime", Long.toString(SystemClock.elapsedRealtime()));
-                        mTimeLeftInMillis = EndTime - TrueTime.now().getTime();
-                        //mTimeLeftInMillis = mEndTime - SystemClock.elapsedRealtime();
-                        Log.i("여기를 들어오는 거니?", Long.toString(mTimeLeftInMillis));
-                        if (mTimeLeftInMillis < 1000) {
-                            mTimeLeftInMillis = 0;
-                            mTimerRunning = false;
-                            resetTimer();
-                        } else {
-                            startTimer();
-                        }
+                if (mTimerRunning) {
+                    EndTime = prefs.getLong("endTime", 0);
+                    //mEndTime = prefs.getLong("endTime", 0);
+                    Log.i("여기를 들어오는 거니? mendtime", Long.toString(SystemClock.elapsedRealtime()));
+                    mTimeLeftInMillis = EndTime - TrueTime.now().getTime();
+                    //mTimeLeftInMillis = mEndTime - SystemClock.elapsedRealtime();
+                    Log.i("여기를 들어오는 거니?", Long.toString(mTimeLeftInMillis));
+                    if (mTimeLeftInMillis < 1000) {
+                        mTimeLeftInMillis = 0;
+                        mTimerRunning = false;
+                        resetTimer();
+                    } else {
+                        startTimer();
                     }
                 }
             }
