@@ -46,7 +46,7 @@ public class SecondCardFragment extends Fragment {
         cardList = new ArrayList<>();
 
         for(int i = 0; i < 9; i++) {
-            cardList.add(new CardData(R.drawable.namhan));
+            cardList.add(new CardData(R.drawable.p_2));
         }
     }
 }

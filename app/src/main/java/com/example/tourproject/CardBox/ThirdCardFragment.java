@@ -46,7 +46,7 @@ public class ThirdCardFragment extends Fragment {
         cardList = new ArrayList<>();
 
         for(int i = 0; i < 6; i++) {
-            cardList.add(new CardData(R.drawable.gyeongbokpalace));
+            cardList.add(new CardData(R.drawable.p_1));
         }
     }
 }
