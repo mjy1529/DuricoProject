@@ -1,9 +1,12 @@
-package com.example.tourproject;
+package com.example.tourproject.collect;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,11 +14,16 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.tourproject.MainActivity;
+import com.example.tourproject.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -30,80 +38,94 @@ import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
-public class MyService extends Service {
-    NotificationManager Notifi_M;
-    ServiceThread thread;
-    Notification Notifi;
-    static double mapx;
-    static double mapy;
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+public class MyJobService extends JobService {
+    JobParameters params;
+    DoItTask doIt;
+    NotificationCompat.Builder builder;
+    static double mapx = 126.9769930325;
+    static double mapy = 37.5788222356;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
+
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public boolean onStartJob(JobParameters jobParameters) {
+        this.params = jobParameters;
+        doIt = new DoItTask();
+        doIt.execute();
+        return true;
     }
 
-    public void onCreate(){
-        super.onCreate();
-        setGps();
-    }
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Notifi_M = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        myServiceHandler handler = new myServiceHandler();
-        thread = new ServiceThread(handler);
-        setGps();
-        thread.start();
-        return START_STICKY;
+    public boolean onStopJob(JobParameters jobParameters) {
+        if (doIt != null) {
+            doIt.cancel(true);
+        }
+        return true;
     }
 
-    //서비스가 종료될 때 할 작업
+    private class DoItTask extends AsyncTask<Void, Void, Void> {
 
-    public void onDestroy() {
-        thread.stopForever();
-        thread = null;//쓰레기 값을 만들어서 빠르게 회수하라고 null을 넣어줌.
-    }
-
-    class myServiceHandler extends Handler {
         @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
+            //setGps();
+            find(mapx, mapy, 12);
+            find(mapx, mapy, 14);
+            find2000(mapx, mapy, 12);
+            find2000(mapx, mapy, 14);
+            Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
+            //조건문 if (푸시알림할 데이터가 있으면) {
+            if (data.size() != 0 || data2.size() != 0) {
+                //push notification
+                Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        public void handleMessage(android.os.Message msg) {
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-            Intent intent = new Intent(MyService.this, PlaceMainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    NotificationChannel notificationChannel = new NotificationChannel(
+                            "smartTour",
+                            "smartTour",
+                            NotificationManager.IMPORTANCE_HIGH
+                    );
+                    notificationManager.createNotificationChannel(notificationChannel);
+                    builder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId());
+                } else {
+                    builder = new NotificationCompat.Builder(getApplicationContext());
+                }
 
-            if(data.size() != 0) {
-                Notifi = new Notification.Builder(getApplicationContext())
-                        .setSmallIcon(R.drawable.pinicon).setContentTitle("수집 가능!").setContentText("근처에 수집 가능한 관광지가 있습니다!!")
+                builder.setSmallIcon(R.drawable.pinicon)
+                        .setContentTitle("수집 가능!")
+                        .setContentText("근처에 수집 가능한 관광지가 있습니다!!")
                         .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
-                        .build();
-
-                //소리추가
-                Notifi.defaults = Notification.DEFAULT_SOUND;
-
-                //알림 소리를 한번만 내도록
-                Notifi.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-
-                //확인하면 자동으로 알림이 제거 되도록
-                Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
 
 
-                Notifi_M.notify( 777 , Notifi);
-
-                //토스트 띄우기
-                Toast.makeText(MyService.this, Double.toString(mapx), Toast.LENGTH_LONG).show();
+                notificationManager.notify(0, builder.build());
+                Log.d("push", "푸시 알림 울림");
             }
+            //}
 
-
+            return null;
         }
-    };
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            jobFinished(params, false);
+            super.onPostExecute(aVoid);
+        }
+
+
+    }
     static void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
                 "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
-
+        Log.i("함수들어갑니다.","MyJobService find()");
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
             InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
@@ -187,7 +209,7 @@ public class MyService extends Service {
     static void find2000(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
                 "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
-
+        Log.i("함수들어갑니다.","MyJobService find2000()");
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
             InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
@@ -284,21 +306,25 @@ public class MyService extends Service {
         }
         return bm;
     }
+
     private final LocationListener mLocationListener = new LocationListener() {
+
         @Override
         public void onLocationChanged(Location location) {
-
+            Log.i("함수들어갑니다.","onLocationChanged");
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
-                Log.i("지금관련들어왔어요", Double.toString(mapx));
+                //mapx = 126.9769930325;
+                //mapy = 37.5788222356;
+                Log.i("잡서미스 리스너들어왔어요", Double.toString(mapx));
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
                     //listView = (ListView)findViewById(R.id.list);
-                    Log.i("여기관련들어왔어요",Double.toString(mapx));
+                    Log.i("잡서비스 리스너스레드 들어왔어요",Double.toString(mapx));
                     Log.i("여기나야관련들어왔어요",Double.toString(mapy));
                     find(mapx, mapy, 12);
                     find(mapx, mapy, 14);
@@ -315,14 +341,16 @@ public class MyService extends Service {
         }
     };
     public void setGps() {
-        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(null, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }*/
+        Log.i("잡서비스 함수들어갑니다.","setGps");
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                100, // 통지사이의 최소 시간간격 (miliSecond)
-                1, // 통지사이의 최소 변경거리 (m)
+                10000, // 통지사이의 최소 시간간격 (miliSecond)
+                0, // 통지사이의 최소 변경거리 (m)
+                mLocationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                10000, // 통지사이의 최소 시간간격 (miliSecond)
+                0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
-
 }

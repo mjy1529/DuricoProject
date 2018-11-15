@@ -1,9 +1,13 @@
 package com.example.tourproject;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,20 +17,23 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tourproject.CardBox.CardBoxActivity;
+import com.example.tourproject.collect.Listviewitem;
+import com.example.tourproject.collect.MyJobService;
+import com.example.tourproject.collect.PlaceMainActivity;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
-    private Button serviceStart, serviceEnd;
     ArrayList<Listviewitem> data = new ArrayList<>();
-    double mapx;
-    double mapy;
-    PlaceMainActivity placeMainActivity = new PlaceMainActivity();
 
+    @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
+        ComponentName componentName = new ComponentName(getApplicationContext(), MyJobService.class);
 
         Button btn0 = (Button) findViewById(R.id.btnCard);
         btn0.setOnClickListener(this);
@@ -36,25 +43,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
-
-        serviceStart = (Button)findViewById(R.id.service_start);
-        serviceEnd = (Button)findViewById(R.id.service_end);
-        serviceStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this,MyService.class);
-                startService(intent);
-            }
-        });
-        serviceEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Service 끝",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this,MyService.class);
-                stopService(intent);
-            }
-        });
+        JobInfo jobInfo = new JobInfo.Builder(0, componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                .setPeriodic(1000 * 60 * 15)
+                .setPersisted(true)
+                .build();
+        jobScheduler.schedule(jobInfo);
     }
 
     private NetworkInfo getNetworkInfo(){
@@ -99,16 +93,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     });
                     alert.show();
                 }
-                break;
-            case R.id.service_start:
-                Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this,MyService.class);
-                startService(intent);
-                break;
-            case R.id.service_end:
-                Toast.makeText(getApplicationContext(),"Service 끝",Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this,MyService.class);
-                stopService(intent);
                 break;
         }
     }

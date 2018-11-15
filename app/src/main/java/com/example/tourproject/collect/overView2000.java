@@ -1,4 +1,4 @@
-package com.example.tourproject;
+package com.example.tourproject.collect;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,19 +8,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.tourproject.R;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
-import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -33,14 +31,12 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Double.valueOf;
 
-public class overView extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
-    overView overview;
+public class overView2000 extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
+    overView2000 overview;
     EditText edit;
     TextView text;
     ImageView imgView;
-    Button collectBtn;
     TextView placeTitleView;
     TextView title1View;
     TextView overviewView;
@@ -64,7 +60,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_over_view);
+        setContentView(R.layout.activity_over_view2000);
         mContext = this;
         Intent intent = getIntent();
         content_id = intent.getStringExtra("content_id");
@@ -75,7 +71,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
 
         tMapView = new TMapView(mContext);
         linearLayoutTmap.addView(tMapView);
-        tMapView.setSKTMapApiKey("5e9803e3-81c4-4567-813b-eba6981d2035");
+        tMapView.setSKTMapApiKey("13373001-b7c7-44b2-9036-423b1e4f7441");
         tMapView.setZoomLevel(15);//줌레벨
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
@@ -88,7 +84,6 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
 
                 placeTitleView = (TextView)findViewById(R.id.placeTitle);
                 imgView = (ImageView)findViewById(R.id.imageview);
-                collectBtn = (Button)findViewById(R.id.collectbtn);
                 title1View = (TextView)findViewById(R.id.title1);
                 overviewView = (TextView)findViewById(R.id.overview);
 
