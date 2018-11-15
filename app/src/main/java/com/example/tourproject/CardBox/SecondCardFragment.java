@@ -32,7 +32,7 @@ public class SecondCardFragment extends Fragment {
         setCardList();
 
         adapter = new GridAdapter(getContext(), cardList);
-        layoutManager = new GridLayoutManager(getContext(), 3);
+        layoutManager = new GridLayoutManager(getContext(), 2);
 
         card_recyclerView.setLayoutManager(layoutManager);
         card_recyclerView.setAdapter(adapter);
@@ -46,7 +46,7 @@ public class SecondCardFragment extends Fragment {
         cardList = new ArrayList<>();
 
         for(int i = 0; i < 9; i++) {
-            cardList.add(new CardData(R.drawable.namhan));
+            cardList.add(new CardData(R.drawable.p_2));
         }
     }
 }
