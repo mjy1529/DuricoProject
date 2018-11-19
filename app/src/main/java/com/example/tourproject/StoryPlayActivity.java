@@ -10,11 +10,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.tourproject.Map.MapActivity;
+import com.example.tourproject.collect.MyJobService;
 
 import java.io.File;
 
@@ -56,7 +58,6 @@ public class StoryPlayActivity extends AppCompatActivity {
 
         //db 생성 메소드
         createDatabase();
-
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
