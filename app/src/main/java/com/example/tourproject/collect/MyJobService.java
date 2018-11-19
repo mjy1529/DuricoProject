@@ -366,4 +366,12 @@ public class MyJobService extends JobService {
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
+
+    public double getMapx(){
+        return mapx;
+    }
+    public double getMapy(){
+        return mapy;
+    }
+
 }
