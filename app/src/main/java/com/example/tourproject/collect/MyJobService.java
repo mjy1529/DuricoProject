@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -44,8 +45,8 @@ public class MyJobService extends JobService {
     JobParameters params;
     DoItTask doIt;
     NotificationCompat.Builder builder;
-    static double mapx = 126.9769930325;
-    static double mapy = 37.5788222356;
+    static double mapx;
+    static double mapy;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
@@ -53,6 +54,7 @@ public class MyJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         this.params = jobParameters;
+        setGps();
         doIt = new DoItTask();
         doIt.execute();
         return true;
@@ -340,15 +342,26 @@ public class MyJobService extends JobService {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+
+
     public void setGps() {
         Log.i("잡서비스 함수들어갑니다.","setGps");
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                10000, // 통지사이의 최소 시간간격 (miliSecond)
-                0, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+//        Criteria criteria = new Criteria();
+//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//        criteria.setCostAllowed(false);
+//
+//        String provider = lm.getBestProvider(criteria, true);
+
+        String provider = LocationManager.PASSIVE_PROVIDER;
+
+//        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+//                10000, // 통지사이의 최소 시간간격 (miliSecond)
+//                0, // 통지사이의 최소 변경거리 (m)
+//                mLocationListener);
+        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
                 10000, // 통지사이의 최소 시간간격 (miliSecond)
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
