@@ -10,15 +10,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.tourproject.Map.MapActivity;
 
 import java.io.File;
 
-public class ViewsActivity extends AppCompatActivity {
+public class StoryPlayActivity extends AppCompatActivity {
     //DetailStoryActivity에서 받아온 story_id와 detailStory_id
     String s_id;
     String m_id;
@@ -39,7 +39,7 @@ public class ViewsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(ViewsActivity.this, MapActivity.class);
+                Intent intent = new Intent(StoryPlayActivity.this, MapActivity.class);
                 intent.putExtra("p_id", s_id);
                 intent.putExtra("m_id", m_id);
                 startActivity(intent);
@@ -56,6 +56,7 @@ public class ViewsActivity extends AppCompatActivity {
 
         //db 생성 메소드
         createDatabase();
+
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -99,7 +100,7 @@ public class ViewsActivity extends AppCompatActivity {
                         if (j <= 3)
                             database.execSQL("update Map2 set state = 1 where map1_id=" + m_id + " and story_id=" + s_id + " and map2_id="+j);
                     }
-                    Intent intent = new Intent(ViewsActivity.this, MapActivity.class);
+                    Intent intent = new Intent(StoryPlayActivity.this, MapActivity.class);
                     intent.putExtra("p_id", s_id);
                     intent.putExtra("m_id", m_id);
                     startActivity(intent);

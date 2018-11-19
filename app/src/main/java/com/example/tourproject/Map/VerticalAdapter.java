@@ -1,4 +1,4 @@
-package com.example.tourproject;
+package com.example.tourproject.Map;
 
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.example.tourproject.R;
+import com.example.tourproject.StoryList.HorizonViewHolder;
 
 import java.util.ArrayList;
 

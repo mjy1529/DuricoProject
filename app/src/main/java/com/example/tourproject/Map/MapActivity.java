@@ -1,25 +1,25 @@
-package com.example.tourproject;
+package com.example.tourproject.Map;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
-import android.graphics.ColorMatrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.example.tourproject.R;
+import com.example.tourproject.StoryList.RecyclerItemClickListener;
+import com.example.tourproject.StoryList.StoryListActivity;
+import com.example.tourproject.StoryPlayActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
             @Override
             public void onItemClick(View view, int position) {
                 if(arr_m2state_list.get(position).equals("1") || arr_m2state_list.get(position).equals("0")) {
-                    Intent intent = new Intent(MapActivity.this, ViewsActivity.class);
+                    Intent intent = new Intent(MapActivity.this, StoryPlayActivity.class);
                     //story_id를 넘겨준다
                     intent.putExtra("p_id", id);
                     intent.putExtra("m_id", mid);
@@ -137,11 +137,9 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public void selectDatas(String sql){
         arr_m2state_list = new ArrayList<String>();
         String r = "";
-        Log.i("dddd", sql);
         Cursor result = database.rawQuery(sql, null);
         result.moveToFirst();
         while(!result.isAfterLast()){
-            Log.i("두부", result.getString(0));
             arr_m2state_list.add(result.getString(0));
             result.moveToNext();
         }
