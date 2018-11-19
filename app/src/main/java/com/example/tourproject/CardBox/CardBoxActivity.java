@@ -9,23 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
-import com.example.tourproject.ViewFlipperAction;
-
-import java.util.ArrayList;
 
 public class CardBoxActivity extends AppCompatActivity {
 

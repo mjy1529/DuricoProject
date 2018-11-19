@@ -1,4 +1,4 @@
-package com.example.tourproject;
+package com.example.tourproject.Map;
 
 public class VerticalData {
     private int img;

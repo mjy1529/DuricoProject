@@ -1,35 +1,28 @@
-package com.example.tourproject;
+package com.example.tourproject.StoryList;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
+
+import com.example.tourproject.MainActivity;
+import com.example.tourproject.Map.MapActivity;
+import com.example.tourproject.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 
 //activity_story_list
@@ -85,6 +78,7 @@ public class StoryListActivity extends AppCompatActivity {
         arrlist = new ArrayList<String>();
         arr_id_list = new ArrayList<String>();
         arr_storycnt_list = new ArrayList<String>();
+
         //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드
         selectData();
 
@@ -133,7 +127,6 @@ public class StoryListActivity extends AppCompatActivity {
 
     public void selectcnt(int id){
         String sql = "select count(*) as cnt from Map2 where story_id="+id;
-        Log.i("ddddd", sql);
         Cursor result = database.rawQuery(sql, null);
         String r = "";
         result.moveToFirst();

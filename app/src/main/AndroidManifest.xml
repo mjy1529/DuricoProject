@@ -32,9 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StoryListActivity" />
-        <activity android:name=".ViewsActivity" />
-        <activity android:name=".MapActivity" />
+        <activity android:name=".StoryList.StoryListActivity" />
+        <activity android:name=".StoryPlayActivity" />
+        <activity android:name=".Map.MapActivity" />
         <activity android:name=".collect.overView" />
         <activity android:name=".collect.overView2000" />
         <activity android:name=".collect.PlaceMainActivity" />

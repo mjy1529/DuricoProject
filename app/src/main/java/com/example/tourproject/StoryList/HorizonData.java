@@ -1,4 +1,4 @@
-package com.example.tourproject;
+package com.example.tourproject.StoryList;
 
 public class HorizonData {
     private int img;

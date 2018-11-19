@@ -14,9 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.tourproject.CardBox.CardBoxActivity;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.collect.Listviewitem;
 import com.example.tourproject.collect.MyJobService;
 import com.example.tourproject.collect.PlaceMainActivity;

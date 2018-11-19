@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -341,16 +342,36 @@ public class MyJobService extends JobService {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+
+
     public void setGps() {
         Log.i("잡서비스 함수들어갑니다.","setGps");
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
+<<<<<<< HEAD
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
                 0, // 통지사이의 최소 시간간격 (miliSecond)
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
                 0, // 통지사이의 최소 시간간격 (miliSecond)
+=======
+//        Criteria criteria = new Criteria();
+//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//        criteria.setCostAllowed(false);
+//
+//        String provider = lm.getBestProvider(criteria, true);
+
+        String provider = LocationManager.PASSIVE_PROVIDER;
+
+//        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+//                10000, // 통지사이의 최소 시간간격 (miliSecond)
+//                0, // 통지사이의 최소 변경거리 (m)
+//                mLocationListener);
+        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                10000, // 통지사이의 최소 시간간격 (miliSecond)
+>>>>>>> 9bfbaa310a50273ac5012820592dceb48e4cbea7
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
