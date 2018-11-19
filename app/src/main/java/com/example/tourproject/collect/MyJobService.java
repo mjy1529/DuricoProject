@@ -44,8 +44,8 @@ public class MyJobService extends JobService {
     JobParameters params;
     DoItTask doIt;
     NotificationCompat.Builder builder;
-    static double mapx = 126.9769930325;
-    static double mapy = 37.5788222356;
+    static double mapx;
+    static double mapy;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
@@ -53,6 +53,7 @@ public class MyJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         this.params = jobParameters;
+        setGps();
         doIt = new DoItTask();
         doIt.execute();
         return true;
@@ -71,7 +72,7 @@ public class MyJobService extends JobService {
         @Override
         protected Void doInBackground(Void... voids) {
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
-            //setGps();
+
             find(mapx, mapy, 12);
             find(mapx, mapy, 14);
             find2000(mapx, mapy, 12);
@@ -345,11 +346,11 @@ public class MyJobService extends JobService {
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                10000, // 통지사이의 최소 시간간격 (miliSecond)
+                0, // 통지사이의 최소 시간간격 (miliSecond)
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                10000, // 통지사이의 최소 시간간격 (miliSecond)
+                0, // 통지사이의 최소 시간간격 (miliSecond)
                 0, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }

@@ -112,11 +112,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-
+            Log.i("지금 리스너 들어왔어요", "PlaceMainActivity 리스너");
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
-                Log.i("지금 리스너 들어왔어요", "PlaceMainActivity 리스너");
+                Log.i("지금 주소 받았어요", "PlaceMainActivity 리스너");
             }
             new Thread(new Runnable() {
                 @Override
@@ -365,11 +365,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 
-                1000, 1, mLocationListener);
+                0, 0, mLocationListener);
 
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 
-                1000, 1, mLocationListener);
+                0, 0, mLocationListener);
 
 //1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
 
