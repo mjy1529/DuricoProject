@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.Network.Application;
 import com.example.tourproject.R;
 
 import java.util.ArrayList;
@@ -34,7 +35,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>{
     @Override
     public void onBindViewHolder(GridViewHolder holder, int position) {
         CardData data = cardDataList.get(position);
-        Glide.with(context).load(data.getCard_image()).into(holder.grid_card_image);
+        Glide.with(context)
+                .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
+                .into(holder.grid_card_image);
     }
 
     @Override
