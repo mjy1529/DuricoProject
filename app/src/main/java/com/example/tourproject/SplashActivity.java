@@ -20,12 +20,13 @@ import retrofit2.Call;
 public class SplashActivity extends AppCompatActivity {
 
     NetworkService networkService;
-
-    Handler handler = new Handler();
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handler = new Handler();
 
         insertUserId(getMACAddress("wlan0"));
 
