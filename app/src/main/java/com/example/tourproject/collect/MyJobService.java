@@ -73,7 +73,7 @@ public class MyJobService extends JobService {
         @Override
         protected Void doInBackground(Void... voids) {
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
-
+            while(mapx == 0 || mapy == 0);
             find(mapx, mapy, 12);
             find(mapx, mapy, 14);
             find2000(mapx, mapy, 12);
@@ -126,7 +126,7 @@ public class MyJobService extends JobService {
     }
     static void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
+                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=300&contentTypeId="+contentTypeNum;
         Log.i("함수들어갑니다.","MyJobService find()");
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
@@ -349,30 +349,16 @@ public class MyJobService extends JobService {
         Log.i("잡서비스 함수들어갑니다.","setGps");
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-<<<<<<< HEAD
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                0, // 통지사이의 최소 시간간격 (miliSecond)
-                0, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                0, // 통지사이의 최소 시간간격 (miliSecond)
-=======
-//        Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//        criteria.setCostAllowed(false);
-//
-//        String provider = lm.getBestProvider(criteria, true);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(false);
 
-        String provider = LocationManager.PASSIVE_PROVIDER;
+        String provider = lm.getBestProvider(criteria, true);
 
-//        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-//                10000, // 통지사이의 최소 시간간격 (miliSecond)
-//                0, // 통지사이의 최소 변경거리 (m)
-//                mLocationListener);
+        //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                10000, // 통지사이의 최소 시간간격 (miliSecond)
->>>>>>> 9bfbaa310a50273ac5012820592dceb48e4cbea7
-                0, // 통지사이의 최소 변경거리 (m)
+                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
+                200, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
 }

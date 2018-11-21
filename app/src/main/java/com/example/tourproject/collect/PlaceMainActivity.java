@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -60,9 +61,10 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
         if(data.size() == 0){
+            Log.i("data가 없습니다.", ",,");
             data.clear();
             data2.clear();
-            setGps();
+            //setGps();
         }
 
         Log.i("mapx 전달됐어요", Double.toString(mapx));
@@ -109,7 +111,12 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                 return super.onOptionsItemSelected(item) ;
         }
     }
-    private final LocationListener mLocationListener = new LocationListener() {
+
+    @Override
+    public void onClick(View v) {
+
+    }
+    /*private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Log.i("지금 리스너 들어왔어요", "PlaceMainActivity 리스너");
@@ -129,6 +136,9 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
                     find2000(mapx, mapy, 14);
+                    if(data.size() == 0) {
+                        Log.i("Place메인에서 data가 없습니다.", ",,");
+                    }
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -174,7 +184,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
     void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
+                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=300&contentTypeId="+contentTypeNum;
         Log.i("함수들어갑니다.","PlaceMainActivity find()");
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
@@ -340,42 +350,21 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             Log.i("find 함수 끝냈다",Double.toString(mapy));
         }
     }//getXmlData method....
-    @Override
-    public void onClick(View v) {
-
-    }
-
-   /* public void setGps() {
-        Log.i("함수들어갑니다.","PlaceMainActivity setGPS()");
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        lm.requestLocationUpdates(){
-            LocationManager.NETWORK_PROVIDER
-        }, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000, // 통지사이의 최소 시간간격 (miliSecond)
-                0, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000, // 통지사이의 최소 시간간격 (miliSecond)
-                0, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-    }*/
     public void setGps() {
         Log.i("함수들어갑니다.","PlaceMainActivity setGPS()");
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(false);
 
-                0, 0, mLocationListener);
+        String provider = lm.getBestProvider(criteria, true);
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+        //String provider = LocationManager.PASSIVE_PROVIDER;
+        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                1000 * 60 * 60, // 통지사이의 최소 시간간격 (miliSecond)
+                500, // 통지사이의 최소 변경거리 (m)
+                mLocationListener);
 
-                0, 0, mLocationListener);
-
-//1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
-
-//위치값을 판별하여 일정 미터단위 움직임이 발생 했을 때에도 리스너를 호출 할 수 있다.
-
-    }
-
+    }*/
 }//MainActivity class..
 
