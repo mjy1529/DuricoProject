@@ -1,6 +1,8 @@
 package com.example.tourproject.Network;
 
 import com.example.tourproject.CardBox.CardResult;
+import com.example.tourproject.Map.Map1Result;
+import com.example.tourproject.Map.Map2Result;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,6 +24,9 @@ public interface NetworkService {
 //    @GET("/story/get_map1.php") //map1 가져오기
 //    Call<Map1Result> getMap1List(@Query("story_id") String story_id);
 
-//    @GET("/story/get_map2.php") //map2 가져오기
-//    Call<Map2Result> getMap2List(@Query("map1_id") String map1_id);
+    @GET("/story/get_allMap1.php") //전체 map1 가져오기
+    Call<Map1Result> getAllMap1List();
+
+    @GET("/story/get_map2.php") //map2 가져오기
+    Call<Map2Result> getMap2List(@Query("map1_id") String map1_id);
 }
