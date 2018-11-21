@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -20,6 +21,7 @@ import com.example.tourproject.R;
 import com.example.tourproject.StoryList.RecyclerItemClickListener;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.StoryPlayActivity;
+import com.example.tourproject.collect.MyJobService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
     ImageButton btns[];
 
+    MyJobService b = new MyJobService();
+
     //액션바 홈버튼 동작을 위한 메소드
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,6 +67,8 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         //db 생성 메소드
         createDatabase();
 
+        Log.i("값 ", Double.toString(b.getMapx()));
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -81,7 +87,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         btns[0] = (ImageButton) findViewById(R.id.imageView1);
         btns[1] = (ImageButton) findViewById(R.id.imageView2);
         btns[2] = (ImageButton) findViewById(R.id.imageView3);
-
         btns[0].setBackgroundResource(R.drawable.img1);
         btns[1].setBackgroundResource(R.drawable.img1);
         btns[2].setBackgroundResource(R.drawable.img1);
@@ -90,6 +95,8 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         btns[2].setOnClickListener(this);
         offbtn();
         onbtn();
+        updatedb(b);
+
         selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
         viewcheck();
 
@@ -163,6 +170,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 offbtn();
                 mid = "1";
                 onbtn();
+                updatedb(b);
                 selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
@@ -170,6 +178,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 offbtn();
                 mid = "2";
                 onbtn();
+                updatedb(b);
                 selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
@@ -177,9 +186,52 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 offbtn();
                 mid = "3";
                 onbtn();
+                updatedb(b);
                 selectDatas("select state from Map2 where story_id="+id+" and map1_id="+mid);
                 viewcheck();
                 break;
         }
     }
+
+    public void updatedb(MyJobService b){
+        if(LocatedPlace(b.getMapx(), b.getMapy())) {
+            Log.i("여기여기","ㅇㅇㅇ");
+            database.execSQL("update Map2 set state = 1 where map1_id=" + mid + " and story_id=" + id + " and map2_id=" + 2);
+        }
+    }
+    public boolean LocatedPlace(double mapx, double mapy){
+        Log.i("여기여기ㅇㅇ","ㅇㅇㅇ");
+        double p_mapx, p_mapy;
+        p_mapx = 126.977041;
+        p_mapy = 37.579652;
+        double diffmapy = LatitudeInDifference(300);
+        double diffmapx = LongitudeInDifference(p_mapy, 300);
+        Log.i("mapy",Double.toString(mapy));
+        Log.i("diff",Double.toString((p_mapy - diffmapy)));
+        Log.i("diff2",Double.toString((p_mapy + diffmapy)));
+        if(mapy >= (p_mapy - diffmapy) && mapy <= (p_mapy + diffmapy))
+            if(mapx >= (p_mapx - diffmapx) && mapx <= (p_mapx + diffmapx))
+                return true;
+        return false;
+    }
+
+    //반경 m이내의 위도차(degree)
+    public double LatitudeInDifference(int diff){
+        //지구반지름
+        final int earth = 6371000;    //단위m
+
+        return (diff*360.0) / (2*Math.PI*earth);
+    }
+
+    //반경 m이내의 경도차(degree)
+    public double LongitudeInDifference(double _latitude, int diff){
+        //지구반지름
+        final int earth = 6371000;    //단위m
+
+        double ddd = Math.cos(0);
+        double ddf = Math.cos(Math.toRadians(_latitude));
+
+        return (diff*360.0) / (2*Math.PI*earth*Math.cos(Math.toRadians(_latitude)));
+    }
+
 }
