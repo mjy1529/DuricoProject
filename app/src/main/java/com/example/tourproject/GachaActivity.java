@@ -2,22 +2,32 @@ package com.example.tourproject;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.tourproject.Map.MapActivity;
 import com.instacart.library.truetime.TrueTime;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -52,10 +62,26 @@ public class GachaActivity extends AppCompatActivity{
     private Thread backgroundThread;
     private boolean running = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gacha);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
+
+        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
 
         backgroundThread = new Thread(new BackgroundThread());
         setRunning(true);
@@ -88,6 +114,12 @@ public class GachaActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    public void clickEvent(View v) {
+        if (v.getId() == R.id.home) {
+            onBackPressed();
+        }
     }
 
     void setRunning(boolean b) {
@@ -261,6 +293,7 @@ public class GachaActivity extends AppCompatActivity{
         MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MyDialog.setContentView(R.layout.pick_customdialong);
         MyDialog.setTitle("My Custom Dialog");
+        MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         cardcontent = (TextView)MyDialog.findViewById(R.id.cardContent);
         cardcontent.setText(Integer.toString(pick()));
