@@ -38,6 +38,7 @@ import static com.example.tourproject.collect.MyJobService.data2;
 import static com.example.tourproject.collect.MyJobService.mapx;
 import static com.example.tourproject.collect.MyJobService.mapy;
 
+
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{
 
     ListView listView;
@@ -45,7 +46,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     TextView text;
     ListviewAdapter adapter;
     ListviewAdapter adapter2;
-    String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
+    String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +61,19 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
-        if(data.size() == 0){
-            Log.i("data가 없습니다.", ",,");
+        if(data2.size() == 0){
+            Log.i("data2가 없습니다.", ",,");
             data.clear();
             data2.clear();
             //setGps();
         }
 
-        Log.i("mapx 전달됐어요", Double.toString(mapx));
+        Log.i("data2 전달됐어요", String.valueOf(data2.size()));
         adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
-        listView2.setAdapter(adapter);
+        listView2.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

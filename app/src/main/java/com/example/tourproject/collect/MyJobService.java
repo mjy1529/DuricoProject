@@ -49,7 +49,7 @@ public class MyJobService extends JobService {
     static double mapy;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
-    static String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
+    static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -74,13 +74,15 @@ public class MyJobService extends JobService {
         protected Void doInBackground(Void... voids) {
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
             while(mapx == 0 || mapy == 0);
-            find(mapx, mapy, 12);
+            /*find(mapx, mapy, 12);
             find(mapx, mapy, 14);
             find2000(mapx, mapy, 12);
-            find2000(mapx, mapy, 14);
+            find2000(mapx, mapy, 14);*/
+            while(data.size() == 0 && data2.size() == 0);
             Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
             //조건문 if (푸시알림할 데이터가 있으면) {
-            if (data.size() != 0 || data2.size() != 0) {
+
+            if (data.size() > 0 || data2.size() > 0) {
                 //push notification
                 Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -205,8 +207,9 @@ public class MyJobService extends JobService {
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
+            Log.i("find1 캐치 에러!", String.valueOf(data.size()));
         }
+        Log.i("find 함수 끝냈다", String.valueOf(data.size()));
     }//getXmlData method....
     static void find2000(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
@@ -289,8 +292,9 @@ public class MyJobService extends JobService {
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
+            Log.i("catch에러!",String.valueOf(data2.size()));
         }
+        Log.i("find2 함수 끝냈다",String.valueOf(data2.size()));
     }//getXmlData method....
     static private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -319,15 +323,15 @@ public class MyJobService extends JobService {
                 mapx = location.getLongitude();
                 //mapx = 126.9769930325;
                 //mapy = 37.5788222356;
-                Log.i("잡서미스 리스너들어왔어요", Double.toString(mapx));
+                //Log.i("잡서미스 리스너들어왔어요", Double.toString(mapx));
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
                     //listView = (ListView)findViewById(R.id.list);
-                    Log.i("잡서비스 리스너스레드 들어왔어요",Double.toString(mapx));
-                    Log.i("여기나야관련들어왔어요",Double.toString(mapy));
+                    Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
+                    Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
                     find(mapx, mapy, 12);
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
@@ -357,7 +361,7 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
+                1000 * 60 * 60, // 통지사이의 최소 시간간격 (miliSecond)
                 200, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
