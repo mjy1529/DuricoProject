@@ -78,8 +78,16 @@ public class MyJobService extends JobService {
             find(mapx, mapy, 14);
             find2000(mapx, mapy, 12);
             find2000(mapx, mapy, 14);*/
+
             while(data.size() == 0 && data2.size() == 0);
+            while(data.size() <= data2.size());
+            try {
+                Thread.sleep(1000 * 7);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
+
             //조건문 if (푸시알림할 데이터가 있으면) {
 
             if (data.size() > 0 || data2.size() > 0) {
@@ -107,14 +115,20 @@ public class MyJobService extends JobService {
                         .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setTimeoutAfter(1000 * 60 * 15);
 
 
                 notificationManager.notify(0, builder.build());
                 Log.d("push", "푸시 알림 울림");
+                try {
+                    Thread.sleep(1000 * 60 * 15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             //}
-
+            //mapx = 0; mapy = 0;
             return null;
         }
 
@@ -361,8 +375,8 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 60, // 통지사이의 최소 시간간격 (miliSecond)
-                200, // 통지사이의 최소 변경거리 (m)
+                1000 * 60 * 10, // 통지사이의 최소 시간간격 (miliSecond)
+                300, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
 

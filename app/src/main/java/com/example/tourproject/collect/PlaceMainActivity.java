@@ -13,9 +13,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,8 +58,17 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
+
+        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
 
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
@@ -69,12 +80,18 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         }
 
         Log.i("data2 전달됐어요", String.valueOf(data2.size()));
+        adapter = null;
+        adapter2 = null;
         adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
+        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
+        adapter2.notifyDataSetChanged();
         listView2.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -100,6 +117,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                 startActivity(intent);
             }
         });
+    }
+    public void clickEvent(View v) {
+        if (v.getId() == R.id.home) {
+            onBackPressed();
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

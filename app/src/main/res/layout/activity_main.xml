@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen"
+    android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <ImageView
-        android:id="@+id/imageCard"
-        android:layout_width="match_parent"
-        android:layout_height="249dp" />
 
     <Button
         android:id="@+id/btnCard"
-        android:layout_width="123dp"
-        android:layout_height="172dp"
-        android:text="test" />
+        android:layout_width="101dp"
+        android:layout_height="101dp"
+        android:background="@drawable/cardbox" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,20 +20,21 @@
 
         <Button
             android:id="@+id/btnCollect"
-            android:layout_width="123dp"
-            android:layout_height="match_parent"
-            android:text="수집" />
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/collect" />
 
         <Button
             android:id="@+id/btnStart"
-            android:layout_width="135dp"
-            android:layout_height="match_parent"
-            android:text="시작" />
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/start" />
+
         <Button
             android:id="@+id/btnPick"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="뽑기"/>
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pick" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp">
+
     <Button
         android:id="@+id/home"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="49dp"
+        android:layout_height="47dp"
         android:layout_gravity="left"
+        android:background="@drawable/home"
         android:gravity="left"
-        android:onClick="clickEvent"
-        android:background="@drawable/home"/>
+        android:onClick="clickEvent" />
 
     <TextView
         android:id="@+id/pecardCnt"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="5dp"
-        android:text="123"
         android:background="@drawable/r"
-        android:layout_alignParentRight="true" />
+        android:fontFamily="@font/gulim050"
+        android:paddingLeft="36dp"
+        android:paddingTop="7dp"
+        android:text="12" />
 
     <TextView
         android:id="@+id/scardCnt"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="5dp"
-        android:text="123"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="69dp"
         android:background="@drawable/g"
-        android:layout_toLeftOf="@id/pecardCnt"/>
+        android:fontFamily="@font/gulim050"
+        android:paddingLeft="36dp"
+        android:paddingTop="7dp"
+        android:text="12" />
 
     <TextView
         android:id="@+id/pcardCnt"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="5dp"
-        android:text="123"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="138dp"
         android:background="@drawable/y"
-        android:layout_toLeftOf="@id/scardCnt" />
+        android:fontFamily="@font/gulim050"
+        android:paddingLeft="36dp"
+        android:paddingTop="7dp"
+        android:text="12" />
 
 
 </RelativeLayout>
