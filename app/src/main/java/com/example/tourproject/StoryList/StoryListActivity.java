@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.tourproject.MainActivity;
@@ -45,33 +47,26 @@ public class StoryListActivity extends AppCompatActivity {
     RecyclerView mHorizonView;
     HorizonAdapter mAdapter;
 
-    //액션바 홈버튼 동작을 위한 메소드
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(StoryListActivity.this, MainActivity.class);
-                startActivity(intent);
-                return true ;
-            default :
-                return super.onOptionsItemSelected(item) ;
-        }
-    }
-
     //시작
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_list);
 
-        Toolbar  myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.home)).getBitmap();
-        bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
-        actionBar.setHomeAsUpIndicator(new BitmapDrawable(bitmap));
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
+
+        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
 
         //db 생성 메소드
         createDatabase();
@@ -87,7 +82,7 @@ public class StoryListActivity extends AppCompatActivity {
         mHorizonView = (RecyclerView) findViewById(R.id.horizon_list);
         ArrayList<HorizonData> data = new ArrayList<>();
         for (int i=0; i<arr_id_list.size(); i++)
-            data.add(new HorizonData(R.drawable.gyeongbokpalace,arrlist.get(i)));
+            data.add(new HorizonData(R.drawable.a_2,arrlist.get(i)));
         final LinearLayoutManager mLayoutManger = new LinearLayoutManager(this);
         mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
         mHorizonView.setLayoutManager(mLayoutManger);
@@ -110,6 +105,12 @@ public class StoryListActivity extends AppCompatActivity {
 
             }
         }));
+    }
+
+    public void clickEvent(View v) {
+        if (v.getId() == R.id.home) {
+            onBackPressed();
+        }
     }
 
     //selec을 이용해 Storys table에서 title와 story_id를 얻어오는 메소드

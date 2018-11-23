@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/screen_2"
     tools:context=".StoryList.StoryListActivity">
 
     <android.support.v7.widget.Toolbar
@@ -13,22 +14,24 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:padding="10dp">
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="25dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="스토리 선택"
-            android:layout_margin="8dp"/>
+        <ImageView
+            android:layout_width="85dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/story" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginLeft="16dp"
             android:id="@+id/horizon_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
