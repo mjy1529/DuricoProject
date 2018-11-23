@@ -15,19 +15,10 @@
 
     <TextView
         android:id="@+id/pecardCnt"
-<<<<<<< HEAD
         android:layout_width="60dp"
         android:layout_height="28dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
-=======
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="3dp"
-        android:text="123"
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
         android:background="@drawable/r"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
@@ -36,20 +27,12 @@
 
     <TextView
         android:id="@+id/scardCnt"
-<<<<<<< HEAD
         android:layout_width="60dp"
         android:layout_height="28dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="69dp"
-=======
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="3dp"
-        android:text="123"
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
+
         android:background="@drawable/g"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
@@ -58,19 +41,11 @@
 
     <TextView
         android:id="@+id/pcardCnt"
-<<<<<<< HEAD
         android:layout_width="60dp"
         android:layout_height="28dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="138dp"
-=======
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:paddingLeft="38dp"
-        android:paddingTop="3dp"
-        android:text="123"
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
         android:background="@drawable/y"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"

@@ -42,13 +42,10 @@
         android:layout_margin="20dp"
         android:background="@color/myown"
         android:choiceMode="singleChoice"
-<<<<<<< HEAD
+
         android:divider="#72b7c0"
         android:dividerHeight="1.5dp"
         android:padding="5dp" />
-=======
-        android:dividerHeight="1.5dp" />
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
 
     <TextView
         android:layout_width="match_parent"
@@ -70,12 +67,9 @@
         android:layout_margin="20dp"
         android:background="@drawable/screen_2"
         android:choiceMode="singleChoice"
-<<<<<<< HEAD
         android:divider="#72b7c0"
         android:dividerHeight="1.5dp"
         android:padding="5dp" />
-=======
-        android:dividerHeight="1.5dp" />
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
+
 
 </LinearLayout>
