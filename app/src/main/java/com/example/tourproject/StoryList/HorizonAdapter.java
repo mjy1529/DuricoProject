@@ -31,7 +31,7 @@ public class HorizonAdapter extends RecyclerView.Adapter<HorizonViewHolder>{
     public void onBindViewHolder(HorizonViewHolder holder, int position) {
         HorizonData data = horizonDatas.get(position);
 
-        holder.description.setText(data.getText());
+        //holder.description.setText(data.getText());
         holder.icon.setImageResource(data.getImg());
     }
 

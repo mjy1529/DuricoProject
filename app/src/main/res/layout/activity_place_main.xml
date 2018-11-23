@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:background="@color/myown"
         android:choiceMode="singleChoice"
-        android:divider="@drawable/basicbtn"
         android:dividerHeight="1.5dp" />
 
     <TextView
@@ -44,7 +43,6 @@
         android:layout_height="wrap_content"
         android:background="@color/myown"
         android:choiceMode="singleChoice"
-        android:divider="@drawable/basicbtn"
         android:dividerHeight="1.5dp" />
 
 </LinearLayout>

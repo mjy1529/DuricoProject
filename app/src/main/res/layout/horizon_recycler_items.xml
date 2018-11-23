@@ -7,24 +7,16 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="300dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/basicbtn">
+        android:layout_margin="8dp">
 
         <ImageView
             android:id="@+id/horizon_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/basicbtn"/>
-
-        <TextView
-            android:id="@+id/horizon_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/horizon_icon"
-            android:layout_gravity="bottom" />
+            android:scaleType="fitXY"
+            android:src="@drawable/a_2" />
 
     </FrameLayout>
 

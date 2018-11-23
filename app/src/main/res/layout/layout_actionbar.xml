@@ -14,10 +14,10 @@
     <TextView
         android:id="@+id/pecardCnt"
         android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_marginLeft="10dp"
         android:paddingLeft="38dp"
-        android:paddingTop="5dp"
+        android:paddingTop="3dp"
         android:text="123"
         android:background="@drawable/r"
         android:layout_alignParentRight="true" />
@@ -25,10 +25,10 @@
     <TextView
         android:id="@+id/scardCnt"
         android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_marginLeft="10dp"
         android:paddingLeft="38dp"
-        android:paddingTop="5dp"
+        android:paddingTop="3dp"
         android:text="123"
         android:background="@drawable/g"
         android:layout_toLeftOf="@id/pecardCnt"/>
@@ -36,9 +36,9 @@
     <TextView
         android:id="@+id/pcardCnt"
         android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:paddingLeft="38dp"
-        android:paddingTop="5dp"
+        android:paddingTop="3dp"
         android:text="123"
         android:background="@drawable/y"
         android:layout_toLeftOf="@id/scardCnt" />
