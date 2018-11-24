@@ -78,11 +78,19 @@
             android:layout_marginRight="20dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/screen_2"
+            android:background="@color/myown"
             android:choiceMode="singleChoice"
             android:divider="#72b7c0"
             android:dividerHeight="1.5dp"
             android:padding="5dp" />
 
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/restart"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:drawable/ic_menu_rotate" />
 </LinearLayout>

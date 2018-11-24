@@ -72,7 +72,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         actionBar.setCustomView(mCustomView);
 
         Button home = (Button) findViewById(R.id.home);
-
+        Button restart = (Button) findViewById(R.id.restart);
+        restart.setOnClickListener(this);
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
         if(data2.size() == 0 && mapy == 0){
@@ -140,7 +141,9 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onClick(View v) {
-
+        if (v.getId() == R.id.restart) {
+            recreate();
+        }
     }
    /*
     private final LocationListener mLocationListener = new LocationListener() {

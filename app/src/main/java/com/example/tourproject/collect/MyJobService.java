@@ -1,6 +1,7 @@
 package com.example.tourproject.collect;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -89,8 +90,8 @@ public class MyJobService extends JobService {
             Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
 
             //조건문 if (푸시알림할 데이터가 있으면) {
-
-            if (data.size() > 0) {
+            Log.d("현재 접속한 클래스", getTopApplicationClassName(getApplicationContext()));
+            if (data.size() > 0 && !getTopApplicationClassName(getApplicationContext()).equals("com.example.tourproject.collect.PlaceMainActivity")) {
                 //push notification
                 Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -139,6 +140,9 @@ public class MyJobService extends JobService {
         }
 
 
+    }
+    public static String getTopApplicationClassName(Context context){
+        return ((ActivityManager.RunningTaskInfo)((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1).get(0)).topActivity.getClassName();
     }
     static void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
@@ -374,7 +378,7 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 5, // 통지사이의 최소 시간간격 (miliSecond)
+                1000 * 60 * 10, // 통지사이의 최소 시간간격 (miliSecond)
                 300, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
