@@ -1,11 +1,13 @@
 package com.example.tourproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,7 @@ import com.example.tourproject.Map.Map1Data;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Data;
 import com.example.tourproject.Map.Map2Result;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.AppUtility.Application;
 import com.example.tourproject.Network.MapDataManager;
 import com.example.tourproject.Network.NetworkService;
 
@@ -24,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import libs.mjn.prettydialog.PrettyDialog;
-import libs.mjn.prettydialog.PrettyDialogCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(checkInternet()) { //wifi나 데이터가 연결되어 있을 때
+                if(checkInternet()) { //wifi나 데이터가 연결체크 : 스플래시 화면에서 map1과 map2의 데이터를 서버에서 가져오기 때문
                     insertUserId(getMACAddress("wlan0"));
                     getMap1Network();
 
@@ -175,25 +175,18 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void showInternetAlertDialog() { //인터넷 연결요청 다이얼로그
-        final PrettyDialog internetDialog = new PrettyDialog(SplashActivity.this);
-        internetDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("네트워크")
                 .setMessage("인터넷이 연결되어 있지 않습니다. Wifi나 LTE 연결 후 다시 실행해주세요.")
-                .setIcon(R.drawable.pdlg_icon_info)
-                .setIconTint(R.color.pdlg_color_blue)
-                .addButton("확인",
-                        R.color.pdlg_color_white,
-                        R.color.pdlg_color_blue,
-                        new PrettyDialogCallback() {
-                            @Override
-                            public void onClick() {
-                                internetDialog.dismiss();
-                                finish();
-                            }
-                        }
-                )
-                .setCanceledOnTouchOutside(false);
-
-        internetDialog.show();
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        alert.setCancelable(false);
+        alert.show();
     }
 
 }

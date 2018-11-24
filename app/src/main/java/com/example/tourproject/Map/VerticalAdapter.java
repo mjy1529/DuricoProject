@@ -34,7 +34,6 @@ public class VerticalAdapter extends RecyclerView.Adapter<HorizonViewHolder>{
     public void onBindViewHolder(HorizonViewHolder holder, int position) {
         VerticalData data = verticalDatas.get(position);
 
-        holder.description.setText(data.getText());
         holder.icon.setImageResource(data.getImg());
        if(data.getState() != 1 && data.getState() != 0) {
            ColorMatrix matrix = new ColorMatrix();

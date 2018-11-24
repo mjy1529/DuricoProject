@@ -1,4 +1,6 @@
-package com.example.tourproject.Network;
+package com.example.tourproject.AppUtility;
+
+import com.example.tourproject.Network.NetworkService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

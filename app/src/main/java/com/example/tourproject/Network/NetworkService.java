@@ -3,6 +3,7 @@ package com.example.tourproject.Network;
 import com.example.tourproject.CardBox.CardResult;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.StoryList.StoryResult;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,8 +13,8 @@ public interface NetworkService {
     @GET("/user/insert_userId.php") //macAddress 넣기
     Call<String> insertUserId(@Query("user_id") String user_id);
 
-//    @GET("/story/get_story.php") //스토리 목록 가져오기
-//    Call<StoryResult> getStoryList();
+    @GET("/story/get_story.php") //스토리 목록 가져오기
+    Call<StoryResult> getStoryList();
 
 //    @GET("/card/get_card.php") //전체 카드 가져오기
 //    Call<CardResult> getTotalCard();

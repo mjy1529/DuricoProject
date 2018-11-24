@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.tourproject.AppUtility.BackPressCloseHandler;
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.collect.Listviewitem;
@@ -24,7 +25,9 @@ import com.example.tourproject.collect.PlaceMainActivity;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
+
     ArrayList<Listviewitem> data = new ArrayList<>();
+    private BackPressCloseHandler backPressCloseHandler;
 
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 .setPersisted(true)
                 .build();
         jobScheduler.schedule(jobInfo);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
     }
 
     private NetworkInfo getNetworkInfo(){
@@ -95,5 +100,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 }
                 break;
         }
+    }
+
+    // 뒤로가기 두번 누를 시 앱 종료
+    @Override
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
     }
 }
