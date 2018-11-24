@@ -1,4 +1,4 @@
-package com.example.tourproject.AppUtility;
+package com.example.tourproject.Util;
 
 import com.example.tourproject.Network.NetworkService;
 

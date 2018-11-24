@@ -1,15 +1,16 @@
-package com.example.tourproject.Network;
+package com.example.tourproject.Util;
 
 import com.example.tourproject.Map.Map1Data;
 import com.example.tourproject.Map.Map2Data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MapDataManager {
 
-    private Map<Integer, Map1Data> map1List;
-    private Map<Integer, Map2Data> map2List;
+    private ArrayList<Map1Data> mapList;
+
     public static MapDataManager instance = new MapDataManager();
 
     public static MapDataManager getInstance() {
@@ -17,15 +18,10 @@ public class MapDataManager {
     }
 
     public void initialize() {
-        map1List = new HashMap<>();
-        map2List = new HashMap<>();
+        mapList = new ArrayList<>();
     }
 
-    public Map<Integer, Map1Data> getMap1List() {
-        return map1List;
-    }
-
-    public Map<Integer, Map2Data> getMap2List() {
-        return map2List;
+    public ArrayList<Map1Data> getMapList() {
+        return mapList;
     }
 }

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tourproject.AppUtility.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 

@@ -15,7 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.tourproject.AppUtility.BackPressCloseHandler;
+import com.example.tourproject.Util.BackPressCloseHandler;
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.collect.Listviewitem;

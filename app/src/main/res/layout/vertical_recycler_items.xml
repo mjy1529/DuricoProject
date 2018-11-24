@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="15dp">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/horizon_icon"
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/gyeongbokpalace" />
+
+    <TextView
+        android:id="@+id/horizon_title"
         android:layout_width="wrap_content"
-        android:layout_height="205dp"
-        android:layout_margin="8dp"
-        android:background="#eaeaea">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizon_icon"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left|bottom"
+        android:layout_marginTop="5dp" />
 
-        <ImageView
-            android:id="@+id/horizon_icon"
-            android:layout_width="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_height="145dp"
-            android:scaleType="fitXY"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/gyeongbokpalace" />
-
-        <TextView
-            android:id="@+id/horizon_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/horizon_icon"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="left|bottom" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

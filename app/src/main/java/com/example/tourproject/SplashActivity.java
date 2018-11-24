@@ -16,8 +16,8 @@ import com.example.tourproject.Map.Map1Data;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Data;
 import com.example.tourproject.Map.Map2Result;
-import com.example.tourproject.AppUtility.Application;
-import com.example.tourproject.Network.MapDataManager;
+import com.example.tourproject.Util.Application;
+import com.example.tourproject.Util.MapDataManager;
 import com.example.tourproject.Network.NetworkService;
 
 import java.io.IOException;
@@ -50,9 +50,9 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(checkInternet()) { //wifi나 데이터가 연결체크 : 스플래시 화면에서 map1과 map2의 데이터를 서버에서 가져오기 때문
+                if (checkInternet()) { //wifi나 데이터가 연결체크 : 스플래시 화면에서 map1과 map2의 데이터를 서버에서 가져오기 때문
                     insertUserId(getMACAddress("wlan0"));
-                    getMap1Network();
+                    setMapList();
 
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -67,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
     public void insertUserId(final String macAddress) {
         new AsyncTask<Void, Void, String>() {
             String result;
+
             @Override
             protected String doInBackground(Void... voids) {
                 Call<String> request = networkService.insertUserId(macAddress);
@@ -111,7 +112,7 @@ public class SplashActivity extends AppCompatActivity {
         return "";
     }
 
-    public void getMap1Network () {
+    public void setMapList() {
         mapDataManager = MapDataManager.getInstance();
         mapDataManager.initialize();
 
@@ -123,10 +124,10 @@ public class SplashActivity extends AppCompatActivity {
                     Map1Result map1Result = response.body();
                     ArrayList<Map1Data> map1List = map1Result.map1;
                     for (int i = 0; i < map1List.size(); i++) {
-                        mapDataManager.getMap1List().put(i, map1List.get(i));
+                        mapDataManager.getMapList().add(map1List.get(i));
                     }
-                    for (int map1_id = 0; map1_id < mapDataManager.getMap1List().size(); map1_id++) {
-                        getMap2Network(String.valueOf(map1_id));
+                    for (int i = 0; i < mapDataManager.getMapList().size(); i++) {
+                        getMap2(mapDataManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
                     }
                 }
             }
@@ -138,7 +139,7 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    public void getMap2Network(final String map1_id) {
+    public void getMap2(final String map1_id) {
         Call<Map2Result> request = networkService.getMap2List(map1_id);
         request.enqueue(new Callback<Map2Result>() {
             @Override
@@ -147,16 +148,13 @@ public class SplashActivity extends AppCompatActivity {
                     Map2Result map2Result = response.body();
                     ArrayList<Map2Data> map2List = map2Result.map2;
 
-                    for (int i = 0; i < map2List.size(); i++) {
-                        mapDataManager.getMap2List().put(i, map2List.get(i));
-                    }
-                    Log.d(TAG, map1_id + " : " + mapDataManager.getMap2List().size());
+                    mapDataManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
                 }
             }
 
             @Override
             public void onFailure(Call<Map2Result> call, Throwable t) {
-                Log.d(TAG, "map2 받아오기 실패");
+
             }
         });
     }
@@ -175,16 +173,36 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void showInternetAlertDialog() { //인터넷 연결요청 다이얼로그
+//        final PrettyDialog internetDialog = new PrettyDialog(SplashActivity.this);
+//        internetDialog
+//                .setMessage("인터넷이 연결되어 있지 않습니다. Wifi나 LTE 연결 후 다시 실행해주세요.")
+//                .setIcon(R.drawable.pdlg_icon_info)
+//                .setIconTint(R.color.pdlg_color_blue)
+//                .addButton("확인",
+//                        R.color.pdlg_color_white,
+//                        R.color.pdlg_color_blue,
+//                        new PrettyDialogCallback() {
+//                            @Override
+//                            public void onClick() {
+//                                internetDialog.dismiss();
+//                                finish();
+//                            }
+//                        }
+//                )
+//                .setCanceledOnTouchOutside(false);
+//
+//        internetDialog.show();
+
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("네트워크")
                 .setMessage("인터넷이 연결되어 있지 않습니다. Wifi나 LTE 연결 후 다시 실행해주세요.")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
         alert.setCancelable(false);
         alert.show();
     }

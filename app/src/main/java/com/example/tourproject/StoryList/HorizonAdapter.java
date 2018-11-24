@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.Map.MapActivity;
-import com.example.tourproject.AppUtility.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.R;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class HorizonAdapter extends RecyclerView.Adapter<HorizonViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MapActivity.class);
-                intent.putExtra("story_id", "data.getStory_id()");
+                intent.putExtra("story_id", String.valueOf(data.getStory_id()));
                 context.startActivity(intent);
             }
         });

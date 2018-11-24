@@ -1,4 +1,4 @@
-package com.example.tourproject.AppUtility;
+package com.example.tourproject.Util;
 
 import android.app.Activity;
 import android.widget.Toast;

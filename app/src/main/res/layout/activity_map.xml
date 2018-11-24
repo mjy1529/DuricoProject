@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Map.MapActivity">
 
     <android.support.v7.widget.Toolbar
@@ -13,31 +13,34 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick" />
 
     </LinearLayout>
 
@@ -52,15 +55,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:text="TextView" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="40dp"
             android:id="@+id/horizon_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp" />
 
     </RelativeLayout>
 

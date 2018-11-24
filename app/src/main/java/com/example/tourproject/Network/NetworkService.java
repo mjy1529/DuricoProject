@@ -22,8 +22,8 @@ public interface NetworkService {
     @GET("/card/get_categoryCard.php") //카테고리 카드 가져오기
     Call<CardResult> getCategoryCard(@Query("category") String category);
 
-//    @GET("/story/get_map1.php") //map1 가져오기
-//    Call<Map1Result> getMap1List(@Query("story_id") String story_id);
+    @GET("/story/get_map1.php") //map1 가져오기
+    Call<Map1Result> getMap1List(@Query("story_id") String story_id);
 
     @GET("/story/get_allMap1.php") //전체 map1 가져오기
     Call<Map1Result> getAllMap1List();

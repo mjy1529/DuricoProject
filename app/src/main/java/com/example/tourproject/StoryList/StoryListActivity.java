@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.tourproject.AppUtility.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 
@@ -46,6 +46,8 @@ public class StoryListActivity extends AppCompatActivity {
 
     NetworkService networkService;
     ArrayList<StoryData> storyList;
+
+    public final static String TAG = "StoryList";
 
     //액션바 홈버튼 동작을 위한 메소드
     @Override
