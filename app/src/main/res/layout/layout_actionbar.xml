@@ -23,6 +23,7 @@
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
         android:paddingTop="7dp"
+        android:textColor="#ec776c"
         android:text="12" />
 
     <TextView
@@ -32,7 +33,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="69dp"
-
+        android:textColor="#6591d1"
         android:background="@drawable/g"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
@@ -49,6 +50,7 @@
         android:background="@drawable/y"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
+        android:textColor="#ffce73"
         android:paddingTop="7dp"
         android:text="12" />
 
