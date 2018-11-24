@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 
@@ -39,6 +40,8 @@ import static com.example.tourproject.collect.MyJobService.data;
 import static com.example.tourproject.collect.MyJobService.data2;
 import static com.example.tourproject.collect.MyJobService.mapx;
 import static com.example.tourproject.collect.MyJobService.mapy;
+import static com.example.tourproject.collect.MyJobService.find;
+import static com.example.tourproject.collect.MyJobService.find2000;
 
 
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{
@@ -72,7 +75,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
-        if(data2.size() == 0){
+        if(data2.size() == 0 && mapy == 0){
             Log.i("data2가 없습니다.", ",,");
             data.clear();
             data2.clear();
@@ -80,8 +83,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         }
 
         Log.i("data2 전달됐어요", String.valueOf(data2.size()));
-        adapter = null;
-        adapter2 = null;
         adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
@@ -120,6 +121,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     }
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
+            /*Intent intent = new Intent(PlaceMainActivity.this, MainActivity.class);
+            startActivity(intent);*/
             onBackPressed();
         }
     }
@@ -139,7 +142,9 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     public void onClick(View v) {
 
     }
-    /*private final LocationListener mLocationListener = new LocationListener() {
+   /*
+    private final LocationListener mLocationListener = new LocationListener() {
+
         @Override
         public void onLocationChanged(Location location) {
             Log.i("지금 리스너 들어왔어요", "PlaceMainActivity 리스너");
@@ -168,7 +173,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                         public void run() {
                             // TODO Auto-generated method stub
                             //text.setText(data);
-                            adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
+                            /*adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
@@ -205,174 +210,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         return bm;
     }
     //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
-    void find(double longi, double lati, int contentTypeNum) {
-        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=300&contentTypeId="+contentTypeNum;
-        Log.i("함수들어갑니다.","PlaceMainActivity find()");
-        try {
-            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
-            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
 
-            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
-            XmlPullParser xpp= factory.newPullParser();
-            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
-
-            String tag;
-            Bitmap imagesrc = null;
-            String title = "";
-            String content_id = "";
-            String addr = "";
-            String contentType_id = "";
-            String mapx = "";
-            String mapy = "";
-            data.clear();
-            xpp.next();
-            Listviewitem item1 = null;
-            int eventType= xpp.getEventType();
-            while( eventType != XmlPullParser.END_DOCUMENT ){
-                //Log.i("관련들어왔어요","ddddddd");
-                switch( eventType ){
-                    case XmlPullParser.START_DOCUMENT:
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        tag= xpp.getName();//테그 이름 얻어오기
-
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-                        else if(tag.equals("addr1")){
-                            xpp.next();
-                            addr = xpp.getText();
-                        }
-                        else if(tag.equals("firstimage")){
-                            xpp.next();
-                            imagesrc = getImageBitmap(xpp.getText());
-                        }
-                        else if(tag.equals("contentid")){
-                            xpp.next();
-                            content_id = xpp.getText();
-                        }
-                        else if(tag.equals("contenttypeid")){
-                            xpp.next();
-                            contentType_id = xpp.getText();
-                        }
-                        else if(tag.equals("mapx")){
-                            xpp.next();
-                            mapx = xpp.getText();
-                        }
-                        else if(tag.equals("mapy")){
-                            xpp.next();
-                            mapy = xpp.getText();
-                        }
-                        else if(tag.equals("title")){
-                            xpp.next();
-                            title = xpp.getText();
-                            if(title != null) {
-                                item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
-                                data.add(item1);
-                            }
-                        }
-                        break;
-
-                    case XmlPullParser.TEXT:
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        tag= xpp.getName(); //테그 이름 얻어오기
-                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
-                            break;
-                }
-                eventType= xpp.next();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
-        }
-    }//getXmlData method....
-    void find2000(double longi, double lati, int contentTypeNum) {
-        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
-        Log.i("함수들어갑니다.","PlaceMainActivity find2000()");
-        try {
-            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
-            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
-
-            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
-            XmlPullParser xpp= factory.newPullParser();
-            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
-
-            String tag;
-            Bitmap imagesrc = null;
-            String title = "";
-            String content_id = "";
-            String addr = "";
-            String contentType_id = "";
-            String mapx = "";
-            String mapy = "";
-            data2.clear();
-            xpp.next();
-            Listviewitem item1 = null;
-            int eventType= xpp.getEventType();
-            while( eventType != XmlPullParser.END_DOCUMENT ){
-                //Log.i("관련들어왔어요","ddddddd");
-                switch( eventType ){
-                    case XmlPullParser.START_DOCUMENT:
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        tag= xpp.getName();//테그 이름 얻어오기
-
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-                        else if(tag.equals("addr1")){
-                            xpp.next();
-                            addr = xpp.getText();
-                        }
-                        else if(tag.equals("firstimage")){
-                            xpp.next();
-                            imagesrc = getImageBitmap(xpp.getText());
-                        }
-                        else if(tag.equals("contentid")){
-                            xpp.next();
-                            content_id = xpp.getText();
-                        }
-                        else if(tag.equals("contenttypeid")){
-                            xpp.next();
-                            contentType_id = xpp.getText();
-                        }
-                        else if(tag.equals("mapx")){
-                            xpp.next();
-                            mapx = xpp.getText();
-                        }
-                        else if(tag.equals("mapy")){
-                            xpp.next();
-                            mapy = xpp.getText();
-                        }
-                        else if(tag.equals("title")){
-                            xpp.next();
-                            title = xpp.getText();
-                            if(title != null) {
-                                item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
-                                data2.add(item1);
-                            }
-                        }
-                        break;
-
-                    case XmlPullParser.TEXT:
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        tag= xpp.getName(); //테그 이름 얻어오기
-                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
-                            break;
-                }
-                eventType= xpp.next();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
-        }
-    }//getXmlData method....
     public void setGps() {
         Log.i("함수들어갑니다.","PlaceMainActivity setGPS()");
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

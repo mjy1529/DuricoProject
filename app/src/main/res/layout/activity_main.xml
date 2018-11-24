@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,34 +8,71 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@null"
+        android:minHeight="?android:attr/actionBarSize"
+        android:padding="10dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+
     <Button
         android:id="@+id/btnCard"
-        android:layout_width="101dp"
-        android:layout_height="101dp"
-        android:background="@drawable/cardbox" />
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0"
+        android:background="@drawable/main"
+        android:gravity="center" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="35dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="23dp"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        android:padding="0dp">
 
         <Button
             android:id="@+id/btnCollect"
-            android:layout_width="129dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/collect" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/three"
+            android:elevation="0dp" />
 
         <Button
             android:id="@+id/btnStart"
-            android:layout_width="129dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/start" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/two" />
 
         <Button
             android:id="@+id/btnPick"
-            android:layout_width="129dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pick" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/one" />
+
     </LinearLayout>
 
 </LinearLayout>

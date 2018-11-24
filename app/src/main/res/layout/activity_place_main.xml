@@ -6,10 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screen"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:paddingStart="0dp"
-    android:paddingTop="0dp">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -22,60 +19,70 @@
         android:paddingLeft="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/line_1"
-        android:fontFamily="@font/gulim070"
-        android:paddingStart="10dp"
-        android:paddingTop="8dp"
-        android:text="수집 가능 관광지 내역"
-        android:textColor="#5186a7"
-        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp">
 
-    <ListView
-        android:id="@+id/listview300"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_margin="20dp"
-        android:background="@color/myown"
-        android:choiceMode="singleChoice"
-<<<<<<< HEAD
-        android:divider="#72b7c0"
-        android:dividerHeight="1.5dp"
-        android:padding="5dp" />
-=======
-        android:dividerHeight="1.5dp" />
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/line_1"
+            android:fontFamily="@font/gulim070"
+            android:paddingStart="10dp"
+            android:paddingTop="8dp"
+            android:text="수집 가능 관광지 내역"
+            android:textColor="#5186a7"
+            android:textSize="18sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/line_1"
-        android:fontFamily="@font/gulim070"
-        android:paddingStart="10dp"
-        android:paddingTop="8dp"
-        android:text="근처 관광지 내역"
-        android:textColor="#5186a7"
-        android:textSize="18sp" />
+        <ListView
+            android:id="@+id/listview300"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
 
-    <ListView
-        android:id="@+id/listview2000"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/screen_2"
-        android:choiceMode="singleChoice"
-<<<<<<< HEAD
-        android:divider="#72b7c0"
-        android:dividerHeight="1.5dp"
-        android:padding="5dp" />
-=======
-        android:dividerHeight="1.5dp" />
->>>>>>> 9e20b32916ed3f55cf6feaeacc01506c11e2c7cd
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/myown"
+            android:choiceMode="singleChoice"
+            android:divider="#72b7c0"
+            android:dividerHeight="1.5dp"
+            android:padding="5dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/line_1"
+            android:fontFamily="@font/gulim070"
+            android:paddingStart="10dp"
+            android:paddingTop="8dp"
+            android:text="근처 관광지 내역"
+            android:textColor="#5186a7"
+            android:textSize="18sp" />
+
+        <ListView
+            android:id="@+id/listview2000"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/screen_2"
+            android:choiceMode="singleChoice"
+            android:divider="#72b7c0"
+            android:dividerHeight="1.5dp"
+            android:padding="5dp" />
+
+    </LinearLayout>
 </LinearLayout>

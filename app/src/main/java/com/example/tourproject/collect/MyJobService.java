@@ -80,9 +80,9 @@ public class MyJobService extends JobService {
             find2000(mapx, mapy, 14);*/
 
             while(data.size() == 0 && data2.size() == 0);
-            while(data.size() <= data2.size());
+            while(data.size() >= data2.size());
             try {
-                Thread.sleep(1000 * 7);
+                Thread.sleep(1000 * 5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -90,7 +90,7 @@ public class MyJobService extends JobService {
 
             //조건문 if (푸시알림할 데이터가 있으면) {
 
-            if (data.size() > 0 || data2.size() > 0) {
+            if (data.size() > 0) {
                 //push notification
                 Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -116,16 +116,16 @@ public class MyJobService extends JobService {
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setTimeoutAfter(1000 * 60 * 15);
+                        .setTimeoutAfter(1000 * 60 * 60);
 
 
                 notificationManager.notify(0, builder.build());
                 Log.d("push", "푸시 알림 울림");
-                try {
+                /*try {
                     Thread.sleep(1000 * 60 * 15);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
             //}
             //mapx = 0; mapy = 0;
@@ -160,7 +160,8 @@ public class MyJobService extends JobService {
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            data.clear();
+            if(contentTypeNum == 12)
+                data.clear();
             xpp.next();
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
@@ -245,7 +246,8 @@ public class MyJobService extends JobService {
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            data2.clear();
+            if(contentTypeNum == 12)
+                data2.clear();
             xpp.next();
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
@@ -327,7 +329,7 @@ public class MyJobService extends JobService {
         return bm;
     }
 
-    private final LocationListener mLocationListener = new LocationListener() {
+    static private final LocationListener mLocationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location location) {
@@ -335,9 +337,6 @@ public class MyJobService extends JobService {
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
-                //mapx = 126.9769930325;
-                //mapy = 37.5788222356;
-                //Log.i("잡서미스 리스너들어왔어요", Double.toString(mapx));
             }
             new Thread(new Runnable() {
                 @Override
@@ -375,7 +374,7 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 10, // 통지사이의 최소 시간간격 (miliSecond)
+                1000 * 60 * 5, // 통지사이의 최소 시간간격 (miliSecond)
                 300, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }

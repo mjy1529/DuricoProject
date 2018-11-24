@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/screen"
+    android:orientation="vertical"
     tools:context=".GachaActivity">
 
     <android.support.v7.widget.Toolbar
@@ -14,9 +14,8 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:padding="10dp">
-    </android.support.v7.widget.Toolbar>
+        android:padding="10dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
     <ImageView
         android:id="@+id/imageView4"
@@ -25,23 +24,24 @@
         android:layout_marginBottom="35dp"
         android:layout_marginLeft="15.5dp"
         android:layout_marginRight="15.5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:srcCompat="@drawable/main" />
 
     <Button
         android:id="@+id/btn_pick"
         android:layout_width="wrap_content"
         android:layout_height="120dp"
-        android:layout_marginBottom="11.5dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="11.5dp"
         android:background="@drawable/a" />
 
     <TextView
         android:id="@+id/txt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="31.5dp"
-        android:layout_gravity="center_horizontal" />
+        android:fontFamily="@font/gulim050"
+        android:text="TextView" />
 
 </LinearLayout>
