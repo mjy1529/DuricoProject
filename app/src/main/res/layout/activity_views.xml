@@ -18,13 +18,23 @@
         android:padding="10dp">
     </android.support.v7.widget.Toolbar>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="323dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="364dp"
-        android:layout_height="323dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/main_1" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="381dp"
+            android:layout_height="323dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/test" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="381dp"
+            android:layout_height="323dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/main_1" />
+    </FrameLayout>
     <RelativeLayout
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"

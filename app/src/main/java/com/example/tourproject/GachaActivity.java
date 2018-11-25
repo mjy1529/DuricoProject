@@ -275,17 +275,17 @@ public class GachaActivity extends AppCompatActivity{
         double r  = Math.random(); //{0.0 - 1.0}
         double dr = r * 100.0f; // {0.0 - 100.0}
 
-        double p[] = { 5.0f, 15.0f, 15.0f, 30.0f, 35.0f }; //4, 3, 2, 1, 0
+        double p[] = { 5.0f, 15.0f, 80.0f }; //2, 1, 0
 
         double cumulative = 0.0f;
         int i;
-        for(i=0; i<5; i++)
+        for(i=0; i<3; i++)
         {
             cumulative += p[i];
             if(dr <= cumulative)
                 break;
         }
-        return 4-i;
+        return 2-i;
     }
 
     public void MyCustomAlertDialog(){
