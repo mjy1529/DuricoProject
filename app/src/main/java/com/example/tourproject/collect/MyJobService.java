@@ -1,5 +1,6 @@
 package com.example.tourproject.collect;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -10,6 +11,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -21,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -48,9 +51,11 @@ public class MyJobService extends JobService {
     NotificationCompat.Builder builder;
     static double mapx;
     static double mapy;
+    static boolean value = false;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
+    public static boolean bAppRunned = false;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -73,25 +78,23 @@ public class MyJobService extends JobService {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
             while(mapx == 0 || mapy == 0);
-            /*find(mapx, mapy, 12);
-            find(mapx, mapy, 14);
-            find2000(mapx, mapy, 12);
-            find2000(mapx, mapy, 14);*/
 
             while(data.size() == 0 && data2.size() == 0);
+
             while(data.size() >= data2.size());
-            try {
+            /*try {
                 Thread.sleep(1000 * 5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
             Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
 
             //조건문 if (푸시알림할 데이터가 있으면) {
             Log.d("현재 접속한 클래스", getTopApplicationClassName(getApplicationContext()));
-            if (data.size() > 0 && !getTopApplicationClassName(getApplicationContext()).equals("com.example.tourproject.collect.PlaceMainActivity")) {
+            if (data.size() > 0 && !bAppRunned) {
                 //push notification
                 Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -113,11 +116,10 @@ public class MyJobService extends JobService {
                 builder.setSmallIcon(R.drawable.pinicon)
                         .setContentTitle("수집 가능!")
                         .setContentText("근처에 수집 가능한 관광지가 있습니다!!")
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setDefaults(Notification.DEFAULT_ALL)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setTimeoutAfter(1000 * 60 * 60);
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
 
 
                 notificationManager.notify(0, builder.build());
@@ -221,6 +223,7 @@ public class MyJobService extends JobService {
                         if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
+
                 eventType= xpp.next();
             }
         } catch (Exception e) {
@@ -228,6 +231,7 @@ public class MyJobService extends JobService {
             //TODO Auto-generated catch blocke.printStackTrace();
             Log.i("find1 캐치 에러!", String.valueOf(data.size()));
         }
+
         Log.i("find 함수 끝냈다", String.valueOf(data.size()));
     }//getXmlData method....
     static void find2000(double longi, double lati, int contentTypeNum) {
@@ -307,6 +311,7 @@ public class MyJobService extends JobService {
                         if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
+
                 eventType= xpp.next();
             }
         } catch (Exception e) {
@@ -331,6 +336,30 @@ public class MyJobService extends JobService {
             Log.e(TAG, "Error getting bitmap", e);
         }
         return bm;
+    }
+    public void setGps() {
+        Log.i("잡서비스 함수들어갑니다.","setGps");
+
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(false);
+
+        String provider = lm.getBestProvider(criteria, true);
+
+        //String provider = LocationManager.PASSIVE_PROVIDER;
+        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                1000 * 60 * 5, // 통지사이의 최소 시간간격 (miliSecond)
+                50, // 통지사이의 최소 변경거리 (m)
+                mLocationListener);
+    }
+
+    public double getMapx(){
+        return mapx;
+    }
+    public double getMapy(){
+        return mapy;
     }
 
     static private final LocationListener mLocationListener = new LocationListener() {
@@ -363,31 +392,4 @@ public class MyJobService extends JobService {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-
-
-    public void setGps() {
-        Log.i("잡서비스 함수들어갑니다.","setGps");
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setCostAllowed(false);
-
-        String provider = lm.getBestProvider(criteria, true);
-
-        //String provider = LocationManager.PASSIVE_PROVIDER;
-        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 10, // 통지사이의 최소 시간간격 (miliSecond)
-                300, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-    }
-
-    public double getMapx(){
-        return mapx;
-    }
-    public double getMapy(){
-        return mapy;
-    }
-
 }
