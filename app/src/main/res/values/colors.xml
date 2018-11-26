@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="myown">#d2ffffff</color>
+    <color name="tab1">#ec776c</color>
+    <color name="tab2">#ffce73</color>
+    <color name="tab3">#77c6ba</color>
 </resources>

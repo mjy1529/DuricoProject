@@ -12,38 +12,48 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:padding="10dp">
+    </android.support.v7.widget.Toolbar>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_below="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_below="@id/toolbar"
+            android:id="@+id/rel"
+            android:paddingRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:theme="@style/TabTheme"
+            android:layout_alignParentRight="true"
+            android:layout_width="270dp"
+            android:layout_height="35dp">
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="인물카드" />
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:text="인물카드"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="장소카드" />
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem2"
+                android:text="장소카드"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="스토리카드" />
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem3"
+                android:text="스토리카드"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    </android.support.design.widget.TabLayout>
+        </android.support.design.widget.TabLayout>
 
+</RelativeLayout>
     <android.support.v4.view.ViewPager
+        android:background="@drawable/test3"
         android:id="@+id/container"
-        android:background="@drawable/screen_1"
-        android:layout_below="@+id/tabs"
+        android:layout_below="@+id/rel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
