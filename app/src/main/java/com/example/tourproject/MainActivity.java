@@ -1,6 +1,7 @@
 package com.example.tourproject;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
 
             MyJobService.bAppRunned = true;
+
             JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
             ComponentName componentName = new ComponentName(getApplicationContext(), MyJobService.class);
             //액션바-------------------------------
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
             Button home = (Button) findViewById(R.id.home);
             //여기까지------------------------------
+
             ImageButton btn0 = (ImageButton) findViewById(R.id.btnCard);
             btn0.setBackground(new ShapeDrawable(new OvalShape()));
             btn0.setClipToOutline(true);
@@ -144,6 +148,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.btnCollect:
+                recreate();
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 intent = new Intent(MainActivity.this, PlaceMainActivity.class);
                 startActivity(intent);
                 break;

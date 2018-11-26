@@ -5,11 +5,20 @@
     android:gravity="center"
     android:paddingTop="15dp">
 
-    <ImageView
+
+
+        <ImageView
         android:id="@+id/grid_card_image"
         android:layout_width="150dp"
         android:layout_height="200dp"
+        android:background="@drawable/a_6"
         android:scaleType="centerInside"
         android:src="@drawable/namhan" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/lock" />
 
 </RelativeLayout>

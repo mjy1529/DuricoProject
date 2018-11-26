@@ -61,11 +61,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             //setGps();
         }
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
         Log.i("data2 전달됐어요", String.valueOf(data2.size()));
         adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);

@@ -17,8 +17,8 @@
         android:padding="10dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
-     <ImageButton
-         android:id="@+id/btnCard"
+    <ImageButton
+        android:id="@+id/btnCard"
         style="@style/Widget.AppCompat.ImageButton"
         android:layout_width="300dp"
         android:layout_height="300dp"

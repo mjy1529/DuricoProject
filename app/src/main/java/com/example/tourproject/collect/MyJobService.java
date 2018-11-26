@@ -26,6 +26,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
@@ -51,7 +52,6 @@ public class MyJobService extends JobService {
     NotificationCompat.Builder builder;
     static double mapx;
     static double mapy;
-    static boolean value = false;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
@@ -69,6 +69,7 @@ public class MyJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         if (doIt != null) {
+            bAppRunned = false;
             doIt.cancel(true);
         }
         return true;
@@ -116,7 +117,7 @@ public class MyJobService extends JobService {
                 builder.setSmallIcon(R.drawable.pinicon)
                         .setContentTitle("수집 가능!")
                         .setContentText("근처에 수집 가능한 관광지가 있습니다!!")
-                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_HIGH);
@@ -350,8 +351,8 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 5, // 통지사이의 최소 시간간격 (miliSecond)
-                50, // 통지사이의 최소 변경거리 (m)
+                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
+                10, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
 
@@ -378,10 +379,10 @@ public class MyJobService extends JobService {
                     //listView = (ListView)findViewById(R.id.list);
                     Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
                     Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
-                    find(mapx, mapy, 12);
+                    /*find(mapx, mapy, 12);
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
-                    find2000(mapx, mapy, 14);
+                    find2000(mapx, mapy, 14);*/
                 }
             }).start();
         }
