@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -379,10 +380,10 @@ public class MyJobService extends JobService {
                     //listView = (ListView)findViewById(R.id.list);
                     Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
                     Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
-                    /*find(mapx, mapy, 12);
+                    find(mapx, mapy, 12);
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
-                    find2000(mapx, mapy, 14);*/
+                    find2000(mapx, mapy, 14);
                 }
             }).start();
         }

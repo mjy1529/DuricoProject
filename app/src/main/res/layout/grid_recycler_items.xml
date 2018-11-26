@@ -6,8 +6,7 @@
     android:paddingTop="15dp">
 
 
-
-        <ImageView
+    <ImageView
         android:id="@+id/grid_card_image"
         android:layout_width="150dp"
         android:layout_height="200dp"

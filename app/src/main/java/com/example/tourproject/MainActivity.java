@@ -8,6 +8,8 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.ConnectivityManager;
@@ -38,14 +40,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
 
     ArrayList<Listviewitem> data = new ArrayList<>();
-
-
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 // result of the request.
             }
         }
-
+*/
             MyJobService.bAppRunned = true;
 
             JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             jobScheduler.schedule(jobInfo);
 
     }
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
+    }*/
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
             //onBackPressed();
@@ -148,9 +148,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.btnCollect:
-                recreate();
+                //recreate();
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -110,6 +110,8 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
+                        if(imagesrc == null)
+                            collectBtn.setVisibility(View.GONE);
                         placeTitleView.setText(item.getTitle());
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
