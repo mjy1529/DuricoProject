@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,13 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,14 +31,12 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Double.valueOf;
 
-public class overView extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
-    overView overview;
+public class overView2000 extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
+    overView2000 overview;
     EditText edit;
     TextView text;
     ImageView imgView;
-    Button collectBtn;
     TextView placeTitleView;
     TextView title1View;
     TextView overviewView;
@@ -67,7 +60,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_over_view);
+        setContentView(R.layout.activity_over_view2000);
 
         mContext = this;
         Intent intent = getIntent();
@@ -92,7 +85,6 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
 
                 placeTitleView = (TextView)findViewById(R.id.placeTitle);
                 imgView = (ImageView)findViewById(R.id.imageview);
-                collectBtn = (Button)findViewById(R.id.collectbtn);
                 title1View = (TextView)findViewById(R.id.title1);
                 overviewView = (TextView)findViewById(R.id.overview);
 
@@ -105,12 +97,11 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                 getXmlData2();
                 getMap();
 
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        if(imagesrc == null)
-                            collectBtn.setVisibility(View.GONE);
                         placeTitleView.setText(item.getTitle());
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
@@ -161,7 +152,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
 
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
-                Log.i("진입:","getXmlData1");
+                Log.i("ddd","ddddddd");
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         //buffer.append("파싱 시작...\n\n");

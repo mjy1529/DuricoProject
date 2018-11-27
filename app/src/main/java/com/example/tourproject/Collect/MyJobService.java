@@ -1,6 +1,5 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -11,10 +10,8 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,14 +19,10 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -161,7 +154,7 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
+            Bitmap imagesrc = null;
             String title = "";
             String content_id = "";
             String addr = "";
@@ -175,7 +168,6 @@ public class MyJobService extends JobService {
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
                 //Log.i("관련들어왔어요","ddddddd");
-
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -214,7 +206,6 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data.add(item1);
-                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
                             }
                         }
                         break;
@@ -251,7 +242,7 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
+            Bitmap imagesrc = null;
             String title = "";
             String content_id = "";
             String addr = "";
@@ -265,7 +256,6 @@ public class MyJobService extends JobService {
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
                 //Log.i("관련들어왔어요","ddddddd");
-
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -304,7 +294,6 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data2.add(item1);
-                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
                             }
                         }
                         break;

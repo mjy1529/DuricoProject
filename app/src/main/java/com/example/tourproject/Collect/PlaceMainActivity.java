@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 
 import android.content.Intent;
@@ -13,16 +13,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 
-
-import static com.example.tourproject.collect.MyJobService.data;
-import static com.example.tourproject.collect.MyJobService.data2;
-import static com.example.tourproject.collect.MyJobService.mapy;
-
+import static com.example.tourproject.Collect.MyJobService.data;
+import static com.example.tourproject.Collect.MyJobService.data2;
+import static com.example.tourproject.Collect.MyJobService.mapy;
 
 
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{

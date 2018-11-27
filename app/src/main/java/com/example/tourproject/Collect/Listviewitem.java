@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 import android.graphics.Bitmap;
 
