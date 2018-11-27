@@ -1,15 +1,22 @@
 package com.example.tourproject.StoryPlay;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.tourproject.Map.MapActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.StoryPlayManager;
 import com.example.tourproject.Util.UserManager;
@@ -33,10 +41,16 @@ public class StoryPlayActivity extends AppCompatActivity {
     int v_cnt; //view 개수
 
     TextView tv; //내용을 보여주는 textView
+    TextView n;
     ImageView imageView; //스토리 사진을 보여주는 imageView
     ArrayList<StoryPlayData> storyPlayList;
 
+    String log;
+    int CHECK_NUM = 0;
+    Button logbtn;
+
     public static final String TAG = "StoryPlay";
+    private Dialog MyDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +80,11 @@ public class StoryPlayActivity extends AppCompatActivity {
         actionBar.setCustomView(mCustomView);
 
         tv = (TextView) findViewById(R.id.content);
+        n = (TextView) findViewById(R.id.textView);
         imageView = (ImageView) findViewById(R.id.imageView);
+
+        log = "";
+        logbtn = (Button) findViewById(R.id.log);
     }
 
     public void getStoryPlayList(int map2_id) {
@@ -81,10 +99,22 @@ public class StoryPlayActivity extends AppCompatActivity {
             }
         }
     }
-
+    public void isName(String name){
+        if(!name.equals("null")) {
+            n.setText(name);
+            n.setVisibility(View.VISIBLE);
+            log += name + " : ";
+        }
+        else
+            n.setVisibility(View.INVISIBLE);
+    }
     public void setStoryPlay() {
         v_cnt = storyPlayList.size();
+        isName(storyPlayList.get(i).getPerson_name());
+
         tv.setText(storyPlayList.get(0).getPlay_content());
+        log += storyPlayList.get(0).getPlay_content() + "\n\n";
+
         Glide.with(this)
                 .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(0).getPlay_image_url())
                 .into(imageView);
@@ -94,7 +124,9 @@ public class StoryPlayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 i++;
                 if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
+                    isName(storyPlayList.get(i).getPerson_name());
                     tv.setText(storyPlayList.get(i).getPlay_content());
+                    log += storyPlayList.get(i).getPlay_content() + "\n\n";
                     Glide.with(StoryPlayActivity.this)
                             .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(i).getPlay_image_url())
                             .into(imageView);
@@ -120,7 +152,49 @@ public class StoryPlayActivity extends AppCompatActivity {
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-            finish();
+            Intent intent = new Intent(getApplicationContext(), StoryListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else if(v.getId() == R.id.log){
+            if(CHECK_NUM == 0) {
+                logbtn.setBackgroundResource(R.drawable.log_1);
+                CHECK_NUM = 1;
+                MyCustomAlertDialog();
+            }
         }
+    }
+
+    public void MyCustomAlertDialog(){
+        MyDialog = new Dialog(StoryPlayActivity.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.pick_customdialong2);
+        MyDialog.setTitle("My Custom Dialog");
+        MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        TextView logcontent = (TextView)MyDialog.findViewById(R.id.logcontent);
+        logcontent.setMovementMethod(new ScrollingMovementMethod());
+        logcontent.setText(log);
+
+        MyDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                CHECK_NUM = 0;
+                logbtn.setBackgroundResource(R.drawable.log);
+            }
+        });
+        /*
+
+
+        logcontent.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                CHECK_NUM = 0;
+                log.setBackgroundResource(R.drawable.log);
+                MyDialog.cancel();
+            }
+        });*/
+        MyDialog.show();
     }
 }

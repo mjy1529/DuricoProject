@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -101,6 +102,9 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
+        home.setBackgroundResource(R.drawable.logo);
 
         mapDataManager = MapManager.getInstance();
         networkService = Application.getInstance().getNetworkService();
