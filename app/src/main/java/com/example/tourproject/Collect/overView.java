@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.Util.Application;
@@ -45,7 +44,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Double.valueOf;
 
 public class overView extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
     overView overview;
@@ -59,8 +57,8 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     TextView title2View;
     TextView useInfoView;
     TextView title3View;
-    Overviewitem item = null;
-    ArrayList<Overviewitem> data = new ArrayList<>();
+    com.example.tourproject.Collect.Overviewitem item = null;
+    ArrayList<com.example.tourproject.Collect.Overviewitem> data = new ArrayList<>();
     String content_id = "";
     String contentType_id = "";
     Bitmap imagesrc = null;
@@ -117,6 +115,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                 getXmlData1();
                 getXmlData2();
                 getMap();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -294,7 +293,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
         }
         Log.i("끝까지 왔는데", "ddddddd");
         System.out.println(useInfo);
-        item = new Overviewitem(imagesrc, title, addr, overview2, useInfo);
+        item = new com.example.tourproject.Collect.Overviewitem(imagesrc, title, addr, overview2, useInfo);
         //item.setUseInfo(useInfo);
     }
 

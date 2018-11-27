@@ -22,10 +22,12 @@ import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.Collect.MyJobService;
 import com.example.tourproject.Util.UserManager;
-import com.example.tourproject.collect.MyJobService;
 
 import java.util.ArrayList;
+
+import retrofit2.http.HEAD;
 
 public class MapActivity extends AppCompatActivity implements ImageButton.OnClickListener {
     String mid;
@@ -90,17 +92,14 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void init() {
-        //액션바-------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
-        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
         actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
         actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
 
-        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
 
@@ -112,6 +111,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         TextView p = (TextView) findViewById(R.id.pcardCnt);
         p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
+        home.setBackgroundResource(R.drawable.logo);
 
         mapDataManager = MapManager.getInstance();
         networkService = Application.getInstance().getNetworkService();

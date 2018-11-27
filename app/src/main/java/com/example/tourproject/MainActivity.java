@@ -13,7 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,16 +25,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.tourproject.CardBox.CardBoxActivity;
+
 import com.example.tourproject.Util.Application;
-import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.BackPressCloseHandler;
+
+import com.example.tourproject.CardBox.CardBoxActivity;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.UserManager;
-import com.example.tourproject.collect.Listviewitem;
-import com.example.tourproject.collect.MyJobService;
-import com.example.tourproject.collect.PlaceMainActivity;
+import com.example.tourproject.Collect.Listviewitem;
+import com.example.tourproject.Collect.MyJobService;
+import com.example.tourproject.Collect.PlaceMainActivity;
 
 import java.util.ArrayList;
+
+import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
 
@@ -85,8 +89,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn0.setOnClickListener(this);
         if(!UserManager.getInstance().getUser_card_url().equals("null")) { //사용자가 메인이미지를 선택하였을 경우
             changeProfileImage(UserManager.getInstance().getUser_card_url());
+            btn0.setBackground(new ShapeDrawable(new OvalShape()));
+            btn0.setClipToOutline(true);
         } else { //처음 실행되거나 사용자가 메인이미지를 선택하지 않았을 경우
             btn0.setBackground(getResources().getDrawable(R.drawable.main));
+            btn0.setBackground(new ShapeDrawable(new OvalShape()));
+            btn0.setClipToOutline(true);
         }
 
         btn0.setBackground(new ShapeDrawable(new OvalShape()));
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn3.setOnClickListener(this);
         JobInfo jobInfo = new JobInfo.Builder(0, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPeriodic(1000 * 60 * 60)
+                .setPeriodic(1000 * 60 * 180)
                 .setPersisted(true)
                 .build();
         jobScheduler.schedule(jobInfo);
@@ -187,14 +195,34 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.btnCollect:
-                //recreate();
-                try {
-                    Thread.sleep(6000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                intent = new Intent(MainActivity.this, PlaceMainActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
+                Check.setTitle("사용자 위치 재탐색")
+                        .setMessage("현재 위치를 탐색하시겠습니까?\n위치 탐색 후 관광지 내역을 재구성합니다.\n선택 후 잠시만 기다려주십시오 :-)")
+                        .setPositiveButton("탐색하여 관광지 재구성", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                recreate();
+                                dialog.dismiss();
+                                while(waiting()!=7);
+                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("재탐색 없이 계속", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                Check.setCancelable(false);
+                Check.show();
                 break;
             case R.id.btnStart:
                 intent = new Intent(MainActivity.this, StoryListActivity.class);
@@ -229,7 +257,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
     }
-
+    public int waiting(){
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return 7;
+    }
     public void changeProfileImage(String card_url) {
         Glide.with(MainActivity.this)
                 .load(Application.getInstance().getBaseImageUrl() + card_url)

@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,13 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,7 +125,7 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
         tItem.setTMapPoint(tpoint);
         tItem.setVisible(TMapMarkerItem.VISIBLE);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.pinicon);
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pinicon);
         tItem.setIcon(bitmap);
 
         // 핀모양으로 된 마커를 사용할 경우 마커 중심을 하단 핀 끝으로 설정.
