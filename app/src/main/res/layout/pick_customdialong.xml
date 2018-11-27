@@ -27,7 +27,6 @@
             android:layout_marginTop="33dp"
             android:fontFamily="@font/gulim070"
             android:gravity="center"
-            android:text="김구"
             android:textColor="#6d6053"
             android:textSize="18sp" />
         <TextView
