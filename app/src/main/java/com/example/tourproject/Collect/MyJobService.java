@@ -154,7 +154,7 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = null;
+            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
             String title = "";
             String content_id = "";
             String addr = "";
@@ -206,6 +206,7 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data.add(item1);
+                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
                             }
                         }
                         break;
@@ -242,7 +243,7 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = null;
+            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
             String title = "";
             String content_id = "";
             String addr = "";
@@ -294,6 +295,8 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data2.add(item1);
+                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
+
                             }
                         }
                         break;
@@ -345,7 +348,7 @@ public class MyJobService extends JobService {
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
+                1000 * 60 * 180, // 통지사이의 최소 시간간격 (miliSecond)
                 10, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }

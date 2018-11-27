@@ -87,7 +87,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     public void showProfileDialog(final CardData data) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle("프로필 사진 설정")
-                .setMessage("프로필 사진으로 설정하시겠습니?")
+                .setMessage("프로필 사진으로 설정하시겠습니까?")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

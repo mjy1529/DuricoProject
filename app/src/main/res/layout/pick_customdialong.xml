@@ -25,20 +25,22 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="33dp"
-            android:textSize="12sp"
             android:fontFamily="@font/gulim070"
+            android:gravity="center"
+            android:text="김구"
             android:textColor="#6d6053"
-            android:text="김구" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/cardContent"
             android:layout_width="190dp"
             android:layout_height="35dp"
             android:layout_marginLeft="30dp"
-            android:textSize="10sp"
             android:fontFamily="@font/gulim070"
+            android:gravity="center"
+            android:text="김구입니다"
             android:textColor="#93786d"
-            android:text="김구입니다" />
+            android:textSize="10sp" />
     </LinearLayout>
 
 
