@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +20,7 @@ import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
-import com.example.tourproject.collect.MyJobService;
+import com.example.tourproject.Collect.MyJobService;
 
 import java.util.ArrayList;
 

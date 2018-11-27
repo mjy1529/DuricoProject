@@ -35,16 +35,16 @@
         <activity android:name=".StoryList.StoryListActivity" />
         <activity android:name=".StoryPlay.StoryPlayActivity" />
         <activity android:name=".Map.MapActivity" />
-        <activity android:name=".collect.overView" />
-        <activity android:name=".collect.overView2000" />
-        <activity android:name=".collect.PlaceMainActivity" />
+        <activity android:name=".Collect.overView" />
+        <activity android:name=".Collect.overView2000" />
+        <activity android:name=".Collect.PlaceMainActivity" />
 
         <activity android:name=".MainActivity" />
         <activity android:name=".GachaActivity" />
         <activity android:name=".CardBox.CardBoxActivity" />
 
         <service
-            android:name=".collect.MyJobService"
+            android:name=".Collect.MyJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         

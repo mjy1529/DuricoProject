@@ -125,7 +125,7 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
         tItem.setTMapPoint(tpoint);
         tItem.setVisible(TMapMarkerItem.VISIBLE);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.pinicon);
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pinicon);
         tItem.setIcon(bitmap);
 
         // 핀모양으로 된 마커를 사용할 경우 마커 중심을 하단 핀 끝으로 설정.

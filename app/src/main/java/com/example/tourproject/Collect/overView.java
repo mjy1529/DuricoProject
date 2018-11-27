@@ -33,7 +33,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Double.valueOf;
 
 public class overView extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
     overView overview;
@@ -132,7 +131,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
         tItem.setTMapPoint(tpoint);
         tItem.setVisible(TMapMarkerItem.VISIBLE);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.pinicon);
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pinicon);
         tItem.setIcon(bitmap);
 
         // 핀모양으로 된 마커를 사용할 경우 마커 중심을 하단 핀 끝으로 설정.
