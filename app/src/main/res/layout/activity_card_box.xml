@@ -19,31 +19,33 @@
     <RelativeLayout
         android:layout_below="@id/toolbar"
         android:id="@+id/rel"
-        android:paddingRight="20dp"
+        android:paddingRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:theme="@style/TabTheme"
             android:layout_alignParentRight="true"
+            android:textStyle="bold"
+            android:fontFamily="@font/gulim070"
             android:layout_width="270dp"
             android:layout_height="35dp">
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem"
-                android:text="인물카드"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem2"
                 android:text="장소카드"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <android.support.design.widget.TabItem
-                android:id="@+id/tabItem3"
+                android:id="@+id/tabItem2"
                 android:text="스토리카드"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem3"
+                android:text="인물카드"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TabLayout>

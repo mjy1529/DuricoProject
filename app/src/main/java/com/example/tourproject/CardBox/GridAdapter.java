@@ -2,12 +2,16 @@ package com.example.tourproject.CardBox;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +33,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     private ArrayList<CardData> cardDataList;
     private ArrayList<Integer> openCardList;
     private CardData data;
+    GridViewHolder holder;
+
+    int s;
 
     public static final String TAG = "Card Grid Adapter";
 
@@ -45,14 +52,16 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.grid_recycler_items, parent, false);
 
-        GridViewHolder holder = new GridViewHolder(view);
+        holder = new GridViewHolder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(GridViewHolder holder, final int position) {
         data = cardDataList.get(position);
-
+        GradientDrawable drawable=
+                (GradientDrawable) context.getDrawable(R.drawable.locklayout);
         boolean isOpen = false;
         for(int i=0; i<openCardList.size(); i++) {
             if(openCardList.get(i) == data.getCard_idx()) {
@@ -64,9 +73,18 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         }
 
         if(isOpen) { //카드가 오픈되어 있을 때만 카드 이미지 확인 및 클릭 가능
+            holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             Glide.with(context)
                     .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
                     .into(holder.grid_card_image);
+
+            if(data.getCard_image_url().equals(UserManager.getInstance().getUser_card_url())) {
+                holder.grid_select.setVisibility(View.VISIBLE);
+                s = data.getCard_idx();
+            }
+            else {
+                holder.grid_select.setVisibility(View.INVISIBLE);
+            }
             //카드를 클릭했을 때의 이벤트
             holder.grid_card_image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,8 +93,14 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                 }
             });
         } else {
+            //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
+            holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
             Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
+            holder.grid_select.setVisibility(View.INVISIBLE);
         }
+        holder.grid_card_image.setBackground(drawable);
+        holder.grid_card_image.setClipToOutline(true);
+
     }
 
     @Override
@@ -94,6 +118,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                         updateUserCard(data);
                         dialog.dismiss();
                         ((MainActivity) MainActivity.mContext).changeProfileImage(data.getCard_image_url());
+                        notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
