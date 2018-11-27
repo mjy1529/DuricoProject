@@ -34,6 +34,7 @@
         </activity>
         <activity android:name=".StoryList.StoryListActivity" />
         <activity android:name=".StoryPlayActivity" />
+        <activity android:name=".StoryPlay.StoryPlayActivity" />
         <activity android:name=".Map.MapActivity" />
         <activity android:name=".collect.overView" />
         <activity android:name=".collect.overView2000" />

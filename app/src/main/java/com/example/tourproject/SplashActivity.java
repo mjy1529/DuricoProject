@@ -1,91 +1,70 @@
 package com.example.tourproject;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.example.tourproject.Network.Application;
-import com.example.tourproject.Network.NetworkService;
-
-import java.io.IOException;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
-
-import retrofit2.Call;
 
 //background_splash.xml, styles.xml
 public class SplashActivity extends AppCompatActivity {
 
-    NetworkService networkService;
     Handler handler;
+
+    public final static String TAG = "SPLASH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
         handler = new Handler();
-
-        insertUserId(getMACAddress("wlan0"));
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                if (checkInternet()) {
+
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    showInternetAlertDialog();
+                }
             }
         }, 3000);
     }
 
-    public void insertUserId(final String macAddress) {
-        networkService = Application.getInstance().getNetworkService();
+    public boolean checkInternet() { //인터넷 연결확인
+        ConnectivityManager manager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        new AsyncTask<Void, Void, String>() {
-            String result;
-            @Override
-            protected String doInBackground(Void... voids) {
-                Call<String> request = networkService.insertUserId(macAddress);
-                try {
-                    result = request.execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-
-            }
-        }.execute();
-    }
-
-    //맥 주소 받아오기
-    public static String getMACAddress(String interfaceName) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface networkInterface : interfaces) {
-                if (interfaceName != null) {
-                    if (!networkInterface.getName().equalsIgnoreCase(interfaceName)) continue;
-                }
-                byte[] mac = networkInterface.getHardwareAddress();
-                if (mac == null) return "";
-                StringBuilder buf = new StringBuilder();
-                for (int idx = 0; idx < mac.length; idx++) {
-                    buf.append(String.format("%02X:", mac[idx]));
-                }
-                if (buf.length() > 0) {
-                    buf.deleteCharAt(buf.length() - 1);
-                }
-                return buf.toString();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (mobile.isConnected() || wifi.isConnected()) {
+            return true;
+        } else {
+            return false;
         }
-        return "";
     }
+
+    public void showInternetAlertDialog() { //인터넷 연결요청 다이얼로그
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("네트워크")
+                .setMessage("인터넷이 연결되어 있지 않습니다. Wifi나 LTE 연결 후 다시 실행해주세요.")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        alert.setCancelable(false);
+        alert.show();
+    }
+
 }

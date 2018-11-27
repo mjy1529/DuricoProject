@@ -2,10 +2,7 @@ package com.example.tourproject;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,21 +16,31 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.tourproject.Map.MapActivity;
+import com.bumptech.glide.Glide;
+import com.example.tourproject.CardBox.CardData;
+import com.example.tourproject.Network.NetworkService;
+import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.CardManager;
+import com.example.tourproject.Util.UserManager;
 import com.instacart.library.truetime.TrueTime;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GachaActivity extends AppCompatActivity{
 
@@ -56,6 +63,7 @@ public class GachaActivity extends AppCompatActivity{
     Dialog MyDialog;
     ImageView cardimage;
     TextView cardcontent;
+    TextView cardName;
     LinearLayout card;
 
     private final MyHandler mHandler = new MyHandler(this);
@@ -295,12 +303,30 @@ public class GachaActivity extends AppCompatActivity{
         MyDialog.setTitle("My Custom Dialog");
         MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        cardName = (TextView) MyDialog.findViewById(R.id.cardName);
         cardcontent = (TextView)MyDialog.findViewById(R.id.cardContent);
         cardcontent.setText(Integer.toString(pick()));
 
         cardimage = (ImageView)MyDialog.findViewById(R.id.gacha_card);
 
-        cardimage.setImageResource(R.drawable.p_1);
+        // ******* 뽑기 이미지 띄우는 부분 ******* //
+        CardData gachaCardData = getGachaCard(); //뽑힌 카드 데이터
+        if(gachaCardData != null) {
+            //카드 이미지 세팅
+            Glide.with(this)
+                    .load(Application.getInstance().getBaseImageUrl() + gachaCardData.getCard_image_url())
+                    .into(cardimage);
+            cardName.setText(gachaCardData.getCard_name()); //카드 이름
+            cardcontent.setText(gachaCardData.getCard_description()); //카드 설명
+
+            updateUserOpenCard(gachaCardData);
+
+        } else { //더이상 뽑을 카드가 없을 때?
+            cardimage.setImageResource(R.drawable.p_1);
+            cardcontent.setText("더 이상 뽑을 카드가 없습니다.");
+        }
+        // *********************************** //
+
         card = (LinearLayout)MyDialog.findViewById(R.id.pickview);
 
         card.setOnClickListener(new View.OnClickListener(){
@@ -310,6 +336,73 @@ public class GachaActivity extends AppCompatActivity{
             }
         });
         MyDialog.show();
+    }
+
+    public CardData getGachaCard() {
+        //인물카드를 받아와서 사용자 카드 중 close 상태인 카드들만 따로 리스트(gachaList)를 만든다.
+        ArrayList<Integer> userOpenIdxList = UserManager.getInstance().getOpenPeopleCardList();
+        ArrayList<CardData> gachaList = CardManager.getInstance().getGachaCardList();
+
+        for (int i = 0; i < gachaList.size(); i++) {
+            for (int j = 0; j < userOpenIdxList.size(); j++) {
+                if (gachaList.get(i).getCard_idx() == userOpenIdxList.get(j)) {
+                    gachaList.remove(gachaList.get(i));
+                }
+            }
+        }
+
+        if (gachaList.size() != 0) {
+            ArrayList<CardData> gachaList_0 = new ArrayList<>();
+            ArrayList<CardData> gachaList_1 = new ArrayList<>();
+            ArrayList<CardData> gachaList_2 = new ArrayList<>();
+
+            //gachaList 중 확률이 높은(0)을 우선한다.
+            for (int i = 0; i < gachaList.size(); i++) {
+                if (gachaList.get(i).getGacha() == 0) {
+                    gachaList_0.add(gachaList.get(i));
+                } else if (gachaList.get(i).getGacha() == 1) {
+                    gachaList_1.add(gachaList.get(i));
+                } else {
+                    gachaList_2.add(gachaList.get(i));
+                }
+            }
+
+            if (gachaList_0.size() != 0) {
+                //Collections.shuffle(gachaList_0); //랜덤으로 뽑고 싶으면 주석 해제하기
+                return gachaList_0.get(0);
+            } else if (gachaList_1.size() != 0) {
+                //Collections.shuffle(gachaList_0);
+                return gachaList_1.get(0);
+            } else {
+                //Collections.shuffle(gachaList_0);
+                return gachaList_2.get(0);
+            }
+
+        } else {
+            return null;
+        }
+    }
+
+    //뽑은 카드 상태(close -> open) 업데이트
+    public void updateUserOpenCard(final CardData cardData) {
+        NetworkService networkService = Application.getInstance().getNetworkService();
+        String user_id = UserManager.getInstance().getUserId();
+        Call<String> request = networkService.updatePeopleCardState(user_id, cardData.getCard_idx());
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()) {
+                    int open_people_card_cnt = Integer.parseInt(response.body());
+                    //오픈된 인물 카드 인덱스 받아오기
+                    UserManager.getInstance().getOpenPeopleCardList().add(cardData.getCard_idx());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 
 }

@@ -1,9 +1,5 @@
 package com.example.tourproject.CardBox;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,23 +9,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.tourproject.MainActivity;
-import com.example.tourproject.Network.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import retrofit2.Call;
 
 public class CardBoxActivity extends AppCompatActivity {
 

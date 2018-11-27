@@ -1,24 +1,28 @@
 package com.example.tourproject.collect;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.UserManager;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
@@ -34,6 +38,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 import static java.lang.Double.valueOf;
@@ -64,6 +72,9 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     Context mContext = null;
     String mapx = "";
     String mapy = "";
+
+    String imageSrcUrl = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +116,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                 getXmlData2();
                 getMap();
 
-
+                // ************** 확인해야할 부분 ****************** //
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -116,9 +127,17 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
                         useInfoView.setText(item.getUseInfo());
-
                     }
                 });
+
+                collectBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        insertPlaceCard();
+                        MyCustomAlertDialog(imageSrcUrl);
+                    }
+                });
+
             }
         }).start();
     }
@@ -179,6 +198,10 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                         else if(tag.equals("firstimage")){
                             xpp.next();
                             imagesrc = getImageBitmap(xpp.getText());
+
+                            // ********* 11/26 추가코드 *******//
+                            imageSrcUrl = xpp.getText();
+                            // ******************************//
                         }
                         else if(tag.equals("overview")){
                             xpp.next();
@@ -299,5 +322,48 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     @Override
     public void onLocationChange(Location location) {
 
+    }
+
+    public void insertPlaceCard() {
+        String user_id = UserManager.getInstance().getUserId();
+        final String place_card_url = imageSrcUrl;
+
+        NetworkService networkService = Application.getInstance().getNetworkService();
+        Call<String> request = networkService.insertPlaceCard(user_id, place_card_url);
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()) {
+                    Log.d("overView", "장소카드 추가 " + response.body());
+                    UserManager.getInstance().getPlaceCardList().add(place_card_url);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void MyCustomAlertDialog(String place_card_url) {
+        final Dialog MyDialog = new Dialog(overView.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.pick_customdialong);
+        MyDialog.setTitle("My Custom Dialog");
+        MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView cardimage = (ImageView) MyDialog.findViewById(R.id.gacha_card);
+        Glide.with(this).load(place_card_url).into(cardimage);
+
+        LinearLayout card = (LinearLayout) MyDialog.findViewById(R.id.pickview);
+
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.cancel();
+            }
+        });
+        MyDialog.show();
     }
 }

@@ -31,19 +31,19 @@
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem"
-                android:text="인물카드"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem2"
                 android:text="장소카드"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <android.support.design.widget.TabItem
-                android:id="@+id/tabItem3"
+                android:id="@+id/tabItem2"
                 android:text="스토리카드"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem3"
+                android:text="인물카드"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

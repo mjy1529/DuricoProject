@@ -16,28 +16,39 @@ public class ListviewAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private ArrayList<Listviewitem> data;
     private int layout;
-    public ListviewAdapter(Context context, int layout, ArrayList<Listviewitem> data){
-        this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.data=data;
-        this.layout=layout;
+
+    public ListviewAdapter(Context context, int layout, ArrayList<Listviewitem> data) {
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.data = data;
+        this.layout = layout;
     }
+
     @Override
-    public int getCount(){return data.size();}
+    public int getCount() {
+        return data.size();
+    }
+
     @Override
-    public String getItem(int position){return data.get(position).getName();}
+    public String getItem(int position) {
+        return data.get(position).getName();
+    }
+
     @Override
-    public long getItemId(int position){return position;}
+    public long getItemId(int position) {
+        return position;
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        if(convertView==null){
-            convertView=inflater.inflate(layout,parent,false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = inflater.inflate(layout, parent, false);
         }
-        Listviewitem listviewitem=data.get(position);
-        ImageView icon=(ImageView)convertView.findViewById(R.id.imageview);
+        Listviewitem listviewitem = data.get(position);
+        ImageView icon = (ImageView) convertView.findViewById(R.id.imageview);
         icon.setImageBitmap(listviewitem.getIcon());
-        TextView name=(TextView)convertView.findViewById(R.id.textview);
+        TextView name = (TextView) convertView.findViewById(R.id.textview);
         name.setText(listviewitem.getName());
-        TextView addr = (TextView)convertView.findViewById(R.id.textview2);
+        TextView addr = (TextView) convertView.findViewById(R.id.textview2);
         addr.setText(listviewitem.getAddr());
         return convertView;
     }
