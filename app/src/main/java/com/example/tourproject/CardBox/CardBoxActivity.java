@@ -15,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.Util.UserManager;
 
 public class CardBoxActivity extends AppCompatActivity {
 
@@ -32,18 +34,7 @@ public class CardBoxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_box);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
-        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
-        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
-        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
-        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
-        actionBar.setCustomView(mCustomView);
-        Button home = (Button) findViewById(R.id.home);
+        doActionbar();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -85,6 +76,31 @@ public class CardBoxActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_first_card, container, false);
             return rootView;
         }
+    }
+
+    public void doActionbar(){
+        //액션바-------------------------------
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
+
+        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
+        TextView pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        TextView s = (TextView) findViewById(R.id.scardCnt);
+        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        TextView p = (TextView) findViewById(R.id.pcardCnt);
+        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        //여기까지------------------------------
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
