@@ -376,6 +376,11 @@ public class MyJobService extends JobService {
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
+
+                Log.d("위치테스트", "정확도 : " + location.getAccuracy());
+                Log.d("위치테스트", "제공자 : " + location.getProvider());
+                Log.d("위치테스트", "위도 : " + location.getLatitude());
+                Log.d("위치테스트", "경도 : " + location.getLongitude());
             }
             new Thread(new Runnable() {
                 @Override

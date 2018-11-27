@@ -2,6 +2,8 @@ package com.example.tourproject.Map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,16 +48,30 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         final Map2Data map2Data = verticalDatas.get(i);
 
-        if(!map2Data.getMap2_image_url().equals("")) {
+        if (!map2Data.getMap2_image_url().equals("")) {
             Glide.with(context)
                     .load(Application.getInstance().getBaseImageUrl() + map2Data.getMap2_image_url())
                     .into(holder.horizon_icon);
+
+            if (verticalDatas.get(i).getMap2_state().equals("0") //상태가 읽음이거나
+                    || verticalDatas.get(i).getMap2_state().equals("1")) { //상태가 읽기가능한 상태이면
+                holder.horizon_icon.clearColorFilter(); //필터 없애기
+                holder.horizon_icon.invalidate();
+
+            } else { //상태가 3(위치인식 필요한 상태)이면 필터 씌우기(회색으로)
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(0);
+                ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+                holder.horizon_icon.setColorFilter(cf);
+            }
+            if (i != 2) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+                holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
         }
 
         holder.horizon_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(verticalDatas.get(i).getMap2_state().equals("0")
+                if (verticalDatas.get(i).getMap2_state().equals("0")
                         || verticalDatas.get(i).getMap2_state().equals("1")) {
                     Intent intent = new Intent(context, StoryPlayActivity.class);
                     intent.putExtra("map2_id", map2Data.getMap2_id());
@@ -64,22 +80,6 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
     }
-
-//    @Override
-//    public void onBindViewHolder(HorizonViewHolder holder, int position) {
-//        VerticalData data = verticalDatas.get(position);
-//
-//        holder.icon.setImageResource(data.getImg());
-//        if (data.getState() != 1 && data.getState() != 0) {
-//            ColorMatrix matrix = new ColorMatrix();
-//            matrix.setSaturation(0);
-//            ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
-//            holder.icon.setColorFilter(cf);
-//        } else {
-//            holder.icon.clearColorFilter();
-//            holder.icon.invalidate();
-//        }
-//    }
 
     @Override
     public int getItemCount() {
