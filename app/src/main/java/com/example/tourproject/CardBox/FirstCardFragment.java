@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tourproject.R;
+
 import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
@@ -49,6 +50,5 @@ public class FirstCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 }

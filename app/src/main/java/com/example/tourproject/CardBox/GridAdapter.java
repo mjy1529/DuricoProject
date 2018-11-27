@@ -8,12 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
@@ -57,11 +58,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     @Override
     public void onBindViewHolder(GridViewHolder holder, final int position) {
         if (openCardList != null) {
-            data = cardDataList.get(position);
 
-            Glide.with(context)
-                    .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
-                    .into(holder.grid_card_image);
+            data = cardDataList.get(position);
 
             boolean isOpen = false;
             for (int i = 0; i < openCardList.size(); i++) {
@@ -74,16 +72,23 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
             }
 
             if (isOpen) { //카드가 오픈되어 있을 때만 카드 이미지 확인 및 클릭 가능
-                holder.grid_card_lock.setVisibility(View.GONE);
+                holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                Glide.with(context)
+                        .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
+                        .into(holder.grid_card_image);
+
                 //카드를 클릭했을 때의 이벤트
                 holder.grid_card_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showProfileDialog(cardDataList.get(position)); //메인사진 변경 다이얼로그 띄움
+                        if (cardDataList.get(position).getCard_category().equals("people")) {
+                            showProfileDialog(cardDataList.get(position)); //메인사진 변경 다이얼로그 띄움
+                        }
                     }
                 });
             } else {
-                holder.grid_card_lock.setVisibility(View.VISIBLE);
+                holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
+                Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
             }
 
         } else { //장소카드인 경우

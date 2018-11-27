@@ -1,5 +1,8 @@
 package com.example.tourproject.CardBox;
 
+
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +20,8 @@ import android.widget.Button;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 
+import retrofit2.http.HEAD;
+
 public class CardBoxActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -25,7 +30,6 @@ public class CardBoxActivity extends AppCompatActivity {
     NetworkService networkService;
     CardResult cardResult;
 
-    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,29 +43,27 @@ public class CardBoxActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
         actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
         actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
-
         //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
-
         Button home = (Button) findViewById(R.id.home);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         View tab1 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(0);
-        //tab1.setBackgroundColor(getResources().getColor(R.color.tab1));
-        tab1.setBackgroundResource(R.drawable.tab_layout);
+        tab1.setBackgroundResource(R.drawable.tab_layout2);
         View tab2 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(1);
-        tab2.setBackgroundResource(R.drawable.tab_layout2);
+        tab2.setBackgroundResource(R.drawable.tab_layout3);
         View tab3 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(2);
-        tab3.setBackgroundResource(R.drawable.tab_layout3);
+        tab3.setBackgroundResource(R.drawable.tab_layout);
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -115,7 +117,7 @@ public class CardBoxActivity extends AppCompatActivity {
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-            onBackPressed();
+            finish();
         }
     }
 }

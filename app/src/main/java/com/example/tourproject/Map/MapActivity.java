@@ -1,6 +1,7 @@
 package com.example.tourproject.Map;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,13 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
@@ -40,6 +42,8 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     NetworkService networkService;
     ArrayList<Map1Data> selectedStoryMap;
 
+    int p;
+
     public final static String TAG = "MAP Activity";
 
     @Override
@@ -56,19 +60,18 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         updateMap2(b);
     }
 
-    public void onBtn() {
-        imageViews[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.a_3);
-        layouts[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.imagebutton_border);
+    public void onBtn(int position) {
+        layouts[position].setBackgroundResource(R.drawable.imagebutton_border);
     }
 
-    public void offBtn() {
-        imageViews[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.a_3);
-        layouts[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.imagebutton_border2);
+    public void offBtn(int position) {
+        layouts[position].setBackgroundResource(R.drawable.imagebutton_border2);
     }
 
     @Override
     public void onClick(View v) {
         int position = 0;
+        offBtn(p);
         switch (v.getId()) {
             case R.id.imageView1:
                 position = 0;
@@ -80,6 +83,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 position = 2;
                 break;
         }
+        p = position;
         setMap2(position);
         updateMap2(b);
     }
@@ -96,14 +100,20 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
 
+        Button home = (Button) findViewById(R.id.home);
+        home.setBackgroundResource(R.drawable.logo);
+
         mapDataManager = MapManager.getInstance();
         networkService = Application.getInstance().getNetworkService();
         selectedStoryMap = new ArrayList<>();
 
-        imageViews = new ImageView[3];
-        imageViews[0] = (ImageView) findViewById(R.id.imageView1);
-        imageViews[1] = (ImageView) findViewById(R.id.imageView2);
-        imageViews[2] = (ImageView) findViewById(R.id.imageView3);
+        imageViews = new ImageButton[3];
+        imageViews[0] = (ImageButton) findViewById(R.id.imageView1);
+        imageViews[1] = (ImageButton) findViewById(R.id.imageView2);
+        imageViews[2] = (ImageButton) findViewById(R.id.imageView3);
+        imageViews[0].setOnClickListener(this);
+        imageViews[1].setOnClickListener(this);
+        imageViews[2].setOnClickListener(this);
 
         layouts = new FrameLayout[3];
         layouts[0] = (FrameLayout) findViewById(R.id.imageView1_1);
@@ -128,8 +138,11 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 Glide.with(this)
                         .load(Application.getInstance().getBaseImageUrl() + selectedStoryMap.get(i).map1_image_url)
                         .into(imageViews[i]);
+                imageViews[i].setBackgroundDrawable(Drawable.createFromPath(selectedStoryMap.get(i).map1_image_url));
+                Log.d(TAG, Application.getInstance().getBaseImageUrl() + selectedStoryMap.get(i).map1_image_url);
             }
             setMap2(0);
+            p = 0;
         } else {
 
         }
@@ -137,6 +150,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
     public void setMap2(int position) {
         if (selectedStoryMap.size() != 0) {
+            onBtn(position);
             textView2.setText(selectedStoryMap.get(position).map1_title);
             mAdapter = new VerticalAdapter(this, selectedStoryMap.get(position).map2List);
             mHorizonView.setAdapter(mAdapter);

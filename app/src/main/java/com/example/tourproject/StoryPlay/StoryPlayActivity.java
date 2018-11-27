@@ -18,11 +18,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
-import com.example.tourproject.GachaActivity;
 import com.example.tourproject.Map.MapActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.StoryPlayManager;
 import com.example.tourproject.Util.UserManager;
@@ -33,8 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
-
 public class StoryPlayActivity extends AppCompatActivity {
 
     int i = 0; //current page
@@ -42,10 +39,10 @@ public class StoryPlayActivity extends AppCompatActivity {
 
     int map2_id; //map2_id
 
-    TextView tv; //내용을 보여주는 textView
+    TextView tv; //person_name을 보여주는
     ImageView imageView; //스토리 사진을 보여주는 imageView
     ArrayList<StoryPlayData> storyPlayList;
-    TextView content; //person_name을 보여주는 textView
+    TextView content; //내용을 보여주는 textView
 
     StoryPlayData storyPlayData;
     Dialog MyDialog;
@@ -103,14 +100,14 @@ public class StoryPlayActivity extends AppCompatActivity {
         //첫번째 페이지 세팅
         v_cnt = storyPlayList.size();
         storyPlayData = storyPlayList.get(0);
-        tv.setText(storyPlayData.getPlay_content());
+        content.setText(storyPlayData.getPlay_content());
 
         // ***** person_name 존재여부에 따른 이벤트 처리 ***** //
         if (storyPlayData.getPerson_name().equals("null")) { //person_name이 없을 경우
-            content.setVisibility(View.INVISIBLE); //사라지기
+            tv.setVisibility(View.INVISIBLE); //사라지기
         } else {
-            content.setVisibility(View.VISIBLE);
-            content.setText(storyPlayData.getPerson_name());
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(storyPlayData.getPerson_name());
         }
 
         Glide.with(this)
@@ -118,26 +115,26 @@ public class StoryPlayActivity extends AppCompatActivity {
                 .into(imageView);
 
         //화면 터치 시 다음 내용으로 전환
-        tv.setOnClickListener(new View.OnClickListener() {
+        content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 i++;
                 if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
                     storyPlayData = storyPlayList.get(i);
-                    tv.setText(storyPlayData.getPlay_content());
+                    content.setText(storyPlayData.getPlay_content());
 
                     if (storyPlayData.getPerson_name().equals("null")) { //person_name이 없을 경우
-                        content.setVisibility(View.INVISIBLE); //사라지기
+                        tv.setVisibility(View.INVISIBLE); //사라지기
                     } else {
-                        content.setVisibility(View.VISIBLE);
-                        content.setText(storyPlayData.getPerson_name());
+                        tv.setVisibility(View.VISIBLE);
+                        tv.setText(storyPlayData.getPerson_name());
                     }
 
                     Glide.with(StoryPlayActivity.this)
                             .load(Application.getInstance().getBaseImageUrl() + storyPlayData.getPlay_image_url())
                             .into(imageView);
 
-                } else { // 마지막 페이지일 때
+                } else if (i == v_cnt){ // 마지막 페이지일 때
                     //해당 이야기에 맞는 카드가 있는지 검색하기
                     CardData cardData = findCard();
                     if (cardData != null && cardData.getMap2_id() != 0) {

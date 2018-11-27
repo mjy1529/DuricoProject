@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.example.tourproject.R;
 
+import retrofit2.http.HEAD;
+
 public class GridViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView grid_card_image;
@@ -18,5 +20,6 @@ public class GridViewHolder extends RecyclerView.ViewHolder {
 
         grid_card_image = (ImageView) itemView.findViewById(R.id.grid_card_image);
         grid_card_lock = (ImageView) itemView.findViewById(R.id.grid_card_lock);
+
     }
 }

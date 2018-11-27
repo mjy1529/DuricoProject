@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class CardManager {
 
     private ArrayList<CardData> peopleCardList;
-//    private ArrayList<CardData> placeCardList;
+    //    private ArrayList<CardData> placeCardList;
     private ArrayList<CardData> storyCardList;
 
     private ArrayList<CardData> gachaCardList;

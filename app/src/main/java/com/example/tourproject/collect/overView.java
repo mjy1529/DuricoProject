@@ -19,9 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
-import com.example.tourproject.Network.Application;
 import com.example.tourproject.Util.UserManager;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
@@ -115,8 +115,6 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                 getXmlData1();
                 getXmlData2();
                 getMap();
-
-                // ************** 확인해야할 부분 ****************** //
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

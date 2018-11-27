@@ -16,9 +16,8 @@
     <ImageView
         android:id="@+id/grid_card_lock"
         android:visibility="gone"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/lock" />
+        android:layout_width="130dp"
+        android:layout_height="200dp"
+        android:scaleType="centerInside" />
 
 </RelativeLayout>

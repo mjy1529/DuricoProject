@@ -22,12 +22,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
 import com.example.tourproject.Network.NetworkService;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
 import com.instacart.library.truetime.TrueTime;

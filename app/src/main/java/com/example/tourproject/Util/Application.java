@@ -1,4 +1,4 @@
-package com.example.tourproject.Network;
+package com.example.tourproject.Util;
 
 import android.util.Log;
 
@@ -9,13 +9,9 @@ import com.example.tourproject.CardBox.PlaceResult;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Data;
 import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.StoryList.StoryResult;
 import com.example.tourproject.StoryPlay.StoryPlayResult;
-import com.example.tourproject.Util.CardManager;
-import com.example.tourproject.Util.MapManager;
-import com.example.tourproject.Util.StoryListManager;
-import com.example.tourproject.Util.StoryPlayManager;
-import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
 

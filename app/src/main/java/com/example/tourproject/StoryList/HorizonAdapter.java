@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.Map.MapActivity;
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.R;
 
 import java.util.ArrayList;

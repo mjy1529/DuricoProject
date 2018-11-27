@@ -23,9 +23,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tourproject.CardBox.CardBoxActivity;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.StoryList.StoryListActivity;
-import com.example.tourproject.Network.Application;
 import com.example.tourproject.Util.BackPressCloseHandler;
 import com.example.tourproject.Util.UserManager;
 import com.example.tourproject.collect.Listviewitem;
@@ -211,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public void changeProfileImage(String card_url) {
         Glide.with(MainActivity.this)
                 .load(Application.getInstance().getBaseImageUrl() + card_url)
+                .apply(new RequestOptions().centerCrop())
                 .into(btn0);
     }
 
