@@ -6,11 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/screen"
-<<<<<<< HEAD
     tools:context=".StoryPlay.StoryPlayActivity">
-=======
-    tools:context=".StoryPlayActivity">
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -49,11 +45,7 @@
             android:layout_height="220dp">
 
             <TextView
-<<<<<<< HEAD
                 android:id="@+id/textView"
-=======
-                android:id="@+id/content"
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
                 android:layout_width="89dp"
                 android:layout_height="29dp"
                 android:layout_alignParentStart="true"
@@ -69,11 +61,7 @@
                 android:text="TextView" />
 
             <TextView
-<<<<<<< HEAD
                 android:id="@+id/content"
-=======
-                android:id="@+id/textView"
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
                 android:layout_width="327dp"
                 android:layout_height="194dp"
                 android:layout_below="@id/content"

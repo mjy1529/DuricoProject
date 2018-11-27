@@ -2,10 +2,7 @@ package com.example.tourproject;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,37 +16,28 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-<<<<<<< HEAD
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
-import com.example.tourproject.Map.MapActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
-=======
-
-import com.example.tourproject.Map.MapActivity;
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 import com.instacart.library.truetime.TrueTime;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,9 +46,6 @@ import retrofit2.Response;
 public class GachaActivity extends AppCompatActivity {
 
     private static final long START_TIME_IN_MILLIS = 86400000;
-
-    private final int REQUEST_WIDTH = 512;
-    private final int REQUEST_HEIGHT = 512;
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
@@ -76,16 +61,14 @@ public class GachaActivity extends AppCompatActivity {
     Dialog MyDialog;
     ImageView cardimage;
     TextView cardcontent;
+    TextView cardname;
     LinearLayout card;
 
     private final MyHandler mHandler = new MyHandler(this);
     private Thread backgroundThread;
     private boolean running = false;
 
-<<<<<<< HEAD
     public static final String TAG = "GachaActivity";
-=======
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +80,9 @@ public class GachaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
         actionBar.setDisplayShowCustomEnabled(true);
-<<<<<<< HEAD
         actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
         actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
         actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
-=======
-        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
-        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
-        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
         //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
@@ -148,7 +125,7 @@ public class GachaActivity extends AppCompatActivity {
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-            onBackPressed();
+            finish();
         }
     }
 
@@ -302,35 +279,6 @@ public class GachaActivity extends AppCompatActivity {
         }
     }
 
-    public int pick() {
-        double r = Math.random(); //{0.0 - 1.0}
-        double dr = r * 100.0f; // {0.0 - 100.0}
-
-<<<<<<< HEAD
-        double p[] = {5.0f, 15.0f, 15.0f, 30.0f, 35.0f}; //4, 3, 2, 1, 0
-
-        double cumulative = 0.0f;
-        int i;
-        for (i = 0; i < 5; i++) {
-=======
-        double p[] = { 5.0f, 15.0f, 80.0f }; //2, 1, 0
-
-        double cumulative = 0.0f;
-        int i;
-        for(i=0; i<3; i++)
-        {
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
-            cumulative += p[i];
-            if (dr <= cumulative)
-                break;
-        }
-<<<<<<< HEAD
-        return 4 - i;
-=======
-        return 2-i;
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
-    }
-
     public void MyCustomAlertDialog() {
         MyDialog = new Dialog(GachaActivity.this);
         MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -339,21 +287,26 @@ public class GachaActivity extends AppCompatActivity {
         MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         cardcontent = (TextView) MyDialog.findViewById(R.id.cardContent);
-        cardcontent.setText(Integer.toString(pick()));
+
+        cardname = (TextView) MyDialog.findViewById(R.id.cardName);
 
         cardimage = (ImageView) MyDialog.findViewById(R.id.gacha_card);
 
         // ******* 뽑기 이미지 띄우는 부분 ******* //
         CardData gachaCardData = getGachaCard(); //뽑힌 카드 데이터
+
         if(gachaCardData != null) {
             Glide.with(this)
                     .load(Application.getInstance().getBaseImageUrl() + gachaCardData.getCard_image_url())
                     .into(cardimage);
 
             updateUserOpenCard(gachaCardData);
-
+            cardcontent.setText(gachaCardData.getCard_description());
+            cardname.setText(gachaCardData.getCard_name());
         } else { //더이상 뽑을 카드가 없을 때
             cardimage.setImageResource(R.drawable.p_1);
+            cardcontent.setText("\"제가 죽으면, 뼛조각 하나 이 일본 땅에 남지 않게 해주십시오\"");
+            cardname.setText("송몽규");
         }
         // *********************************** //
 

@@ -1,12 +1,5 @@
 package com.example.tourproject.CardBox;
 
-<<<<<<< HEAD
-=======
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,10 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-<<<<<<< HEAD
-=======
-import android.widget.TextView;
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
@@ -37,7 +26,6 @@ public class CardBoxActivity extends AppCompatActivity {
     NetworkService networkService;
     CardResult cardResult;
 
-    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,33 +39,22 @@ public class CardBoxActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
         actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
         actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
-<<<<<<< HEAD
         //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
-=======
-
-        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
-        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
-        actionBar.setCustomView(mCustomView);
-
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         Button home = (Button) findViewById(R.id.home);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         View tab1 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(0);
-<<<<<<< HEAD
-=======
-        //tab1.setBackgroundColor(getResources().getColor(R.color.tab1));
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         tab1.setBackgroundResource(R.drawable.tab_layout);
         View tab2 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(1);
         tab2.setBackgroundResource(R.drawable.tab_layout2);
@@ -136,11 +113,7 @@ public class CardBoxActivity extends AppCompatActivity {
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-<<<<<<< HEAD
             finish();
-=======
-            onBackPressed();
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         }
     }
 }

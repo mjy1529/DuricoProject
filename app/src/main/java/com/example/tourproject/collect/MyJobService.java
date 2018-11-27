@@ -1,4 +1,4 @@
-package com.example.tourproject.Collect;
+package com.example.tourproject.collect;
 
 import android.Manifest;
 import android.annotation.TargetApi;

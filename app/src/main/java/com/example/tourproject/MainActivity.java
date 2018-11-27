@@ -28,9 +28,9 @@ import com.example.tourproject.Util.BackPressCloseHandler;
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.UserManager;
-import com.example.tourproject.Collect.Listviewitem;
-import com.example.tourproject.Collect.MyJobService;
-import com.example.tourproject.Collect.PlaceMainActivity;
+import com.example.tourproject.collect.Listviewitem;
+import com.example.tourproject.collect.MyJobService;
+import com.example.tourproject.collect.PlaceMainActivity;
 
 import java.util.ArrayList;
 
