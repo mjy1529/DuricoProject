@@ -16,21 +16,12 @@
         android:padding="10dp">
     </android.support.v7.widget.Toolbar>
 
-<<<<<<< HEAD
     <RelativeLayout
         android:layout_below="@id/toolbar"
         android:id="@+id/rel"
         android:paddingRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-=======
-        <RelativeLayout
-            android:layout_below="@id/toolbar"
-            android:id="@+id/rel"
-            android:paddingRight="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:theme="@style/TabTheme"
@@ -55,15 +46,8 @@
                 android:text="스토리카드"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-<<<<<<< HEAD
         </android.support.design.widget.TabLayout>
     </RelativeLayout>
-=======
-
-        </android.support.design.widget.TabLayout>
-
-</RelativeLayout>
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
     <android.support.v4.view.ViewPager
         android:background="@drawable/test3"
         android:id="@+id/container"

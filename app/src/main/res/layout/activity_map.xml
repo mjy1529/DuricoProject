@@ -26,7 +26,6 @@
         android:padding="2dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp">
-<<<<<<< HEAD
 
         <FrameLayout
             android:layout_width="80dp"
@@ -37,29 +36,10 @@
             android:id="@+id/imageView1_1">
             <ImageButton
                 android:id="@+id/imageView1"
-                android:layout_width="73dp"
-                android:layout_height="73dp"
+                android:layout_width="110dp"
+                android:layout_height="105dp"
                 android:layout_marginLeft="0.5dp"
                 android:layout_marginTop="0.1dp"
-                android:background="@drawable/a_3"
-                android:layout_gravity="center_horizontal|center_vertical" />
-        </FrameLayout>
-
-=======
-        <FrameLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/imageView1_1">
-            <ImageButton
-                android:id="@+id/imageView1"
-                android:layout_width="73dp"
-                android:layout_height="73dp"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginTop="0.1dp"
-                android:background="@drawable/a_3"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
 
@@ -72,39 +52,12 @@
             android:layout_centerHorizontal="true">
             <ImageButton
                 android:id="@+id/imageView2"
-                android:layout_width="73dp"
-                android:layout_height="73dp"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginTop="0.1dp"
-                android:background="@drawable/a_3"
-                android:layout_gravity="center_horizontal|center_vertical" />
-        </FrameLayout>
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
-
-        <FrameLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-<<<<<<< HEAD
-            android:layout_marginRight="20dp"
-            android:id="@+id/imageView2_2"
-            android:layout_centerHorizontal="true">
-            <ImageButton
-                android:id="@+id/imageView2"
-=======
-            android:id="@+id/imageView3_3"
-            android:layout_alignParentRight="true">
-            <ImageButton
-                android:id="@+id/imageView3"
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
-                android:layout_width="73dp"
-                android:layout_height="73dp"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginTop="0.1dp"
-                android:background="@drawable/a_3"
+                android:scaleType="fitXY"
+                android:layout_width="110dp"
+                android:layout_height="105dp"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
 
-<<<<<<< HEAD
         <FrameLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -112,15 +65,11 @@
             android:layout_alignParentRight="true">
             <ImageButton
                 android:id="@+id/imageView3"
-                android:layout_width="73dp"
-                android:layout_height="73dp"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginTop="0.1dp"
-                android:background="@drawable/a_3"
+                android:scaleType="fitCenter"
+                android:layout_width="110dp"
+                android:layout_height="105dp"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
-=======
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
     </RelativeLayout>
 
     <RelativeLayout
@@ -149,11 +98,5 @@
             android:layout_centerVertical="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-<<<<<<< HEAD
     </RelativeLayout>
-=======
-
-    </RelativeLayout>
-
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 </RelativeLayout>

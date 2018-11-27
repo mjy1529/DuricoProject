@@ -11,10 +11,6 @@
         <!--<item name="android:windowBackground">@drawable/background_splash</item>-->
     </style>
     <style name="TabTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-<<<<<<< HEAD
-=======
-
->>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         <item name="android:textColorPrimary">@android:color/white</item>       <!-- 탭바 선택된 텍스트 -->
     </style>
 </resources>
