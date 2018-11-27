@@ -46,7 +46,7 @@ public class UserManager {
     }
 
     public int getPlace_card_cnt() {
-        return openPeopleCardList.size();
+        return placeCardList.size();
     }
 
     public void setPlace_card_cnt(int place_card_cnt) {

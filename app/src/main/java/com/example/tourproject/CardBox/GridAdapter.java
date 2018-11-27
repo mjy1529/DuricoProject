@@ -2,6 +2,9 @@ package com.example.tourproject.CardBox;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
 
@@ -30,6 +34,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     private ArrayList<Integer> openCardList;
     private ArrayList<String> placeCardList;
     private CardData data;
+    GridViewHolder holder;
+
+    int s;
 
     public static final String TAG = "Card Grid Adapter";
 
@@ -51,7 +58,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.grid_recycler_items, parent, false);
 
-        GridViewHolder holder = new GridViewHolder(view);
+        holder = new GridViewHolder(view);
+
         return holder;
     }
 
@@ -60,6 +68,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         if (openCardList != null) {
 
             data = cardDataList.get(position);
+
+            GradientDrawable drawable =
+                    (GradientDrawable) context.getDrawable(R.drawable.locklayout);
 
             boolean isOpen = false;
             for (int i = 0; i < openCardList.size(); i++) {
@@ -77,6 +88,13 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                         .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
                         .into(holder.grid_card_image);
 
+                if (data.getCard_image_url().equals(UserManager.getInstance().getUser_card_url())) {
+                    //holder.grid_select.setVisibility(View.VISIBLE);
+                    s = data.getCard_idx();
+                } else {
+                    //holder.grid_select.setVisibility(View.INVISIBLE);
+                }
+
                 //카드를 클릭했을 때의 이벤트
                 holder.grid_card_image.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -86,12 +104,18 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                         }
                     }
                 });
+
             } else {
+                //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
                 holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
                 Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
+                //holder.grid_select.setVisibility(View.INVISIBLE);
             }
 
-        } else { //장소카드인 경우
+            holder.grid_card_image.setBackground(drawable);
+            holder.grid_card_image.setClipToOutline(true);
+
+        } else {
             Glide.with(context).load(placeCardList.get(position)).into(holder.grid_card_image);
         }
     }
@@ -108,7 +132,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     public void showProfileDialog(final CardData data) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle("프로필 사진 설정")
-                .setMessage("프로필 사진으로 설정하시겠습니?")
+                .setMessage("프로필 사진으로 설정하시겠습니까?")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -118,6 +142,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
 
                         dialog.dismiss();
                         ((MainActivity) MainActivity.mContext).changeProfileImage(data.getCard_image_url());
+                        notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {

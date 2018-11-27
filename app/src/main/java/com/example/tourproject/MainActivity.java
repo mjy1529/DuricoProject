@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -76,24 +77,18 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
         ComponentName componentName = new ComponentName(getApplicationContext(), MyJobService.class);
-        //액션바-------------------------------
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
-        actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
-        actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
 
-        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
-        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
-        actionBar.setCustomView(mCustomView);
-
-        Button home = (Button) findViewById(R.id.home);
-        //여기까지------------------------------
+        doActionbar();
 
         btn0 = (ImageButton) findViewById(R.id.btnCard);
+
+        btn0.setOnClickListener(this);
+        if(!UserManager.getInstance().getUser_card_url().equals("null")) { //사용자가 메인이미지를 선택하였을 경우
+            changeProfileImage(UserManager.getInstance().getUser_card_url());
+        } else { //처음 실행되거나 사용자가 메인이미지를 선택하지 않았을 경우
+            btn0.setBackground(getResources().getDrawable(R.drawable.main));
+        }
+
         btn0.setBackground(new ShapeDrawable(new OvalShape()));
         btn0.setClipToOutline(true);
         btn0.setOnClickListener(this);
@@ -144,6 +139,32 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             // permissions this app might request
         }
     }*/
+
+    public void doActionbar(){
+        //액션바-------------------------------
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
+
+        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
+        Button home = (Button) findViewById(R.id.home);
+        TextView pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
+        TextView s = (TextView) findViewById(R.id.scardCnt);
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
+        TextView p = (TextView) findViewById(R.id.pcardCnt);
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
+        //여기까지------------------------------
+    }
+
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
             //onBackPressed();
