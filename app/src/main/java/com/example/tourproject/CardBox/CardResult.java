@@ -3,7 +3,8 @@ package com.example.tourproject.CardBox;
 import java.util.ArrayList;
 
 public class CardResult {
-    ArrayList<CardData> card;
+
+    public ArrayList<CardData> card;
 
     @Override
     public String toString() {

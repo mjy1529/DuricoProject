@@ -1,23 +1,21 @@
 package com.example.tourproject.CardBox;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tourproject.Network.Application;
-import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.Util.CardManager;
+import com.example.tourproject.Util.UserManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import retrofit2.Call;
 
 public class ThirdCardFragment extends Fragment {
 
@@ -32,40 +30,21 @@ public class ThirdCardFragment extends Fragment {
         card_number = (TextView) view.findViewById(R.id.card_number);
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
 
-        getCategoryCard("story");
+        setPeopleCard();
         return view;
     }
 
-    public void getCategoryCard(final String category) {
-        final NetworkService networkService = Application.getInstance().getNetworkService();
+    public void setPeopleCard() {
+        cardList = CardManager.getInstance().getPeopleCardList(); //인물카드
+        ArrayList<Integer> openCardList = UserManager.getInstance().getOpenPeopleCardList();
 
-        new AsyncTask<Void, Void, String>() {
-            CardResult cardResult;
-            @Override
-            protected String doInBackground(Void... voids) {
-                Call<CardResult> request = networkService.getCategoryCard(category);
-                try {
-                    cardResult = request.execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
+        GridAdapter adapter = new GridAdapter(getContext(), cardList, openCardList);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                cardList = cardResult.card;
+        card_recyclerView.setLayoutManager(layoutManager);
+        card_recyclerView.setAdapter(adapter);
 
-                GridAdapter adapter = new GridAdapter(getContext(), cardList);
-                GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-
-                card_recyclerView.setLayoutManager(layoutManager);
-                card_recyclerView.setAdapter(adapter);
-
-                int openCardCnt = 3;
-                card_number.setText(openCardCnt + " / " + adapter.getItemCount());
-            }
-        }.execute();
+        int openCardCnt = UserManager.getInstance().getOpen_people_card_cnt();
+        card_number.setText(openCardCnt + " / " + adapter.getItemCount());
     }
 }

@@ -1,40 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageCard"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="249dp" />
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@null"
+        android:minHeight="?android:attr/actionBarSize"
+        android:padding="10dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnCard"
-        android:layout_width="123dp"
-        android:layout_height="172dp"
-        android:text="test" />
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0"
+        android:elevation="0dp"
+        android:gravity="center"
+        android:src="@drawable/p_1" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="35dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="23dp"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        android:padding="0dp">
 
         <Button
             android:id="@+id/btnCollect"
-            android:layout_width="123dp"
-            android:layout_height="match_parent"
-            android:text="수집" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/three"
+            android:elevation="0dp" />
 
         <Button
             android:id="@+id/btnStart"
-            android:layout_width="135dp"
-            android:layout_height="match_parent"
-            android:text="시작" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/two" />
+
         <Button
             android:id="@+id/btnPick"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="뽑기"/>
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="136dp"
+            android:layout_margin="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/one" />
+
     </LinearLayout>
 
 </LinearLayout>

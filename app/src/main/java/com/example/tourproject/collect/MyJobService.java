@@ -1,6 +1,8 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +11,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -20,8 +23,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
@@ -49,7 +54,8 @@ public class MyJobService extends JobService {
     static double mapy;
     static ArrayList<Listviewitem> data = new ArrayList<>();
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
-    static String key = "j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
+    static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
+    public static boolean bAppRunned = false;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -63,6 +69,7 @@ public class MyJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         if (doIt != null) {
+            bAppRunned = false;
             doIt.cancel(true);
         }
         return true;
@@ -72,15 +79,23 @@ public class MyJobService extends JobService {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
             while(mapx == 0 || mapy == 0);
-            find(mapx, mapy, 12);
-            find(mapx, mapy, 14);
-            find2000(mapx, mapy, 12);
-            find2000(mapx, mapy, 14);
+
+            while(data.size() == 0 && data2.size() == 0);
+
+            while(data.size() >= data2.size());
+            /*try {
+                Thread.sleep(1000 * 5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
             Log.d("GPS후 TmapTest", "" + mapx + "," + mapy);
+
             //조건문 if (푸시알림할 데이터가 있으면) {
-            if (data.size() != 0 || data2.size() != 0) {
+            Log.d("현재 접속한 클래스", getTopApplicationClassName(getApplicationContext()));
+            if (data.size() > 0 && !bAppRunned) {
                 //push notification
                 Intent intent = new Intent(getApplicationContext(), PlaceMainActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -110,9 +125,14 @@ public class MyJobService extends JobService {
 
                 notificationManager.notify(0, builder.build());
                 Log.d("push", "푸시 알림 울림");
+                /*try {
+                    Thread.sleep(1000 * 60 * 15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
             }
             //}
-
+            //mapx = 0; mapy = 0;
             return null;
         }
 
@@ -123,6 +143,9 @@ public class MyJobService extends JobService {
         }
 
 
+    }
+    public static String getTopApplicationClassName(Context context){
+        return ((ActivityManager.RunningTaskInfo)((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1).get(0)).topActivity.getClassName();
     }
     static void find(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
@@ -137,19 +160,21 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = null;
+            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
             String title = "";
             String content_id = "";
             String addr = "";
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            data.clear();
+            if(contentTypeNum == 12)
+                data.clear();
             xpp.next();
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
                 //Log.i("관련들어왔어요","ddddddd");
+
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -188,6 +213,7 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data.add(item1);
+                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
                             }
                         }
                         break;
@@ -200,13 +226,16 @@ public class MyJobService extends JobService {
                         if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
+
                 eventType= xpp.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
+            Log.i("find1 캐치 에러!", String.valueOf(data.size()));
         }
+
+        Log.i("find 함수 끝냈다", String.valueOf(data.size()));
     }//getXmlData method....
     static void find2000(double longi, double lati, int contentTypeNum) {
         String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
@@ -221,19 +250,21 @@ public class MyJobService extends JobService {
             xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
 
             String tag;
-            Bitmap imagesrc = null;
+            Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
             String title = "";
             String content_id = "";
             String addr = "";
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            data2.clear();
+            if(contentTypeNum == 12)
+                data2.clear();
             xpp.next();
             Listviewitem item1 = null;
             int eventType= xpp.getEventType();
             while( eventType != XmlPullParser.END_DOCUMENT ){
                 //Log.i("관련들어왔어요","ddddddd");
+
                 switch( eventType ){
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -272,6 +303,7 @@ public class MyJobService extends JobService {
                             if(title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data2.add(item1);
+                                imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
                             }
                         }
                         break;
@@ -284,13 +316,15 @@ public class MyJobService extends JobService {
                         if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
+
                 eventType= xpp.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("find 함수 끝냈다",Double.toString(mapy));
+            Log.i("catch에러!",String.valueOf(data2.size()));
         }
+        Log.i("find2 함수 끝냈다",String.valueOf(data2.size()));
     }//getXmlData method....
     static private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -308,8 +342,32 @@ public class MyJobService extends JobService {
         }
         return bm;
     }
+    public void setGps() {
+        Log.i("잡서비스 함수들어갑니다.","setGps");
 
-    private final LocationListener mLocationListener = new LocationListener() {
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(false);
+
+        String provider = lm.getBestProvider(criteria, true);
+
+        //String provider = LocationManager.PASSIVE_PROVIDER;
+        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
+                10, // 통지사이의 최소 변경거리 (m)
+                mLocationListener);
+    }
+
+    public double getMapx(){
+        return mapx;
+    }
+    public double getMapy(){
+        return mapy;
+    }
+
+    static private final LocationListener mLocationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location location) {
@@ -317,17 +375,14 @@ public class MyJobService extends JobService {
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
-                //mapx = 126.9769930325;
-                //mapy = 37.5788222356;
-                Log.i("잡서미스 리스너들어왔어요", Double.toString(mapx));
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
                     //listView = (ListView)findViewById(R.id.list);
-                    Log.i("잡서비스 리스너스레드 들어왔어요",Double.toString(mapx));
-                    Log.i("여기나야관련들어왔어요",Double.toString(mapy));
+                    Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
+                    Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
                     find(mapx, mapy, 12);
                     find(mapx, mapy, 14);
                     find2000(mapx, mapy, 12);
@@ -342,31 +397,4 @@ public class MyJobService extends JobService {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-
-
-    public void setGps() {
-        Log.i("잡서비스 함수들어갑니다.","setGps");
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setCostAllowed(false);
-
-        String provider = lm.getBestProvider(criteria, true);
-
-        //String provider = LocationManager.PASSIVE_PROVIDER;
-        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 20, // 통지사이의 최소 시간간격 (miliSecond)
-                200, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-    }
-
-    public double getMapx(){
-        return mapx;
-    }
-    public double getMapy(){
-        return mapy;
-    }
-
 }

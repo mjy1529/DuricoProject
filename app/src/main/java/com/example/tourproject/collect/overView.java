@@ -1,4 +1,4 @@
-package com.example.tourproject.collect;
+package com.example.tourproject.Collect;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,8 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,7 +59,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     String addr = "";
     String overview2 = "";
     String useInfo = "";
-    String key="j0aZMFt%2BMMaKgatcd%2F%2FLjwsbfCIfIrLvs6jy9Fyj7EOqvCUnpmXiSbvXlpKbKk2wVC1vlALOF6F1EcG1o1JbzQ%3D%3D";
+    String key="1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
     TMapView tMapView = null;
     Context mContext = null;
     String mapx = "";
@@ -64,6 +68,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_over_view);
+
         mContext = this;
         Intent intent = getIntent();
         content_id = intent.getStringExtra("content_id");
@@ -100,11 +105,12 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                 getXmlData2();
                 getMap();
 
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
+                        if(imagesrc == null)
+                            collectBtn.setVisibility(View.GONE);
                         placeTitleView.setText(item.getTitle());
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
@@ -115,6 +121,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
             }
         }).start();
     }
+
     void getMap() {
 
         Double x = Double.valueOf(mapx);

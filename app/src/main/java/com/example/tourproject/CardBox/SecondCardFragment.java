@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tourproject.Network.Application;
+import com.example.tourproject.Util.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.Util.CardManager;
+import com.example.tourproject.Util.UserManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,40 +34,22 @@ public class SecondCardFragment extends Fragment {
         card_number = (TextView) view.findViewById(R.id.card_number);
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
 
-        getCategoryCard("place");
+        setStoryCard();
+
         return view;
     }
 
-    public void getCategoryCard(final String category) {
-        final NetworkService networkService = Application.getInstance().getNetworkService();
+    public void setStoryCard() {
+        cardList = CardManager.getInstance().getStoryCardList(); //스토리카드
+        ArrayList<Integer> openCardList = UserManager.getInstance().getOpenStoryCardList();
 
-        new AsyncTask<Void, Void, String>() {
-            CardResult cardResult;
-            @Override
-            protected String doInBackground(Void... voids) {
-                Call<CardResult> request = networkService.getCategoryCard(category);
-                try {
-                    cardResult = request.execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
+        GridAdapter adapter = new GridAdapter(getContext(), cardList, openCardList);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                cardList = cardResult.card;
+        card_recyclerView.setLayoutManager(layoutManager);
+        card_recyclerView.setAdapter(adapter);
 
-                GridAdapter adapter = new GridAdapter(getContext(), cardList);
-                GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-
-                card_recyclerView.setLayoutManager(layoutManager);
-                card_recyclerView.setAdapter(adapter);
-
-                int openCardCnt = 3;
-                card_number.setText(openCardCnt + " / " + adapter.getItemCount());
-            }
-        }.execute();
+        int openCardCnt = UserManager.getInstance().getOpen_story_card_cnt();
+        card_number.setText(openCardCnt + " / " + adapter.getItemCount());
     }
 }

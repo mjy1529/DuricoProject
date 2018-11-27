@@ -1,6 +1,7 @@
 package com.example.tourproject.StoryList;
 
 public class StoryData {
+
     private int story_id;
     private String story_title;
     private String story_image_url;
