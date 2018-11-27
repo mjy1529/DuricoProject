@@ -11,10 +11,21 @@
         android:layout_width="150dp"
         android:layout_height="200dp"
         android:background="@drawable/a_6"
+<<<<<<< HEAD
         android:outlineProvider="background"
         android:scaleType="centerCrop"
          />
 
 
+=======
+        android:scaleType="centerInside"
+        android:src="@drawable/namhan" />
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/lock" />
 
 </RelativeLayout>

@@ -11,7 +11,12 @@
         android:layout_height="335dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
+<<<<<<< HEAD
         android:adjustViewBounds="true" />
+=======
+        android:adjustViewBounds="true"
+        android:background="@drawable/p_1" />
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     <LinearLayout
         android:layout_width="249dp"
@@ -20,6 +25,7 @@
         android:background="@drawable/a_1">
 
         <TextView
+<<<<<<< HEAD
             android:id="@+id/cardName"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
@@ -29,6 +35,17 @@
             android:fontFamily="@font/gulim070"
             android:textColor="#6d6053"
             android:text="김구" />
+=======
+        android:id="@+id/cardName"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="33dp"
+            android:textSize="12sp"
+            android:fontFamily="@font/gulim070"
+            android:textColor="#6d6053"
+        android:text="김구" />
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
         <TextView
             android:id="@+id/cardContent"

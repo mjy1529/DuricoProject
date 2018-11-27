@@ -36,6 +36,7 @@ public class HorizonAdapter extends RecyclerView.Adapter<HorizonViewHolder> {
 
     @Override
     public void onBindViewHolder(HorizonViewHolder holder, int position) {
+<<<<<<< HEAD
         final StoryData data = storyList.get(position);
 
         Glide.with(context)
@@ -50,6 +51,12 @@ public class HorizonAdapter extends RecyclerView.Adapter<HorizonViewHolder> {
                 context.startActivity(intent);
             }
         });
+=======
+        HorizonData data = horizonDatas.get(position);
+
+        //holder.description.setText(data.getText());
+        holder.icon.setImageResource(data.getImg());
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
     }
 
     @Override

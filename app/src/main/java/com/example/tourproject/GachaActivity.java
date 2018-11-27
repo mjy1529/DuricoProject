@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+<<<<<<< HEAD
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +36,10 @@ import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
+=======
+
+import com.example.tourproject.Map.MapActivity;
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 import com.instacart.library.truetime.TrueTime;
 
 import java.io.IOException;
@@ -77,7 +82,10 @@ public class GachaActivity extends AppCompatActivity {
     private Thread backgroundThread;
     private boolean running = false;
 
+<<<<<<< HEAD
     public static final String TAG = "GachaActivity";
+=======
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +97,15 @@ public class GachaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
         actionBar.setDisplayShowCustomEnabled(true);
+<<<<<<< HEAD
         actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
         actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
         actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
+=======
+        actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
+        actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
         //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
@@ -292,16 +306,29 @@ public class GachaActivity extends AppCompatActivity {
         double r = Math.random(); //{0.0 - 1.0}
         double dr = r * 100.0f; // {0.0 - 100.0}
 
+<<<<<<< HEAD
         double p[] = {5.0f, 15.0f, 15.0f, 30.0f, 35.0f}; //4, 3, 2, 1, 0
 
         double cumulative = 0.0f;
         int i;
         for (i = 0; i < 5; i++) {
+=======
+        double p[] = { 5.0f, 15.0f, 80.0f }; //2, 1, 0
+
+        double cumulative = 0.0f;
+        int i;
+        for(i=0; i<3; i++)
+        {
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
             cumulative += p[i];
             if (dr <= cumulative)
                 break;
         }
+<<<<<<< HEAD
         return 4 - i;
+=======
+        return 2-i;
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
     }
 
     public void MyCustomAlertDialog() {

@@ -1,6 +1,10 @@
 package com.example.tourproject.Collect;
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -18,9 +22,16 @@ import android.widget.TextView;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 
+<<<<<<< HEAD
 import static com.example.tourproject.Collect.MyJobService.data;
 import static com.example.tourproject.Collect.MyJobService.data2;
 import static com.example.tourproject.Collect.MyJobService.mapy;
+
+=======
+import static com.example.tourproject.collect.MyJobService.data;
+import static com.example.tourproject.collect.MyJobService.data2;
+import static com.example.tourproject.collect.MyJobService.mapy;
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
 
 public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{

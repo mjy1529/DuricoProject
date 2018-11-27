@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,13 @@ import java.util.Comparator;
 
 public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+<<<<<<< HEAD
     private Context context;
     private ArrayList<Map2Data> verticalDatas;
+=======
+public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder>{
+    private ArrayList<VerticalData> verticalDatas;
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     public VerticalAdapter(Context context, ArrayList<Map2Data> verticalDatas) {
         this.context = context;
@@ -31,17 +37,27 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
+<<<<<<< HEAD
     public Map2ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+=======
+    public VerticalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
         // 사용할 아이템의 뷰를 생성해준다.
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.vertical_recycler_items, parent, false);
 
+<<<<<<< HEAD
         Map2ViewHolder holder = new Map2ViewHolder(view);
+=======
+        VerticalViewHolder holder = new VerticalViewHolder(view);
+
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
         return holder;
     }
 
     @Override
+<<<<<<< HEAD
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
         VerticalAdapter.Map2ViewHolder holder = (VerticalAdapter.Map2ViewHolder) viewHolder;
 
@@ -64,6 +80,24 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
+=======
+    public void onBindViewHolder(VerticalViewHolder holder, int position) {
+        VerticalData data = verticalDatas.get(position);
+
+        holder.icon.setImageResource(data.getImg());
+       if(data.getState() != 1 && data.getState() != 0) {
+           ColorMatrix matrix = new ColorMatrix();
+           matrix.setSaturation(0);
+           ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+           holder.icon.setColorFilter(cf);
+       }
+       else{
+          holder.icon.clearColorFilter();
+          holder.icon.invalidate();
+       }
+       if(data.getId() != 3)
+           holder.icon2.setBackgroundResource(data.getImg2());
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
     }
 
 //    @Override

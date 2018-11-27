@@ -15,7 +15,11 @@
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         android:padding="10dp"
+<<<<<<< HEAD
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+=======
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+>>>>>>> 88d08faf93ce6ed9a4e619a5442e90279e2ac043
 
     <ImageView
         android:id="@+id/imageView4"
