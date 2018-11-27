@@ -63,12 +63,10 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void onBtn(int position) {
-        //imageViews[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.a_3);
         layouts[position].setBackgroundResource(R.drawable.imagebutton_border);
     }
 
     public void offBtn(int position) {
-        //imageViews[Integer.parseInt(mid) - 1].setBackgroundResource(R.drawable.a_3);
         layouts[position].setBackgroundResource(R.drawable.imagebutton_border2);
     }
 
@@ -139,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                 Glide.with(this)
                         .load(Application.getInstance().getBaseImageUrl() + selectedStoryMap.get(i).map1_image_url)
                         .into(imageViews[i]);
-                //imageViews[i].setBackgroundDrawable(Drawable.createFromPath(selectedStoryMap.get(i).map1_image_url));
+                imageViews[i].setBackgroundDrawable(Drawable.createFromPath(selectedStoryMap.get(i).map1_image_url));
                 Log.d(TAG, Application.getInstance().getBaseImageUrl() + selectedStoryMap.get(i).map1_image_url);
             }
             setMap2(0);
@@ -150,7 +148,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void setMap2(int position) {
-        Log.i("이거는 뭔문제", "이거는 ");
         if (selectedStoryMap.size() != 0) {
             onBtn(position);
             textView2.setText(selectedStoryMap.get(position).map1_title);
@@ -161,7 +158,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-            onBackPressed();
+            finish();
         }
     }
 
@@ -186,7 +183,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public boolean LocatedPlace(double mapx, double mapy) {
-        Log.i("여기여기ㅇㅇ", "ㅇㅇㅇ");
         double p_mapx, p_mapy;
         p_mapx = 126.977041;
         p_mapy = 37.579652;

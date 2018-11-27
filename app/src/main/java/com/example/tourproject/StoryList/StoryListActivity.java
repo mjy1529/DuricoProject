@@ -1,9 +1,6 @@
 package com.example.tourproject.StoryList;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,22 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
-import com.example.tourproject.Util.Application;
-import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.StoryListManager;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import retrofit2.Call;
-
 
 //activity_story_list
 //layout : horizon_recycler_items
@@ -61,13 +47,6 @@ public class StoryListActivity extends AppCompatActivity {
         actionBar.setCustomView(mCustomView);
 
         Button home = (Button) findViewById(R.id.home);
-        //★
-        /*home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });*/
     }
 
     public void setRecyclerView() {
@@ -82,20 +61,7 @@ public class StoryListActivity extends AppCompatActivity {
             mHorizonView.setAdapter(horizonAdapter);
         }
     }
-    /* ★
-    //액션바 홈버튼 동작을 위한 메소드
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
-    //★
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
             finish();

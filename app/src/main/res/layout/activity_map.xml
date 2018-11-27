@@ -36,10 +36,8 @@
             android:id="@+id/imageView1_1">
             <ImageButton
                 android:id="@+id/imageView1"
-                android:layout_width="110dp"
-                android:layout_height="105dp"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginTop="0.1dp"
+                android:layout_width="91dp"
+                android:layout_height="91dp"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
 
@@ -52,9 +50,8 @@
             android:layout_centerHorizontal="true">
             <ImageButton
                 android:id="@+id/imageView2"
-                android:scaleType="fitXY"
-                android:layout_width="110dp"
-                android:layout_height="105dp"
+                android:layout_width="91dp"
+                android:layout_height="91dp"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
 
@@ -65,9 +62,8 @@
             android:layout_alignParentRight="true">
             <ImageButton
                 android:id="@+id/imageView3"
-                android:scaleType="fitCenter"
-                android:layout_width="110dp"
-                android:layout_height="105dp"
+                android:layout_width="91dp"
+                android:layout_height="91dp"
                 android:layout_gravity="center_horizontal|center_vertical" />
         </FrameLayout>
     </RelativeLayout>
