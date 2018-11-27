@@ -12,12 +12,15 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:gravity="right"
-        android:paddingRight="15dp"
+        android:paddingRight="30dp"
+        android:fontFamily="@font/gulim070"
         android:text="오픈된 카드수 / 총 카드수"
-        android:textColor="#000"
+        android:textColor="#ec776c"
         android:textSize="15sp" />
 
     <android.support.v7.widget.RecyclerView
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp"
         android:id="@+id/card_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

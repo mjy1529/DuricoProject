@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -64,6 +65,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         }
 
         if(isOpen) { //카드가 오픈되어 있을 때만 카드 이미지 확인 및 클릭 가능
+            holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             Glide.with(context)
                     .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
                     .into(holder.grid_card_image);
@@ -75,6 +77,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                 }
             });
         } else {
+            //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
+            holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
             Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
         }
     }

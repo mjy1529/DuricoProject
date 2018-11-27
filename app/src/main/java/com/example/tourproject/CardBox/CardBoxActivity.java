@@ -1,5 +1,7 @@
 package com.example.tourproject.CardBox;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -55,11 +56,11 @@ public class CardBoxActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         View tab1 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(0);
-        tab1.setBackgroundResource(R.drawable.tab_layout);
+        tab1.setBackgroundResource(R.drawable.tab_layout2);
         View tab2 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(1);
-        tab2.setBackgroundResource(R.drawable.tab_layout2);
+        tab2.setBackgroundResource(R.drawable.tab_layout3);
         View tab3 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(2);
-        tab3.setBackgroundResource(R.drawable.tab_layout3);
+        tab3.setBackgroundResource(R.drawable.tab_layout);
     }
 
     public static class PlaceholderFragment extends Fragment {
