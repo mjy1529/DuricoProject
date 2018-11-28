@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
@@ -58,6 +59,8 @@ public class StoryPlayActivity extends AppCompatActivity {
     private Dialog MyDialog;
     NetworkService networkService;
     String user_id;
+
+    ArrayList<CardData> popUpCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +133,24 @@ public class StoryPlayActivity extends AppCompatActivity {
                 .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(0).getPlay_image_url())
                 .into(imageView);
 
+        //해당 이야기에 맞는 카드가 있는지 검색하기
+        popUpCards = findCard();
+
+//        //해당 이야기에 맞는 카드가 있을 때 처리
+//        if(popUpCards != null) {
+//            for (int i = 0; i < popUpCards.size(); i++) {
+//                if (popUpCards.get(i).getMap2_id() != 0) {
+//                    if (popUpCards.get(i).getCard_category().equals("people")) {
+//                        showPeopleCardDialog(popUpCards.get(i));
+//                        updateOpenPeopleCard(popUpCards.get(i)); //오픈 인물카드 업데이트
+//                    } else if (popUpCards.get(i).getCard_category().equals("story")) {
+//                        showStoryCardDialog(popUpCards.get(i));
+//                        updateOpenStoryCard(popUpCards.get(i)); //오픈 스토리카드 업데이트
+//                    }
+//                }
+//            }
+//        }
+
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,30 +164,46 @@ public class StoryPlayActivity extends AppCompatActivity {
                             .into(imageView);
 
                 } else if (i == v_cnt) { // 마지막 페이지일 때
-                    //해당 이야기에 맞는 카드가 있는지 검색하기
-                    CardData cardData = findCard();
-                    if (cardData != null && cardData.getMap2_id() != 0) { //해당 이야기에 맞는 카드가 있을 때
-                        if (cardData.getCard_category().equals("people")) {
-                            updateOpenPeopleCard(cardData);
-                        } else if (cardData.getCard_category().equals("story")) {
-                            updateOpenStoryCard(cardData);
-                        }
-                        cardAlertDialog(cardData);
-                    }
+                    //DB map2 상태 업데이트
                     updateMap2State(map2_id);
 
                     //UserManager의 map2State 업데이트
                     UserManager userManager = UserManager.getInstance();
-                    for(int i=0; i<userManager.getMap2StateList().size(); i++) {
+                    for (int i = 0; i < userManager.getMap2StateList().size(); i++) {
                         //첫번째 이야기이고 현재 map2_id와 일치하는 userManager의 map2StateList를 업데이트 시킨다.
-                        if(userManager.getMap2StateList().get(i).getMap2_id() == map2_id
+                        if (userManager.getMap2StateList().get(i).getMap2_id() == map2_id
                                 && userManager.getMap2StateList().get(i).getMap2_position() == 1) {
                             userManager.getMap2StateList().get(i).setMap2_state(0);
-                            userManager.getMap2StateList().get(i+2).setMap2_state(1);
+                            userManager.getMap2StateList().get(i + 2).setMap2_state(1);
                             break;
                         }
                     }
                     MapActivity.mAdapter.notifyDataSetChanged();
+
+                    if (popUpCards == null) {
+                        finish();
+                    } else {
+                        if (popUpCards.get(0).getCard_category().equals("people")) {
+                            updateOpenPeopleCard(popUpCards.get(0)); //오픈 인물카드 업데이트
+                            showPeopleCardDialog(popUpCards.get(0));
+                        } else if (popUpCards.get(0).getCard_category().equals("story")) {
+                            updateOpenStoryCard(popUpCards.get(0)); //오픈 스토리카드 업데이트
+                            showStoryCardDialog(popUpCards.get(0));
+                        }
+                    }
+
+                } else if (i == (v_cnt + 1)) {
+                    if (popUpCards.size() == 2) {
+                        if (popUpCards.get(1).getCard_category().equals("people")) {
+                            updateOpenPeopleCard(popUpCards.get(1)); //오픈 인물카드 업데이트
+                            showPeopleCardDialog(popUpCards.get(1));
+                        } else if (popUpCards.get(1).getCard_category().equals("story")) {
+                            updateOpenStoryCard(popUpCards.get(1)); //오픈 스토리카드 업데이트
+                            showStoryCardDialog(popUpCards.get(1));
+                        }
+                    } else {
+                        finish();
+                    }
 
                 } else {
                     finish();
@@ -202,22 +239,31 @@ public class StoryPlayActivity extends AppCompatActivity {
         }
     }
 
-    public CardData findCard() {
-        ArrayList<CardData> peopleCardList = CardManager.getInstance().getPeopleCardList();
-        ArrayList<CardData> storyCardList = CardManager.getInstance().getStoryCardList();
+    public ArrayList<CardData> findCard() {
+        ArrayList<CardData> popUpCards = new ArrayList<>();
 
+        ArrayList<CardData> peopleCardList = CardManager.getInstance().getPeopleCardList(); //인물카드
+        ArrayList<CardData> storyCardList = CardManager.getInstance().getStoryCardList(); //스토리카드
+
+        //인물카드들 중에 검색하여 popUpCards에 추가1
         for (int i = 0; i < peopleCardList.size(); i++) {
             if (peopleCardList.get(i).getMap2_id() == map2_id) {
-                return peopleCardList.get(i);
+                popUpCards.add(peopleCardList.get(i));
             }
         }
 
+        //스토리카드들 중에 검색하여 popUpCards에 추가
         for (int i = 0; i < storyCardList.size(); i++) {
             if (storyCardList.get(i).getMap2_id() == map2_id) {
-                return storyCardList.get(i);
+                popUpCards.add(storyCardList.get(i));
             }
         }
-        return null;
+
+        if (popUpCards.size() == 0) {
+            return null;
+        } else {
+            return popUpCards;
+        }
     }
 
     public void MyCustomAlertDialog() {
@@ -251,8 +297,8 @@ public class StoryPlayActivity extends AppCompatActivity {
         MyDialog.show();
     }
 
-    //map2에 해당하는 카드가 있다면 보여주기!
-    public void cardAlertDialog(CardData cardData) {
+    //map2에 해당하는 인물카드 팝업 띄우기
+    public void showPeopleCardDialog(CardData cardData) {
         MyDialog = new Dialog(StoryPlayActivity.this);
         MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MyDialog.setContentView(R.layout.pick_customdialong);
@@ -269,11 +315,36 @@ public class StoryPlayActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
                 .into(cardimage);
+        Toast.makeText(this, "gacha!", Toast.LENGTH_SHORT).show();
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyDialog.cancel();
+                MyDialog.dismiss();
+            }
+        });
+        MyDialog.show();
+    }
+
+    //map2에 해당하는 스토리카드 팝업 띄우기
+    public void showStoryCardDialog(CardData cardData) {
+        MyDialog = new Dialog(StoryPlayActivity.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.pick_customdialog3);
+        MyDialog.setTitle("My Custom Dialog");
+        MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView cardImage = (ImageView) MyDialog.findViewById(R.id.pickCard_noDesc);
+        LinearLayout card = (LinearLayout) MyDialog.findViewById(R.id.pickview_noDesc);
+        Toast.makeText(this, "gacha!", Toast.LENGTH_SHORT).show();
+
+        Glide.with(this)
+                .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
+                .into(cardImage);
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.dismiss();
             }
         });
         MyDialog.show();

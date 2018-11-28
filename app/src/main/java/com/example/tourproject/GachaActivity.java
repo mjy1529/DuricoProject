@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
@@ -332,6 +333,7 @@ public class GachaActivity extends AppCompatActivity{
                     .into(cardimage);
             cardName.setText(gachaCardData.getCard_name()); //카드 이름
             cardcontent.setText(gachaCardData.getCard_description()); //카드 설명
+            Toast.makeText(this, "gacha!", Toast.LENGTH_SHORT).show();
 
             updateUserOpenCard(gachaCardData);
 
