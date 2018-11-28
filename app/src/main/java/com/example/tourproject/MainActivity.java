@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 startActivity(intent);
                             }
                         });
-                Check.setCancelable(false);
+                Check.setCancelable(true);
                 Check.show();
                 break;
             case R.id.btnStart:
@@ -265,14 +265,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     @Override
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
-    }
-    public int waiting(){
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return 7;
     }
     public void changeProfileImage(String card_url) {
         Glide.with(MainActivity.this)
