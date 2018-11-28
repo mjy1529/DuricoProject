@@ -28,7 +28,9 @@ import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
 
-import retrofit2.http.HEAD;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapActivity extends AppCompatActivity implements ImageButton.OnClickListener {
     String mid;
@@ -47,6 +49,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     ArrayList<Map1Data> selectedStoryMap;
 
     int p;
+    Map1Data map1Data;
 
     public final static String TAG = "MAP Activity";
 
@@ -60,7 +63,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         Intent intent = getIntent();
         String story_id = intent.getStringExtra("story_id");
         setMap(story_id);
-
+        map1Data = selectedStoryMap.get(0);
         updateMap2(b);
     }
 
@@ -89,6 +92,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         }
         p = position;
         setMap2(position);
+        map1Data = selectedStoryMap.get(position);
         updateMap2(b);
     }
 
@@ -178,7 +182,28 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public void updateMap2(MyJobService b) {
         if (LocatedPlace(b.getMapx(), b.getMapy())) {
             // ***** db에 map2의 상태 1로 update 하기 ****** //
+            int map2_id = 0;
+            for(int i=0; i<map1Data.getMap2List().size(); i++) {
+                if(map1Data.getMap2List().get(i).getMap1_id() == Integer.parseInt(map1Data.getMap_id())
+                        && map1Data.getMap2List().get(i).getMap2_position() == 1) {
+                    map2_id = map1Data.getMap2List().get(i).getMap2_id();
 
+                    UserManager.getInstance().getMap2StateList().get(i).setMap2_state(1);
+                    break;
+                }
+            }
+            Call<String> request = networkService.updateMap2State(UserManager.getInstance().getUserId(), map2_id);
+            request.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d(TAG, "MAP2 두번째 이야기 활성화");
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d(TAG, "MAP2 두번째 이야기 활성화 실패");
+                }
+            });
 
             mAdapter.notifyDataSetChanged();
             // ****************************************** //
@@ -188,8 +213,14 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public boolean LocatedPlace(double mapx, double mapy) {
         Log.i("여기여기ㅇㅇ", "ㅇㅇㅇ");
         double p_mapx, p_mapy;
-        p_mapx = 126.977041;
-        p_mapy = 37.579652;
+
+        // ************ 추가 ************ //
+//        p_mapx = 126.977041;
+//        p_mapy = 37.579652;
+        p_mapx = map1Data.getMap1_mapx();
+        p_mapy = map1Data.getMap1_mapy();
+        // ***************************** //
+
         double diffmapy = LatitudeInDifference(300);
         double diffmapx = LongitudeInDifference(p_mapy, 300);
         Log.i("mapy", Double.toString(mapy));
