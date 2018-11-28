@@ -1,5 +1,6 @@
 package com.example.tourproject;
 
+import android.annotation.SuppressLint;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 
 import retrofit2.http.HEAD;
 
-public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
+public class MainActivity extends AppCompatActivity implements Button.OnClickListener, Button.OnTouchListener {
 
     ArrayList<Listviewitem> data = new ArrayList<>();
     private BackPressCloseHandler backPressCloseHandler;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
     public static final String TAG = "MainActivity";
 
+    @SuppressLint("ClickableViewAccessibility")
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,105 +112,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn1 = (ImageButton) findViewById(R.id.btnCollect);
         btn2 = (ImageButton) findViewById(R.id.btnStart);
         btn3 = (ImageButton) findViewById(R.id.btnPick);
-        //btn1.setOnClickListener(this);
-        //btn2.setOnClickListener(this);
-        //btn3.setOnClickListener(this);
-        btn1.setOnTouchListener(new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event){
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        btn1.getBackground().setColorFilter(0x66ffffff, PorterDuff.Mode.SRC_ATOP);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        btn1.getBackground().clearColorFilter();
-                        AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
-                        Check.setTitle("사용자 위치 재탐색")
-                                .setMessage("현재 위치를 탐색하시겠습니까?\n위치 탐색 후 관광지 내역을 재구성합니다.\n선택 후 잠시만 기다려주십시오 :-)")
-                                .setPositiveButton("탐색하여 관광지 재구성", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        recreate();
-                                        dialog.dismiss();
-                                        new Handler().postDelayed(new Runnable()
-                                        {
-                                            @Override
-                                            public void run()
-                                            {
-                                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        }, 8000);// 0.5초 정도 딜레이를 준 후 시작
+        btn1.setOnTouchListener(this);
+        btn2.setOnTouchListener(this);
+        btn3.setOnTouchListener(this);
 
-
-                                    }
-                                })
-                                .setNegativeButton("재탐색 없이 계속", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        try {
-                                            Thread.sleep(2000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
-                        Check.setCancelable(false);
-                        Check.show();
-                        break;
-                }
-                return true;
-            }
-        });
-        btn2.setOnTouchListener(new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event){
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        btn2.getBackground().setColorFilter(0x66ffffff, PorterDuff.Mode.SRC_ATOP);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        btn2.getBackground().clearColorFilter();
-                        Intent intent = new Intent(MainActivity.this, StoryListActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-                return true;
-            }
-        });
-        btn3.setOnTouchListener(new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event){
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        btn3.getBackground().setColorFilter(0x66ffffff, PorterDuff.Mode.SRC_ATOP);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        btn3.getBackground().clearColorFilter();
-                        NetworkInfo mNetworkState = getNetworkInfo();
-                        if (mNetworkState != null && mNetworkState.isConnected()) {
-                            if (mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE) {
-                                Log.i("인터넷 연결됨", "인터넷 연결됨");
-                                Intent intent = new Intent(MainActivity.this, GachaActivity.class);
-                                startActivity(intent);
-                            }
-                        } else {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                            alert.setTitle("네트워크");
-                            alert.setMessage("네트워크가 연결되지 않았습니다.");
-                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            alert.show();
-                        }
-                        break;
-                }
-                return true;
-            }
-        });
         JobInfo jobInfo = new JobInfo.Builder(0, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
                 .setPeriodic(1000 * 60 * 180)
@@ -226,6 +133,102 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         backPressCloseHandler = new BackPressCloseHandler(this);
     }
 
+    public boolean onTouch(View v, MotionEvent event){
+        ImageButton i = null;
+        int tmp = -1;
+        switch (v.getId()) {
+            case R.id.btnCollect:
+                i = btn1;
+                tmp = 0;
+                break;
+            case R.id.btnStart:
+                i = btn2;
+                tmp = 1;
+                break;
+            case R.id.btnPick:
+                i = btn3;
+                tmp = 2;
+                break;
+        }
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                i.getBackground().setColorFilter(0x66ffffff, PorterDuff.Mode.SRC_ATOP);
+                break;
+            case MotionEvent.ACTION_UP:
+                i.getBackground().clearColorFilter();
+                if(tmp == 0) {
+                    doCollect();
+                }else if(tmp == 1){
+                    Intent intent = new Intent(MainActivity.this, StoryListActivity.class);
+                    startActivity(intent);
+                }else if(tmp == 2){
+                    doGacha();
+                }
+                break;
+        }
+        return true;
+
+
+    }
+    public void doGacha(){
+        NetworkInfo mNetworkState = getNetworkInfo();
+        if (mNetworkState != null && mNetworkState.isConnected()) {
+            if (mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE) {
+                Log.i("인터넷 연결됨", "인터넷 연결됨");
+                Intent intent = new Intent(MainActivity.this, GachaActivity.class);
+                startActivity(intent);
+            }
+        } else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+            alert.setTitle("네트워크");
+            alert.setMessage("네트워크가 연결되지 않았습니다.");
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.show();
+        }
+    }
+    public void doCollect(){
+        AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
+        Check.setTitle("사용자 위치 재탐색")
+                .setMessage("현재 위치를 탐색하시겠습니까?\n위치 탐색 후 관광지 내역을 재구성합니다.\n선택 후 잠시만 기다려주십시오 :-)")
+                .setPositiveButton("탐색하여 관광지 재구성", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        recreate();
+                        dialog.dismiss();
+                        new Handler().postDelayed(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                                startActivity(intent);
+                            }
+                        }, 8000);// 0.5초 정도 딜레이를 준 후 시작
+
+
+                    }
+                })
+                .setNegativeButton("재탐색 없이 계속", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        Check.setCancelable(false);
+        Check.show();
+    }
     /*@Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
