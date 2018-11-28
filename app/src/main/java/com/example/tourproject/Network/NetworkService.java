@@ -6,6 +6,7 @@ import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Result;
 import com.example.tourproject.CardBox.OpenPeopleCard;
 import com.example.tourproject.CardBox.OpenStoryCard;
+import com.example.tourproject.Map.UserMap2Result;
 import com.example.tourproject.StoryList.StoryResult;
 import com.example.tourproject.StoryPlay.StoryPlayResult;
 
@@ -57,8 +58,11 @@ public interface NetworkService {
     @GET("/story/get_all_storyPlay.php") //모든 상세이야기 가져오기
     Call<StoryPlayResult> getStoryPlayList();
 
+    @GET("/user/get_map2State.php") //사용자별 map2 상태 가져오기
+    Call<UserMap2Result> getMap2State(@Query("user_id") String user_id);
+
     @GET("/user/update_map2.php") //map2 상태 업데이트
-    Call<String> updateMap2State(@Query("user_id") String user_id, @Query("map2_id") String map2_id);
+    Call<String> updateMap2State(@Query("user_id") String user_id, @Query("map2_id") int map2_id);
 
     @GET("/card/insert_placeCard.php") //장소카드 넣기
     Call<String> insertPlaceCard(@Query("user_id") String user_id, @Query("place_card_url") String place_card_url);

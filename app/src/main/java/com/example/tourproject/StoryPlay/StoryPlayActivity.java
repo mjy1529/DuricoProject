@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
+import com.example.tourproject.MainActivity;
 import com.example.tourproject.Map.MapActivity;
+import com.example.tourproject.Map.VerticalAdapter;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.StoryList.StoryListActivity;
@@ -52,10 +54,10 @@ public class StoryPlayActivity extends AppCompatActivity {
     int CHECK_NUM = 0;
     Button logbtn;
 
-    StoryPlayData storyPlayData;
-
     public static final String TAG = "StoryPlay";
     private Dialog MyDialog;
+    NetworkService networkService;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,9 @@ public class StoryPlayActivity extends AppCompatActivity {
 
         log = "";
         logbtn = (Button) findViewById(R.id.log);
+
+        networkService = Application.getInstance().getNetworkService();
+        user_id = UserManager.getInstance().getUserId();
     }
 
     public void getStoryPlayList(int map2_id) {
@@ -140,9 +145,7 @@ public class StoryPlayActivity extends AppCompatActivity {
                 } else if (i == v_cnt) { // 마지막 페이지일 때
                     //해당 이야기에 맞는 카드가 있는지 검색하기
                     CardData cardData = findCard();
-//                    Log.d("스토리플레이", cardData.toString());
-
-                    if (cardData != null && cardData.getMap2_id() != 0) {
+                    if (cardData != null && cardData.getMap2_id() != 0) { //해당 이야기에 맞는 카드가 있을 때
                         if (cardData.getCard_category().equals("people")) {
                             updateOpenPeopleCard(cardData);
                         } else if (cardData.getCard_category().equals("story")) {
@@ -150,69 +153,25 @@ public class StoryPlayActivity extends AppCompatActivity {
                         }
                         cardAlertDialog(cardData);
 
-                    } else {
+                        //UserManager의 map2State 업데이트
+                        UserManager userManager = UserManager.getInstance();
+                        for(int i=0; i<userManager.getMap2StateList().size(); i++) {
+                            if (userManager.getMap2StateList().get(i).getMap2_position() == 1) {
+                                userManager.getMap2StateList().get(i).setMap2_state(0);
+                                userManager.getMap2StateList().get(i+2).setMap2_state(1);
+                            }
+                        }
+                        updateMap2State(map2_id);
+
+                    } else { //해당 이야기에 맞는 카드가 없을 때 종료
                         finish();
                     }
+
                 } else {
                     finish();
                 }
             }
         });
-
-//        //첫번째 페이지 세팅
-//        v_cnt = storyPlayList.size();
-//        storyPlayData = storyPlayList.get(0);
-//        content.setText(storyPlayData.getPlay_content());
-//
-//        // ***** person_name 존재여부에 따른 이벤트 처리 ***** //
-//        if (storyPlayData.getPerson_name().equals("null")) { //person_name이 없을 경우
-//            tv.setVisibility(View.INVISIBLE); //사라지기
-//        } else {
-//            tv.setVisibility(View.VISIBLE);
-//            tv.setText(storyPlayData.getPerson_name());
-//        }
-//
-//        Glide.with(this)
-//                .load(Application.getInstance().getBaseImageUrl() + storyPlayData.getPlay_image_url())
-//                .into(imageView);
-//
-//        //화면 터치 시 다음 내용으로 전환
-//        content.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                i++;
-//                if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
-//                    storyPlayData = storyPlayList.get(i);
-//                    content.setText(storyPlayData.getPlay_content());
-//
-//                    if (storyPlayData.getPerson_name().equals("null")) { //person_name이 없을 경우
-//                        tv.setVisibility(View.INVISIBLE); //사라지기
-//                    } else {
-//                        tv.setVisibility(View.VISIBLE);
-//                        tv.setText(storyPlayData.getPerson_name());
-//                    }
-//
-//                    Glide.with(StoryPlayActivity.this)
-//                            .load(Application.getInstance().getBaseImageUrl() + storyPlayData.getPlay_image_url())
-//                            .into(imageView);
-//
-//                } else if (i == v_cnt){ // 마지막 페이지일 때
-//                    //해당 이야기에 맞는 카드가 있는지 검색하기
-//                    CardData cardData = findCard();
-//                    if (cardData != null && cardData.getMap2_id() != 0) {
-//                        if(cardData.getCard_category().equals("people")) {
-//                            updateOpenPeopleCard(cardData);
-//                        } else if(cardData.getCard_category().equals("story")) {
-//                            updateOpenStoryCard(cardData);
-//                        }
-//                        cardAlertDialog(cardData);
-//
-//                    } else {
-//                        finish();
-//                    }
-//                }
-//            }
-//        });
     }
 
     //액션바 홈버튼 동작을 위한 메소드
@@ -342,8 +301,6 @@ public class StoryPlayActivity extends AppCompatActivity {
     }
 
     public void updateOpenStoryCard(final CardData cardData) {
-        NetworkService networkService = Application.getInstance().getNetworkService();
-        String user_id = UserManager.getInstance().getUserId();
         Call<String> request = networkService.updateStoryCardState(user_id, cardData.getCard_idx());
         request.enqueue(new Callback<String>() {
             @Override
@@ -351,6 +308,21 @@ public class StoryPlayActivity extends AppCompatActivity {
                 if (!UserManager.getInstance().getOpenStoryCardList().contains(cardData.getCard_idx())) {
                     UserManager.getInstance().getOpenStoryCardList().add(cardData.getCard_idx());
                 }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void updateMap2State(final int map2_id) {
+        Call<String> request = networkService.updateMap2State(user_id, map2_id);
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("맵 상태 변경", response.body());
             }
 
             @Override

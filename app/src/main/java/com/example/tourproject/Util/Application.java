@@ -9,6 +9,7 @@ import com.example.tourproject.CardBox.PlaceResult;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Data;
 import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.Map.UserMap2Result;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.StoryList.StoryResult;
 import com.example.tourproject.StoryPlay.StoryPlayResult;
@@ -29,9 +30,6 @@ public class Application extends android.app.Application {
     private static Application instance;
     private NetworkService networkService;
     private UserManager userManager;
-    private CardManager cardManager;
-    private MapManager mapManager;
-    private StoryListManager storyListManager;
 
     public static final String TAG = "Application";
 
@@ -52,30 +50,17 @@ public class Application extends android.app.Application {
         builNetworkService();
 
         initManager();
-
-        //상세이야기, 전체 카드 받아오기
-        setStoryListManager();
-        getCardList();
-        setMapDataManager();
-        getStoryPlayDataList();
-
+        // 사용자 정보들은 여기서 받기
         insertUser(userManager.getUserId());
         getOpenPeopleCardIdx(userManager.getUserId());
         getOpenStoryCardIdx(userManager.getUserId());
-
         getPlaceCard(userManager.getUserId()); //장소카드만 받아오기
+        getUserMap2State(userManager.getUserId());
+
+        getStoryPlayDataList();
     }
 
     public void initManager() {
-        cardManager = CardManager.getInstance();
-        cardManager.initialize();
-
-        mapManager = MapManager.getInstance();
-        mapManager.initialize();
-
-        storyListManager = StoryListManager.getInstance();
-        storyListManager.initialize();
-
         userManager = UserManager.getInstance();
         userManager.initialize();
     }
@@ -120,65 +105,6 @@ public class Application extends android.app.Application {
         });
     }
 
-    public void setMapDataManager() {
-        Call<Map1Result> request = networkService.getAllMap1List();
-        request.enqueue(new Callback<Map1Result>() {
-            @Override
-            public void onResponse(Call<Map1Result> call, Response<Map1Result> response) {
-                if (response.isSuccessful()) {
-                    Map1Result map1Result = response.body();
-                    mapManager.setMapList(map1Result.map1);
-                    for (int i = 0; i < mapManager.getMapList().size(); i++) {
-                        getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map1Result> call, Throwable t) {
-                Log.d(TAG, "map1 받아오기 실패");
-            }
-        });
-    }
-
-    public void getMap2(final String map1_id) {
-        Call<Map2Result> request = networkService.getMap2List(map1_id);
-        request.enqueue(new Callback<Map2Result>() {
-            @Override
-            public void onResponse(Call<Map2Result> call, Response<Map2Result> response) {
-                if (response.isSuccessful()) {
-                    Map2Result map2Result = response.body();
-                    ArrayList<Map2Data> map2List = map2Result.map2;
-
-                    mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map2Result> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public void setStoryListManager() {
-        Call<StoryResult> request = networkService.getStoryList();
-        request.enqueue(new Callback<StoryResult>() {
-            @Override
-            public void onResponse(Call<StoryResult> call, Response<StoryResult> response) {
-                if (response.isSuccessful()) {
-                    StoryResult storyResult = response.body();
-                    storyListManager.setStoryList(storyResult.story);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StoryResult> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
-            }
-        });
-    }
-
     public void getStoryPlayDataList() {
         final StoryPlayManager storyPlayManager = StoryPlayManager.getInstance();
         storyPlayManager.initialize();
@@ -200,32 +126,7 @@ public class Application extends android.app.Application {
         });
     }
 
-    public void getCardList() {
-        Call<CardResult> request = networkService.getCard();
-        request.enqueue(new Callback<CardResult>() {
-            @Override
-            public void onResponse(Call<CardResult> call, Response<CardResult> response) {
-                if(response.isSuccessful()) {
-                    CardResult cardResult = response.body();
-                    for(int i=0; i<cardResult.card.size(); i++) {
-                        switch (cardResult.card.get(i).getCard_category()) {
-                            case "people" :
-                                cardManager.getPeopleCardList().add(cardResult.card.get(i));
-                                cardManager.getGachaCardList().add(cardResult.card.get(i));
-                                break;
-                            case "story" :
-                                cardManager.getStoryCardList().add(cardResult.card.get(i));
-                                break;
-                        }
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<CardResult> call, Throwable t) {
-            }
-        });
-    }
 
     public void getPlaceCard(String user_id) {
         Call<PlaceResult> request = networkService.getPlaceCard(user_id);
@@ -281,4 +182,23 @@ public class Application extends android.app.Application {
         });
     }
 
+    public void getUserMap2State(String user_id) {
+        Call<UserMap2Result> request = networkService.getMap2State(user_id);
+        request.enqueue(new Callback<UserMap2Result>() {
+            @Override
+            public void onResponse(Call<UserMap2Result> call, Response<UserMap2Result> response) {
+                if(response.isSuccessful()) {
+                    UserMap2Result userMap2Result = response.body();
+                    userManager.setMap2StateList(userMap2Result.map2State);
+                    Log.d(TAG, "MAP2 STATE 받아오기 성공");
+                    Log.d(TAG, userManager.getMap2StateList().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserMap2Result> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+    }
 }

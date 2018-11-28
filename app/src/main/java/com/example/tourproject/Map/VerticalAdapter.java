@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.R;
 import com.example.tourproject.StoryPlay.StoryPlayActivity;
+import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,11 +25,14 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
     private ArrayList<Map2Data> verticalDatas;
+    private ArrayList<UserMap2Data> userMap2DataList;
 
     public VerticalAdapter(Context context, ArrayList<Map2Data> verticalDatas) {
         this.context = context;
         Collections.sort(verticalDatas, sortByPosition);
         this.verticalDatas = verticalDatas;
+
+        this.userMap2DataList = UserManager.getInstance().getMap2StateList();
     }
 
     @Override
@@ -47,38 +51,102 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         VerticalAdapter.Map2ViewHolder holder = (VerticalAdapter.Map2ViewHolder) viewHolder;
 
         final Map2Data map2Data = verticalDatas.get(i);
+        UserManager userManager = UserManager.getInstance();
 
         if (!map2Data.getMap2_image_url().equals("")) {
             Glide.with(context)
                     .load(Application.getInstance().getBaseImageUrl() + map2Data.getMap2_image_url())
                     .into(holder.horizon_icon);
-
-            if (verticalDatas.get(i).getMap2_state().equals("0") //상태가 읽음이거나
-                    || verticalDatas.get(i).getMap2_state().equals("1")) { //상태가 읽기가능한 상태이면
-                holder.horizon_icon.clearColorFilter(); //필터 없애기
-                holder.horizon_icon.invalidate();
-
-            } else { //상태가 3(위치인식 필요한 상태)이면 필터 씌우기(회색으로)
-                ColorMatrix matrix = new ColorMatrix();
-                matrix.setSaturation(0);
-                ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
-                holder.horizon_icon.setColorFilter(cf);
-            }
-            if (i != 2) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
-                holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
         }
 
-        holder.horizon_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (verticalDatas.get(i).getMap2_state().equals("0")
-                        || verticalDatas.get(i).getMap2_state().equals("1")) {
-                    Intent intent = new Intent(context, StoryPlayActivity.class);
-                    intent.putExtra("map2_id", map2Data.getMap2_id());
-                    context.startActivity(intent);
+        for (int k = 0; k < userMap2DataList.size(); k++) {
+            if (map2Data.getMap2_id() == userMap2DataList.get(k).getMap2_id()) {
+                if (userMap2DataList.get(k).getMap2_state() == 0
+                        || userMap2DataList.get(k).getMap2_state() == 1) {
+                    holder.horizon_icon.clearColorFilter(); //필터 없애기
+                    holder.horizon_icon.invalidate();
+
+                    holder.horizon_icon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, StoryPlayActivity.class);
+                            intent.putExtra("map2_id", map2Data.getMap2_id());
+                            context.startActivity(intent);
+                        }
+                    });
+
+                } else {
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(0);
+                    ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+                    holder.horizon_icon.setColorFilter(cf);
                 }
+
+                if (userMap2DataList.get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+                    holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
             }
-        });
+        }
+
+//        for (int k = 0; k < userManager.getMap2StateList().size(); k++) {
+//            if (map2Data.getMap2_id() == userManager.getMap2StateList().get(k).getMap2_id()) {
+//                if (userManager.getMap2StateList().get(k).getMap2_state() == 0
+//                        && userManager.getMap2StateList().get(k).getMap2_state() == 1) {
+//                    holder.horizon_icon.clearColorFilter(); //필터 없애기
+//                    holder.horizon_icon.invalidate();
+//
+//                    holder.horizon_icon.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            Intent intent = new Intent(context, StoryPlayActivity.class);
+//                            intent.putExtra("map2_id", map2Data.getMap2_id());
+//                            context.startActivity(intent);
+//                        }
+//                    });
+//
+//                } else {
+//                    ColorMatrix matrix = new ColorMatrix();
+//                    matrix.setSaturation(0);
+//                    ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+//                    holder.horizon_icon.setColorFilter(cf);
+//                }
+//
+//                if (userManager.getMap2StateList().get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+//                    holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
+//            }
+//        }
+
+
+//        if (!map2Data.getMap2_image_url().equals("")) {
+//            Glide.with(context)
+//                    .load(Application.getInstance().getBaseImageUrl() + map2Data.getMap2_image_url())
+//                    .into(holder.horizon_icon);
+//
+//            if (verticalDatas.get(i).getMap2_state().equals("0") //상태가 읽음이거나
+//                    || verticalDatas.get(i).getMap2_state().equals("1")) { //상태가 읽기가능한 상태이면
+//                holder.horizon_icon.clearColorFilter(); //필터 없애기
+//                holder.horizon_icon.invalidate();
+//
+//            } else { //상태가 3(위치인식 필요한 상태)이면 필터 씌우기(회색으로)
+//                ColorMatrix matrix = new ColorMatrix();
+//                matrix.setSaturation(0);
+//                ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+//                holder.horizon_icon.setColorFilter(cf);
+//            }
+//            if (i != 2) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+//                holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
+//        }
+//
+//        holder.horizon_icon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (verticalDatas.get(i).getMap2_state().equals("0")
+//                        || verticalDatas.get(i).getMap2_state().equals("1")) {
+//                    Intent intent = new Intent(context, StoryPlayActivity.class);
+//                    intent.putExtra("map2_id", map2Data.getMap2_id());
+//                    context.startActivity(intent);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -97,6 +165,7 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             horizon_icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
             horizon_arrow = (ImageView) itemView.findViewById(R.id.horizon_arrow);
         }
+
     }
 
     //Map2 데이터 순서 정렬
