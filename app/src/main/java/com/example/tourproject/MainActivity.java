@@ -1,5 +1,6 @@
 package com.example.tourproject;
 
+import android.Manifest;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -36,6 +38,8 @@ import com.example.tourproject.Util.UserManager;
 import com.example.tourproject.Collect.Listviewitem;
 import com.example.tourproject.Collect.MyJobService;
 import com.example.tourproject.Collect.PlaceMainActivity;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 
@@ -56,26 +60,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
-*/
+        TedPermission.with(MainActivity.this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
+                .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
+                .check();
+
         mContext = this;
 
         MyJobService.bAppRunned = true;
@@ -124,30 +116,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         backPressCloseHandler = new BackPressCloseHandler(this);
     }
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }*/
 
     public void doActionbar(){
         //액션바-------------------------------
@@ -212,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                         Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
                                         startActivity(intent);
                                     }
-                                }, 8000);// 0.5초 정도 딜레이를 준 후 시작
+                                }, 6000);// 0.5초 정도 딜레이를 준 후 시작
 
 
                             }
@@ -221,11 +189,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
                                 startActivity(intent);
                             }
@@ -260,7 +223,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 break;
         }
     }
+    PermissionListener permissionlistener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            //Toast.makeText(MainActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+        }
 
+        @Override
+        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+            //Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    };
     // 뒤로가기 두번 누를 시 앱 종료
     @Override
     public void onBackPressed() {

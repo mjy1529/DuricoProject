@@ -19,5 +19,6 @@
         android:layout_height="29dp"
         android:layout_alignBottom="@+id/grid_card_image"
         android:layout_alignStart="@+id/grid_card_image"
-        android:background="@drawable/selected" />
+        android:background="@drawable/selected"
+        android:visibility="invisible" />
 </RelativeLayout>
