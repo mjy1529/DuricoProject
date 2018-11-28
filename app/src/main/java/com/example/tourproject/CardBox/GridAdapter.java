@@ -89,10 +89,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                         .into(holder.grid_card_image);
 
                 if (data.getCard_image_url().equals(UserManager.getInstance().getUser_card_url())) {
-                    //holder.grid_select.setVisibility(View.VISIBLE);
+                    holder.grid_select.setVisibility(View.VISIBLE);
                     s = data.getCard_idx();
                 } else {
-                    //holder.grid_select.setVisibility(View.INVISIBLE);
+                    holder.grid_select.setVisibility(View.INVISIBLE);
                 }
 
                 //카드를 클릭했을 때의 이벤트
@@ -109,7 +109,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                 //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
                 holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
                 Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
-                //holder.grid_select.setVisibility(View.INVISIBLE);
+                holder.grid_select.setVisibility(View.INVISIBLE);
             }
 
             holder.grid_card_image.setBackground(drawable);

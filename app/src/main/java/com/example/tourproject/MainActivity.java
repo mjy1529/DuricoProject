@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -203,9 +204,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             public void onClick(DialogInterface dialog, int which) {
                                 recreate();
                                 dialog.dismiss();
-                                while(waiting()!=7);
-                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
-                                startActivity(intent);
+                                new Handler().postDelayed(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }, 8000);// 0.5초 정도 딜레이를 준 후 시작
+
+
                             }
                         })
                         .setNegativeButton("재탐색 없이 계속", new DialogInterface.OnClickListener() {

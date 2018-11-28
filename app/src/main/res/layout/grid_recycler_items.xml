@@ -7,10 +7,17 @@
 
     <ImageView
         android:id="@+id/grid_card_image"
-        android:layout_width="150dp"
+        android:layout_width="130dp"
         android:layout_height="200dp"
         android:background="@drawable/a_6"
         android:outlineProvider="background"
         android:scaleType="centerInside" />
 
+    <ImageView
+        android:id="@+id/grid_select"
+        android:layout_width="130dp"
+        android:layout_height="29dp"
+        android:layout_alignBottom="@+id/grid_card_image"
+        android:layout_alignStart="@+id/grid_card_image"
+        android:background="@drawable/selected" />
 </RelativeLayout>
