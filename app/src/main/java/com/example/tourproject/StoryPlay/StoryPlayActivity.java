@@ -158,11 +158,15 @@ public class StoryPlayActivity extends AppCompatActivity {
                     //UserManager의 map2State 업데이트
                     UserManager userManager = UserManager.getInstance();
                     for(int i=0; i<userManager.getMap2StateList().size(); i++) {
-                        if (userManager.getMap2StateList().get(i).getMap2_position() == 1) {
+                        //첫번째 이야기이고 현재 map2_id와 일치하는 userManager의 map2StateList를 업데이트 시킨다.
+                        if(userManager.getMap2StateList().get(i).getMap2_id() == map2_id
+                                && userManager.getMap2StateList().get(i).getMap2_position() == 1) {
                             userManager.getMap2StateList().get(i).setMap2_state(0);
                             userManager.getMap2StateList().get(i+2).setMap2_state(1);
+                            break;
                         }
                     }
+                    MapActivity.mAdapter.notifyDataSetChanged();
 
                 } else {
                     finish();

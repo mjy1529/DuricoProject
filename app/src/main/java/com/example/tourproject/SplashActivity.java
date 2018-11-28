@@ -132,14 +132,13 @@ public class SplashActivity extends AppCompatActivity {
                                 break;
                         }
                     }
-
-                    Log.d("여기는 APPLICATION", cardManager.getPeopleCardList().toString());
-                    Log.d("여기는 APPLICATION", cardManager.getStoryCardList().toString());
+                    Log.d(TAG, "PEOPLE, STORY CARD 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<CardResult> call, Throwable t) {
+                Log.d(TAG, "PEOPLE, STORY CARD 받아오기 실패");
             }
         });
     }
@@ -155,12 +154,13 @@ public class SplashActivity extends AppCompatActivity {
                     for (int i = 0; i < mapManager.getMapList().size(); i++) {
                         getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
                     }
+                    Log.d(TAG, "MAP 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<Map1Result> call, Throwable t) {
-                Log.d(TAG, "map1 받아오기 실패");
+                Log.d(TAG, "MAP 받아오기 실패");
             }
         });
     }
@@ -180,7 +180,6 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Map2Result> call, Throwable t) {
-
             }
         });
     }
@@ -193,12 +192,13 @@ public class SplashActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     StoryResult storyResult = response.body();
                     storyListManager.setStoryList(storyResult.story);
+                    Log.d(TAG, "STORY LIST 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<StoryResult> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "STORY LIST 받아오기 실패");
             }
         });
     }

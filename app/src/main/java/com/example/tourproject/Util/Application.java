@@ -95,12 +95,13 @@ public class Application extends android.app.Application {
                 if (response.isSuccessful()) {
                     String user_card_url = response.body();
                     UserManager.getInstance().setUser_card_url(user_card_url);
+                    Log.d(TAG, "USER DB 데이터 INSERT 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                Log.d(TAG, "USER DB 데이터 INSERT 실패");
             }
         });
     }
@@ -116,12 +117,13 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     StoryPlayResult storyPlayResult = response.body();
                     storyPlayManager.setStoryPlayList(storyPlayResult.storyPlay);
+                    Log.d(TAG, "STORY PLAY DATA 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<StoryPlayResult> call, Throwable t) {
-
+                Log.d(TAG, "STORY PLAY DATA 받아오기 실패");
             }
         });
     }
@@ -135,12 +137,13 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     PlaceResult placeResult = response.body();
                     UserManager.getInstance().setPlaceCardList(placeResult.placeCard);
+                    Log.d(TAG, "PLACE CARD 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<PlaceResult> call, Throwable t) {
-
+                Log.d(TAG, "PLACE CARD 받아오기 실패");
             }
         });
     }
@@ -153,12 +156,13 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     OpenPeopleCard openPeopleCard = response.body();
                     userManager.setOpenPeopleCardList(openPeopleCard.openCardList);
+                    Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<OpenPeopleCard> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 실패");
             }
         });
     }
@@ -171,12 +175,13 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     OpenStoryCard openStoryCard = response.body();
                     userManager.setOpenStoryCardList(openStoryCard.openCardList);
+                    Log.d(TAG, "OPEN STORY CARD LIST 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<OpenStoryCard> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "OPEN STORY CARD LIST 받아오기 실패");
             }
         });
     }
@@ -190,13 +195,12 @@ public class Application extends android.app.Application {
                     UserMap2Result userMap2Result = response.body();
                     userManager.setMap2StateList(userMap2Result.map2State);
                     Log.d(TAG, "MAP2 STATE 받아오기 성공");
-                    Log.d(TAG, userManager.getMap2StateList().toString());
                 }
             }
 
             @Override
             public void onFailure(Call<UserMap2Result> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "MAP2 STATE 받아오기 실패");
             }
         });
     }

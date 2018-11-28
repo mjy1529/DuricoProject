@@ -58,6 +58,9 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         for (int k = 0; k < userManager.getMap2StateList().size(); k++) {
             if (map2Data.getMap2_id() == userManager.getMap2StateList().get(k).getMap2_id()) {
+                if (userManager.getMap2StateList().get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+                    holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
+
                 if (userManager.getMap2StateList().get(k).getMap2_state() == 0
                         || userManager.getMap2StateList().get(k).getMap2_state() == 1) {
                     holder.horizon_icon.clearColorFilter(); //필터 없애기
@@ -71,6 +74,7 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             context.startActivity(intent);
                         }
                     });
+                    break;
 
                 } else {
                     ColorMatrix matrix = new ColorMatrix();
@@ -78,9 +82,6 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
                     holder.horizon_icon.setColorFilter(cf);
                 }
-
-                if (userManager.getMap2StateList().get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
-                    holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
             }
         }
 
