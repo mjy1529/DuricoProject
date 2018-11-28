@@ -1,6 +1,4 @@
 package com.example.tourproject.Util;
-
-import com.example.tourproject.Map.Map1Data;
 import com.example.tourproject.StoryList.StoryData;
 
 import java.util.ArrayList;

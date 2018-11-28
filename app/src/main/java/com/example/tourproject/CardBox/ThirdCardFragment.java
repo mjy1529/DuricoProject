@@ -45,6 +45,6 @@ public class ThirdCardFragment extends Fragment {
         card_recyclerView.setAdapter(adapter);
 
         int openCardCnt = UserManager.getInstance().getOpen_people_card_cnt();
-        card_number.setText(openCardCnt + " / " + adapter.getItemCount());
+        card_number.setText(String.valueOf(openCardCnt));
     }
 }

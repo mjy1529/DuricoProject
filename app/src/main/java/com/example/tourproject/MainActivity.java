@@ -26,9 +26,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.tourproject.CardBox.CardData;
+
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.BackPressCloseHandler;
+
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.UserManager;
@@ -38,7 +39,9 @@ import com.example.tourproject.Collect.PlaceMainActivity;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Button.OnClickListener{
+import retrofit2.http.HEAD;
+
+public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
 
     ArrayList<Listviewitem> data = new ArrayList<>();
     private BackPressCloseHandler backPressCloseHandler;
@@ -53,8 +56,28 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+*/
         mContext = this;
+
         MyJobService.bAppRunned = true;
 
         JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
@@ -65,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn0 = (ImageButton) findViewById(R.id.btnCard);
 
         btn0.setOnClickListener(this);
-        if(!UserManager.getInstance().getUser_card_url().equals("null")) { //사용자가 메인이미지를 선택하였을 경우
+        if(UserManager.getInstance().getUser_card_url() != null) { //사용자가 메인이미지를 선택하였을 경우
             changeProfileImage(UserManager.getInstance().getUser_card_url());
             btn0.setBackground(new ShapeDrawable(new OvalShape()));
             btn0.setClipToOutline(true);
@@ -74,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             btn0.setBackground(new ShapeDrawable(new OvalShape()));
             btn0.setClipToOutline(true);
         }
+
+        btn0.setBackground(new ShapeDrawable(new OvalShape()));
+        btn0.setClipToOutline(true);
+        btn0.setOnClickListener(this);
 
         Button btn1 = (Button) findViewById(R.id.btnCollect);
         Button btn2 = (Button) findViewById(R.id.btnStart);
@@ -88,8 +115,40 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 .build();
         jobScheduler.schedule(jobInfo);
 
+        String user_card_url = UserManager.getInstance().getUser_card_url();
+        if (user_card_url != null && !user_card_url.equals("null")) { //사용자가 메인이미지를 선택하였을 경우
+            changeProfileImage(UserManager.getInstance().getUser_card_url());
+        } else { //처음 실행되거나 사용자가 메인이미지를 선택하지 않았을 경우
+            btn0.setBackground(getResources().getDrawable(R.drawable.main));
+        }
+
         backPressCloseHandler = new BackPressCloseHandler(this);
     }
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }*/
+
     public void doActionbar(){
         //액션바-------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -107,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         Button home = (Button) findViewById(R.id.home);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
-        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
-        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
-        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
     }
 
@@ -121,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             recreate();
         }
     }
-    private NetworkInfo getNetworkInfo(){
+
+    private NetworkInfo getNetworkInfo() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo;
@@ -130,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnCard:
                 intent = new Intent(MainActivity.this, CardBoxActivity.class);
                 startActivity(intent);
@@ -179,14 +239,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 break;
             case R.id.btnPick:
                 NetworkInfo mNetworkState = getNetworkInfo();
-                if(mNetworkState != null && mNetworkState.isConnected()){
-                    if(mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE){
+                if (mNetworkState != null && mNetworkState.isConnected()) {
+                    if (mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE) {
                         Log.i("인터넷 연결됨", "인터넷 연결됨");
                         intent = new Intent(MainActivity.this, GachaActivity.class);
                         startActivity(intent);
                     }
-                }
-                else {
+                } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle("네트워크");
                     alert.setMessage("네트워크가 연결되지 않았습니다.");
@@ -218,7 +277,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public void changeProfileImage(String card_url) {
         Glide.with(MainActivity.this)
                 .load(Application.getInstance().getBaseImageUrl() + card_url)
-                .apply(new RequestOptions().centerCrop().override(700, 700))
+                .apply(new RequestOptions().centerCrop())
                 .into(btn0);
+        btn0.setBackground(new ShapeDrawable(new OvalShape()));
+        btn0.setClipToOutline(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

@@ -28,15 +28,15 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
     ListView listView;
     ListView listView2;
-    static ListviewAdapter adapter;
-    static ListviewAdapter adapter2;
+    static com.example.tourproject.Collect.ListviewAdapter adapter;
+    static com.example.tourproject.Collect.ListviewAdapter adapter2;
     String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_main);
-        MyJobService.bAppRunned = true;
+        com.example.tourproject.Collect.MyJobService.bAppRunned = true;
 
         doActionbar();
 
@@ -51,14 +51,12 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             //setGps();
         }
 
-
-
         Log.i("data2 전달됐어요", String.valueOf(data2.size()));
-        adapter=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
+        adapter=new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        adapter2=new ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
+        adapter2=new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
         adapter2.notifyDataSetChanged();
         listView2.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
@@ -78,7 +76,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         });
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), overView2000.class);
+                Intent intent = new Intent(getApplicationContext(), com.example.tourproject.Collect.overView2000.class);
                 //intent.putExtra("img", data.get(position).getIcon());
                 intent.putExtra("title", data2.get(position).getName());
                 intent.putExtra("content_id", data2.get(position).getContent_id());
@@ -114,11 +112,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 
         Button home = (Button) findViewById(R.id.home);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
-        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
-        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
-        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
     }
 

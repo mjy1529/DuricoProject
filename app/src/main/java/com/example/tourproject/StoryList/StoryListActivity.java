@@ -1,6 +1,5 @@
 package com.example.tourproject.StoryList;
 
-
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.StoryListManager;
 import com.example.tourproject.Util.UserManager;
+
+import retrofit2.http.HEAD;
+
 
 //activity_story_list
 //layout : horizon_recycler_items
@@ -53,11 +56,11 @@ public class StoryListActivity extends AppCompatActivity {
 
         Button home = (Button) findViewById(R.id.home);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
-        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
-        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
-        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
     }
 
@@ -74,10 +77,21 @@ public class StoryListActivity extends AppCompatActivity {
         }
     }
 
+    //액션바 홈버튼 동작을 위한 메소드
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
             finish();
         }
     }
-
 }

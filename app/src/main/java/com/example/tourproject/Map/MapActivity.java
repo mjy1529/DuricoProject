@@ -18,36 +18,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+<<<<<<< HEAD
 import com.example.tourproject.Collect.MyJobService;
+=======
+import com.example.tourproject.MainActivity;
+>>>>>>> bb780e67fcf5461046bf305d5b91ddcde4addaf5
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.UserManager;
 import com.example.tourproject.Collect.MyJobService;
+import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
 
+import retrofit2.http.HEAD;
 
 public class MapActivity extends AppCompatActivity implements ImageButton.OnClickListener {
-
-    //StoryListActivity에서 받아온 mid
     String mid;
 
-    //    ArrayList<String> arr_m2state_list = null;
     RecyclerView mHorizonView;
-    VerticalAdapter mAdapter;
+    public static VerticalAdapter mAdapter;
 
-    ImageButton imageViews[];
+    ImageView imageViews[];
     FrameLayout layouts[];
     TextView textView2;
-    int p;
 
     MyJobService b = new MyJobService();
 
     MapManager mapDataManager;
     NetworkService networkService;
     ArrayList<Map1Data> selectedStoryMap;
+
+    int p;
 
     public final static String TAG = "MAP Activity";
 
@@ -109,6 +113,13 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         actionBar.setCustomView(mCustomView);
 
         Button home = (Button) findViewById(R.id.home);
+        TextView pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
+        TextView s = (TextView) findViewById(R.id.scardCnt);
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
+        TextView p = (TextView) findViewById(R.id.pcardCnt);
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
+        //여기까지------------------------------
         home.setBackgroundResource(R.drawable.logo);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
         pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
@@ -174,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
+//            onBackPressed();
             finish();
         }
     }
@@ -181,24 +193,15 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public void updateMap2(MyJobService b) {
         if (LocatedPlace(b.getMapx(), b.getMapy())) {
             // ***** db에 map2의 상태 1로 update 하기 ****** //
-            //user_id, map1_id, map2_id
-//            Call<String> request = networkService.updateUserMap2(UserManager.getInstance().getUserMacAddress(),
-//                    );
-//            request.enqueue(new Callback<String>() {
-//                @Override
-//                public void onResponse(Call<String> call, Response<String> response) {
-//
-//                }
-//
-//                @Override
-//                public void onFailure(Call<String> call, Throwable t) {
-//
-//                }
-//            });
+
+
+            mAdapter.notifyDataSetChanged();
+            // ****************************************** //
         }
     }
 
     public boolean LocatedPlace(double mapx, double mapy) {
+        Log.i("여기여기ㅇㅇ", "ㅇㅇㅇ");
         double p_mapx, p_mapy;
         p_mapx = 126.977041;
         p_mapy = 37.579652;

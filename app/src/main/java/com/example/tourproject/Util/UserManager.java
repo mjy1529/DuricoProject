@@ -1,5 +1,7 @@
 package com.example.tourproject.Util;
 
+import com.example.tourproject.Map.UserMap2Data;
+
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,11 +12,12 @@ public class UserManager {
     private String userId; //사용자 맥주소
     private String user_card_url; //사용자 선택 카드
     private int open_people_card_cnt; //오픈된 인물카드 수
-    private int open_place_card_cnt; //오픈된 장소카드 수
+    private int place_card_cnt; //전체 장소카드 수
     private int open_story_card_cnt; //오픈된 스토리카드 수
     private ArrayList<Integer> openPeopleCardList; //오픈된 인물카드 인덱스
-    private ArrayList<Integer> openPlaceCardList; //오픈된 인물카드 인덱스
+    private ArrayList<String> placeCardList; //장소카드 url
     private ArrayList<Integer> openStoryCardList; //오픈된 인물카드 인덱스
+    private ArrayList<UserMap2Data> map2StateList; //오픈된 map2
 
     public static UserManager instance = new UserManager();
 
@@ -25,12 +28,10 @@ public class UserManager {
     public void initialize() {
         userId = getMACAddress("wlan0");
         openPeopleCardList = new ArrayList<>();
-        openPlaceCardList = new ArrayList<>();
+        placeCardList = new ArrayList<>();
         openStoryCardList = new ArrayList<>();
 
-        open_people_card_cnt = 0;
-        open_place_card_cnt = 0;
-        open_story_card_cnt = 0;
+        map2StateList = new ArrayList<>();
     }
 
     public String getUserId() {
@@ -46,27 +47,19 @@ public class UserManager {
     }
 
     public int getOpen_people_card_cnt() {
-        return open_people_card_cnt;
+        return this.openPeopleCardList.size();
     }
 
-    public void setOpen_people_card_cnt(int open_people_card_cnt) {
-        this.open_people_card_cnt = open_people_card_cnt;
+    public int getPlace_card_cnt() {
+        return placeCardList.size();
     }
 
-    public int getOpen_place_card_cnt() {
-        return open_place_card_cnt;
-    }
-
-    public void setOpen_place_card_cnt(int open_place_card_cnt) {
-        this.open_place_card_cnt = open_place_card_cnt;
+    public void setPlace_card_cnt(int place_card_cnt) {
+        this.place_card_cnt = place_card_cnt;
     }
 
     public int getOpen_story_card_cnt() {
-        return open_story_card_cnt;
-    }
-
-    public void setOpen_story_card_cnt(int open_story_card_cnt) {
-        this.open_story_card_cnt = open_story_card_cnt;
+        return this.openStoryCardList.size();
     }
 
     public ArrayList<Integer> getOpenPeopleCardList() {
@@ -77,12 +70,12 @@ public class UserManager {
         this.openPeopleCardList = openPeopleCardList;
     }
 
-    public ArrayList<Integer> getOpenPlaceCardList() {
-        return openPlaceCardList;
+    public ArrayList<String> getPlaceCardList() {
+        return placeCardList;
     }
 
-    public void setOpenPlaceCardList(ArrayList<Integer> openPlaceCardList) {
-        this.openPlaceCardList = openPlaceCardList;
+    public void setPlaceCardList(ArrayList<String> placeCardList) {
+        this.placeCardList = placeCardList;
     }
 
     public ArrayList<Integer> getOpenStoryCardList() {
@@ -91,6 +84,14 @@ public class UserManager {
 
     public void setOpenStoryCardList(ArrayList<Integer> openStoryCardList) {
         this.openStoryCardList = openStoryCardList;
+    }
+
+    public ArrayList<UserMap2Data> getMap2StateList() {
+        return map2StateList;
+    }
+
+    public void setMap2StateList(ArrayList<UserMap2Data> map2StateList) {
+        this.map2StateList = map2StateList;
     }
 
     //맥 주소 받아오기

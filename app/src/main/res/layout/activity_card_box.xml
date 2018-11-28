@@ -22,6 +22,7 @@
         android:paddingRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:theme="@style/TabTheme"

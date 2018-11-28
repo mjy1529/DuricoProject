@@ -9,15 +9,15 @@
         android:id="@+id/gacha_card"
         android:layout_width="match_parent"
         android:layout_height="335dp"
-        android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:adjustViewBounds="true" />
 
     <LinearLayout
         android:layout_width="249dp"
         android:layout_height="116dp"
-        android:orientation="vertical"
-        android:background="@drawable/a_1">
+        android:background="@drawable/a_1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/cardName"
@@ -27,10 +27,8 @@
             android:layout_marginTop="33dp"
             android:fontFamily="@font/gulim070"
             android:gravity="center"
-            android:text="김구"
             android:textColor="#6d6053"
             android:textSize="18sp" />
-
         <TextView
             android:id="@+id/cardContent"
             android:layout_width="190dp"
@@ -41,7 +39,7 @@
             android:text="김구입니다"
             android:textColor="#93786d"
             android:textSize="10sp" />
-    </LinearLayout>
 
+    </LinearLayout>
 
 </LinearLayout>

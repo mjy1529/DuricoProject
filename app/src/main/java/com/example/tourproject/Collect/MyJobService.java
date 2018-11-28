@@ -23,6 +23,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+
 import com.example.tourproject.R;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -368,6 +369,11 @@ public class MyJobService extends JobService {
             if (location != null) {
                 mapy = location.getLatitude();
                 mapx = location.getLongitude();
+
+                Log.d("위치테스트", "정확도 : " + location.getAccuracy());
+                Log.d("위치테스트", "제공자 : " + location.getProvider());
+                Log.d("위치테스트", "위도 : " + location.getLatitude());
+                Log.d("위치테스트", "경도 : " + location.getLongitude());
             }
             new Thread(new Runnable() {
                 @Override

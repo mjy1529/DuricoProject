@@ -1,5 +1,6 @@
 package com.example.tourproject.CardBox;
 
+
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.UserManager;
+
+import retrofit2.http.HEAD;
 
 public class CardBoxActivity extends AppCompatActivity {
 
@@ -95,11 +98,11 @@ public class CardBoxActivity extends AppCompatActivity {
 
         Button home = (Button) findViewById(R.id.home);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
-        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
-        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
-        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
     }
 

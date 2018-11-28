@@ -1,14 +1,13 @@
 package com.example.tourproject.Util;
 
 import com.example.tourproject.CardBox.CardData;
-import com.example.tourproject.StoryPlay.StoryPlayData;
 
 import java.util.ArrayList;
 
 public class CardManager {
 
     private ArrayList<CardData> peopleCardList;
-    private ArrayList<CardData> placeCardList;
+    //    private ArrayList<CardData> placeCardList;
     private ArrayList<CardData> storyCardList;
 
     private ArrayList<CardData> gachaCardList;
@@ -21,7 +20,7 @@ public class CardManager {
 
     public void initialize() {
         peopleCardList = new ArrayList<>();
-        placeCardList = new ArrayList<>();
+//        placeCardList = new ArrayList<>();
         storyCardList = new ArrayList<>();
 
         gachaCardList = new ArrayList<>();
@@ -35,13 +34,13 @@ public class CardManager {
         this.peopleCardList = peopleCardList;
     }
 
-    public ArrayList<CardData> getPlaceCardList() {
-        return placeCardList;
-    }
-
-    public void setPlaceCardList(ArrayList<CardData> placeCardList) {
-        this.placeCardList = placeCardList;
-    }
+//    public ArrayList<CardData> getPlaceCardList() {
+//        return placeCardList;
+//    }
+//
+//    public void setPlaceCardList(ArrayList<CardData> placeCardList) {
+//        this.placeCardList = placeCardList;
+//    }
 
     public ArrayList<CardData> getStoryCardList() {
         return storyCardList;

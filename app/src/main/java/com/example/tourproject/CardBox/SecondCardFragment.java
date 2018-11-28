@@ -1,6 +1,5 @@
 package com.example.tourproject.CardBox;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,16 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tourproject.Util.Application;
-import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import retrofit2.Call;
 
 public class SecondCardFragment extends Fragment {
 
@@ -50,6 +44,6 @@ public class SecondCardFragment extends Fragment {
         card_recyclerView.setAdapter(adapter);
 
         int openCardCnt = UserManager.getInstance().getOpen_story_card_cnt();
-        card_number.setText(openCardCnt + " / " + adapter.getItemCount());
+        card_number.setText(String.valueOf(openCardCnt));
     }
 }

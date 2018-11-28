@@ -7,6 +7,7 @@ public class CardData {
     private String card_category;
     private String card_description;
     private int gacha;
+    private int map2_id;
 
     public String getCard_image_url() {
         return card_image_url;
@@ -30,6 +31,10 @@ public class CardData {
 
     public int getGacha() {
         return gacha;
+    }
+
+    public int getMap2_id() {
+        return map2_id;
     }
 
     @Override

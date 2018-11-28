@@ -15,7 +15,7 @@
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         android:padding="10dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
     <ImageButton
@@ -30,7 +30,7 @@
         android:layout_marginTop="30dp"
         android:layout_weight="0"
         android:gravity="center"
-        android:src="@drawable/p_1" />
+        android:background="@drawable/main" />
 
     <LinearLayout
         style="?android:attr/buttonBarButtonStyle"

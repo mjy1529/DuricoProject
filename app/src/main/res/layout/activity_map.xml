@@ -13,86 +13,96 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:padding="10dp">
-    </android.support.v7.widget.Toolbar>
+        android:padding="10dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:layout_below="@id/toolbar"
         android:id="@+id/re"
-        android:layout_centerHorizontal="true"
         android:layout_width="300dp"
         android:layout_height="90dp"
-        android:padding="2dp"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
+        android:layout_marginRight="30dp"
+        android:padding="2dp">
 
         <FrameLayout
+            android:id="@+id/imageView1_1"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="20dp"
             android:layout_alignParentLeft="true"
-            android:id="@+id/imageView1_1">
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="20dp">
+
             <ImageButton
                 android:id="@+id/imageView1"
                 android:layout_width="91dp"
                 android:layout_height="91dp"
-                android:layout_gravity="center_horizontal|center_vertical" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:onClick="onClick" />
+
         </FrameLayout>
 
 
         <FrameLayout
+            android:id="@+id/imageView2_2"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginRight="20dp"
-            android:id="@+id/imageView2_2"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="20dp">
+
             <ImageButton
                 android:id="@+id/imageView2"
                 android:layout_width="91dp"
                 android:layout_height="91dp"
-                android:layout_gravity="center_horizontal|center_vertical" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:onClick="onClick" />
+
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/imageView3_3"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/imageView3_3"
             android:layout_alignParentRight="true">
+
             <ImageButton
                 android:id="@+id/imageView3"
                 android:layout_width="91dp"
                 android:layout_height="91dp"
-                android:layout_gravity="center_horizontal|center_vertical" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:onClick="onClick" />
         </FrameLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_below="@id/re"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_below="@id/re"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:textSize="16sp"
-            android:fontFamily="@font/gulim070"
-            android:textColor="#5186a7"
             android:layout_marginBottom="10dp"
-            android:text="TextView" />
+            android:fontFamily="@font/gulim070"
+            android:text="TextView"
+            android:textColor="#5186a7"
+            android:textSize="16sp" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="40dp"
             android:id="@+id/horizon_list"
-            android:layout_centerVertical="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="40dp" />
+
     </RelativeLayout>
+
 </RelativeLayout>

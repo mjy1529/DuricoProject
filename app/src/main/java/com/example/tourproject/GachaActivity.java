@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
@@ -31,7 +30,6 @@ import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
 import com.instacart.library.truetime.TrueTime;
-
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.SocketTimeoutException;
@@ -42,10 +40,14 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
-public class GachaActivity extends AppCompatActivity {
+public class GachaActivity extends AppCompatActivity{
 
     private static final long START_TIME_IN_MILLIS = 86400000;
+
+    private final int REQUEST_WIDTH = 512;
+    private final int REQUEST_HEIGHT = 512;
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
@@ -61,14 +63,15 @@ public class GachaActivity extends AppCompatActivity {
     Dialog MyDialog;
     ImageView cardimage;
     TextView cardcontent;
-    TextView cardname;
+    TextView cardName;
     LinearLayout card;
+
+    TextView pe;
 
     private final MyHandler mHandler = new MyHandler(this);
     private Thread backgroundThread;
     private boolean running = false;
 
-    public static final String TAG = "GachaActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,7 @@ public class GachaActivity extends AppCompatActivity {
 
         try {
             backgroundThread.join();
-        } catch (InterruptedException e) {
+        }catch(InterruptedException e) {
             Log.i("TRUETIMEWAIT", "ERROR");
             e.printStackTrace();
         }
@@ -126,12 +129,12 @@ public class GachaActivity extends AppCompatActivity {
         actionBar.setCustomView(mCustomView);
 
         Button home = (Button) findViewById(R.id.home);
-        TextView pe = (TextView) findViewById(R.id.pecardCnt);
-        pe.setText(Integer.toString(UserManager.getInstance().getOpen_people_card_cnt()));
+        pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
-        s.setText(Integer.toString(UserManager.getInstance().getOpen_story_card_cnt()));
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
-        p.setText(Integer.toString(UserManager.getInstance().getOpen_place_card_cnt()));
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
         //여기까지------------------------------
     }
 
@@ -154,7 +157,7 @@ public class GachaActivity extends AppCompatActivity {
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 Log.e("TrueTime", "SocketError");
-            } catch (IOException e) {
+            }catch(IOException e){
                 e.printStackTrace();
                 Log.e("TrueTime", "Error");
             }
@@ -170,7 +173,7 @@ public class GachaActivity extends AppCompatActivity {
 
     }
 
-    private void startTimer() {
+    private void startTimer(){
 
         //mEndTime = SystemClock.elapsedRealtime() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -191,33 +194,33 @@ public class GachaActivity extends AppCompatActivity {
         updateButtons();
     }
 
-    private void resetTimer() {
+    private void resetTimer(){
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
         updateButtons();
     }
 
-    private void updateCountDownText() {
-        int hours = (int) (mTimeLeftInMillis / (60 * 60 * 1000));
-        int minutes = (int) (mTimeLeftInMillis / (60 * 1000)) % 60;
-        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+    private void updateCountDownText(){
+        int hours = (int)(mTimeLeftInMillis / (60 * 60 * 1000));
+        int minutes = (int)(mTimeLeftInMillis / (60 *1000)) % 60;
+        int seconds = (int)(mTimeLeftInMillis / 1000) % 60;
 
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
 
         mTextViewCountDown.setText(timeLeftFormatted);
     }
 
-    private void updateButtons() {
-        if (mTimerRunning) {
+    private  void updateButtons(){
+        if(mTimerRunning){
             mButtonStartPause.setEnabled(false);
-        } else {
+        }else{
             updateCountDownText();
             mButtonStartPause.setEnabled(true);
         }
     }
 
     @Override
-    protected void onStop() {
+    protected  void onStop(){
         super.onStop();
 
         if (mCountDownTimer != null) {
@@ -233,25 +236,23 @@ public class GachaActivity extends AppCompatActivity {
         editor.putLong("endTime", EndTime);
         editor.apply();
     }
-
-    private NetworkInfo getNetworkInfo() {
+    private NetworkInfo getNetworkInfo(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo;
     }
-
     @Override
-    protected void onStart() {
+    protected void onStart(){
         super.onStart();
         NetworkInfo mNetworkState = getNetworkInfo();
-        if (mNetworkState != null && mNetworkState.isConnected()) {
-            if (mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE) {
+        if(mNetworkState != null && mNetworkState.isConnected()){
+            if(mNetworkState.getType() == ConnectivityManager.TYPE_WIFI || mNetworkState.getType() == ConnectivityManager.TYPE_MOBILE){
                 backgroundThread = new Thread(new BackgroundThread());
                 setRunning(true);
                 backgroundThread.start();
                 try {
                     backgroundThread.join();
-                } catch (InterruptedException e) {
+                }catch(InterruptedException e) {
                     Log.i("TRUETIMEWAIT", "ERROR");
                     e.printStackTrace();
                 }
@@ -277,7 +278,8 @@ public class GachaActivity extends AppCompatActivity {
                     }
                 }
             }
-        } else {
+        }
+        else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("네트워크");
             alert.setMessage("네트워크가 연결되지 않았습니다.");
@@ -291,42 +293,59 @@ public class GachaActivity extends AppCompatActivity {
         }
     }
 
-    public void MyCustomAlertDialog() {
+    public int pick(){
+        double r  = Math.random(); //{0.0 - 1.0}
+        double dr = r * 100.0f; // {0.0 - 100.0}
+
+        double p[] = { 5.0f, 15.0f, 80.0f }; //2, 1, 0
+
+        double cumulative = 0.0f;
+        int i;
+        for(i=0; i<3; i++)
+        {
+            cumulative += p[i];
+            if(dr <= cumulative)
+                break;
+        }
+        return 2-i;
+    }
+
+    public void MyCustomAlertDialog(){
         MyDialog = new Dialog(GachaActivity.this);
         MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MyDialog.setContentView(R.layout.pick_customdialong);
         MyDialog.setTitle("My Custom Dialog");
         MyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        cardcontent = (TextView) MyDialog.findViewById(R.id.cardContent);
+        cardName = (TextView) MyDialog.findViewById(R.id.cardName);
+        cardcontent = (TextView)MyDialog.findViewById(R.id.cardContent);
+        cardcontent.setText(Integer.toString(pick()));
 
-        cardname = (TextView) MyDialog.findViewById(R.id.cardName);
-
-        cardimage = (ImageView) MyDialog.findViewById(R.id.gacha_card);
+        cardimage = (ImageView)MyDialog.findViewById(R.id.gacha_card);
 
         // ******* 뽑기 이미지 띄우는 부분 ******* //
         CardData gachaCardData = getGachaCard(); //뽑힌 카드 데이터
-
         if(gachaCardData != null) {
+            //카드 이미지 세팅
             Glide.with(this)
                     .load(Application.getInstance().getBaseImageUrl() + gachaCardData.getCard_image_url())
                     .into(cardimage);
+            cardName.setText(gachaCardData.getCard_name()); //카드 이름
+            cardcontent.setText(gachaCardData.getCard_description()); //카드 설명
 
             updateUserOpenCard(gachaCardData);
-            cardcontent.setText(gachaCardData.getCard_description());
-            cardname.setText(gachaCardData.getCard_name());
-        } else { //더이상 뽑을 카드가 없을 때
+
+        } else { //더이상 뽑을 카드가 없을 때?
             cardimage.setImageResource(R.drawable.p_1);
-            cardcontent.setText("\"제가 죽으면, 뼛조각 하나 이 일본 땅에 남지 않게 해주십시오\"");
-            cardname.setText("송몽규");
+            cardcontent.setText("더 이상 뽑을 카드가 없습니다.");
         }
         // *********************************** //
 
-        card = (LinearLayout) MyDialog.findViewById(R.id.pickview);
+        card = (LinearLayout)MyDialog.findViewById(R.id.pickview);
 
-        card.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 MyDialog.cancel();
             }
         });
@@ -374,7 +393,6 @@ public class GachaActivity extends AppCompatActivity {
             }
 
         } else {
-            Toast.makeText(this, "더이상 뽑을 카드가 없습니다!!", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -389,10 +407,9 @@ public class GachaActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful()) {
                     int open_people_card_cnt = Integer.parseInt(response.body());
-                    //오픈된 인물 카드 개수 받아오기
-                    UserManager.getInstance().setOpen_people_card_cnt(open_people_card_cnt);
                     //오픈된 인물 카드 인덱스 받아오기
                     UserManager.getInstance().getOpenPeopleCardList().add(cardData.getCard_idx());
+                    pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
                 }
             }
 
@@ -401,7 +418,6 @@ public class GachaActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 }

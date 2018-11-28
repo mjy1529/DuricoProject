@@ -4,10 +4,17 @@ import android.util.Log;
 
 import com.example.tourproject.CardBox.CardResult;
 import com.example.tourproject.CardBox.OpenPeopleCard;
-import com.example.tourproject.CardBox.OpenPlaceCard;
 import com.example.tourproject.CardBox.OpenStoryCard;
+import com.example.tourproject.CardBox.PlaceResult;
+import com.example.tourproject.Map.Map1Result;
+import com.example.tourproject.Map.Map2Data;
+import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.Map.UserMap2Result;
 import com.example.tourproject.Network.NetworkService;
+import com.example.tourproject.StoryList.StoryResult;
 import com.example.tourproject.StoryPlay.StoryPlayResult;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,16 +49,20 @@ public class Application extends android.app.Application {
 
         builNetworkService();
 
-        //상세이야기, 전체 카드 받아오기
-        getStoryPlayDataList();
-        getCardList();
+        initManager();
+        // 사용자 정보들은 여기서 받기
+        insertUser(userManager.getUserId());
+        getOpenPeopleCardIdx(userManager.getUserId());
+        getOpenStoryCardIdx(userManager.getUserId());
+        getPlaceCard(userManager.getUserId()); //장소카드만 받아오기
+        getUserMap2State(userManager.getUserId());
 
+        getStoryPlayDataList();
+    }
+
+    public void initManager() {
         userManager = UserManager.getInstance();
         userManager.initialize();
-
-        getOpenPeopleCardIdx(userManager.getUserId());
-        getOpenPlaceCardIdx(userManager.getUserId());
-        getOpenStoryCardIdx(userManager.getUserId());
     }
 
     public void builNetworkService() {
@@ -76,6 +87,25 @@ public class Application extends android.app.Application {
         return baseImageUrl;
     }
 
+    public void insertUser(final String macAddress) {
+        Call<String> request = networkService.insertUser(macAddress);
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    String user_card_url = response.body();
+                    UserManager.getInstance().setUser_card_url(user_card_url);
+                    Log.d(TAG, "USER DB 데이터 INSERT 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "USER DB 데이터 INSERT 실패");
+            }
+        });
+    }
+
     public void getStoryPlayDataList() {
         final StoryPlayManager storyPlayManager = StoryPlayManager.getInstance();
         storyPlayManager.initialize();
@@ -87,45 +117,33 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     StoryPlayResult storyPlayResult = response.body();
                     storyPlayManager.setStoryPlayList(storyPlayResult.storyPlay);
+                    Log.d(TAG, "STORY PLAY DATA 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<StoryPlayResult> call, Throwable t) {
-
+                Log.d(TAG, "STORY PLAY DATA 받아오기 실패");
             }
         });
     }
 
-    public void getCardList() {
-        final CardManager cardManager = CardManager.getInstance();
-        cardManager.initialize();
 
-        Call<CardResult> request = networkService.getAllCard();
-        request.enqueue(new Callback<CardResult>() {
+    public void getPlaceCard(String user_id) {
+        Call<PlaceResult> request = networkService.getPlaceCard(user_id);
+        request.enqueue(new Callback<PlaceResult>() {
             @Override
-            public void onResponse(Call<CardResult> call, Response<CardResult> response) {
+            public void onResponse(Call<PlaceResult> call, Response<PlaceResult> response) {
                 if(response.isSuccessful()) {
-                    CardResult cardResult = response.body();
-                    for(int i=0; i<cardResult.card.size(); i++) {
-                        switch (cardResult.card.get(i).getCard_category()) {
-                            case "people" :
-                                cardManager.getPeopleCardList().add(cardResult.card.get(i));
-                                cardManager.getGachaCardList().add(cardResult.card.get(i));
-                                break;
-                            case "place" :
-                                cardManager.getPlaceCardList().add(cardResult.card.get(i));
-                                break;
-                            case "story" :
-                                cardManager.getStoryCardList().add(cardResult.card.get(i));
-                                break;
-                        }
-                    }
+                    PlaceResult placeResult = response.body();
+                    UserManager.getInstance().setPlaceCardList(placeResult.placeCard);
+                    Log.d(TAG, "PLACE CARD 받아오기 성공");
                 }
             }
 
             @Override
-            public void onFailure(Call<CardResult> call, Throwable t) {
+            public void onFailure(Call<PlaceResult> call, Throwable t) {
+                Log.d(TAG, "PLACE CARD 받아오기 실패");
             }
         });
     }
@@ -138,32 +156,13 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     OpenPeopleCard openPeopleCard = response.body();
                     userManager.setOpenPeopleCardList(openPeopleCard.openCardList);
-                    userManager.setOpen_people_card_cnt(openPeopleCard.openCardList.size());
+                    Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<OpenPeopleCard> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
-            }
-        });
-    }
-
-    public void getOpenPlaceCardIdx(String user_id) {
-        Call<OpenPlaceCard> request = networkService.getOpenPlaceCard(user_id);
-        request.enqueue(new Callback<OpenPlaceCard>() {
-            @Override
-            public void onResponse(Call<OpenPlaceCard> call, Response<OpenPlaceCard> response) {
-                if(response.isSuccessful()) {
-                    OpenPlaceCard openPlaceCard = response.body();
-                    userManager.setOpenPlaceCardList(openPlaceCard.openCardList);
-                    userManager.setOpen_place_card_cnt(openPlaceCard.openCardList.size());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OpenPlaceCard> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 실패");
             }
         });
     }
@@ -176,15 +175,33 @@ public class Application extends android.app.Application {
                 if(response.isSuccessful()) {
                     OpenStoryCard openStoryCard = response.body();
                     userManager.setOpenStoryCardList(openStoryCard.openCardList);
-                    userManager.setOpen_story_card_cnt(openStoryCard.openCardList.size());
+                    Log.d(TAG, "OPEN STORY CARD LIST 받아오기 성공");
                 }
             }
 
             @Override
             public void onFailure(Call<OpenStoryCard> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "OPEN STORY CARD LIST 받아오기 실패");
             }
         });
     }
 
+    public void getUserMap2State(String user_id) {
+        Call<UserMap2Result> request = networkService.getMap2State(user_id);
+        request.enqueue(new Callback<UserMap2Result>() {
+            @Override
+            public void onResponse(Call<UserMap2Result> call, Response<UserMap2Result> response) {
+                if(response.isSuccessful()) {
+                    UserMap2Result userMap2Result = response.body();
+                    userManager.setMap2StateList(userMap2Result.map2State);
+                    Log.d(TAG, "MAP2 STATE 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserMap2Result> call, Throwable t) {
+                Log.d(TAG, "MAP2 STATE 받아오기 실패");
+            }
+        });
+    }
 }
