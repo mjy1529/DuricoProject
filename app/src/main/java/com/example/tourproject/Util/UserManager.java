@@ -1,5 +1,7 @@
 package com.example.tourproject.Util;
 
+import com.example.tourproject.Map.UserMap2Data;
+
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,7 @@ public class UserManager {
     private ArrayList<Integer> openPeopleCardList; //오픈된 인물카드 인덱스
     private ArrayList<String> placeCardList; //장소카드 url
     private ArrayList<Integer> openStoryCardList; //오픈된 인물카드 인덱스
+    private ArrayList<UserMap2Data> map2StateList; //오픈된 map2
 
     public static UserManager instance = new UserManager();
 
@@ -27,6 +30,8 @@ public class UserManager {
         openPeopleCardList = new ArrayList<>();
         placeCardList = new ArrayList<>();
         openStoryCardList = new ArrayList<>();
+
+        map2StateList = new ArrayList<>();
     }
 
     public String getUserId() {
@@ -79,6 +84,14 @@ public class UserManager {
 
     public void setOpenStoryCardList(ArrayList<Integer> openStoryCardList) {
         this.openStoryCardList = openStoryCardList;
+    }
+
+    public ArrayList<UserMap2Data> getMap2StateList() {
+        return map2StateList;
+    }
+
+    public void setMap2StateList(ArrayList<UserMap2Data> map2StateList) {
+        this.map2StateList = map2StateList;
     }
 
     //맥 주소 받아오기

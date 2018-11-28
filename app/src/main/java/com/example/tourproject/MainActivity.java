@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         btn0 = (ImageButton) findViewById(R.id.btnCard);
 
         btn0.setOnClickListener(this);
-        if(!UserManager.getInstance().getUser_card_url().equals("null")) { //사용자가 메인이미지를 선택하였을 경우
+        if(UserManager.getInstance().getUser_card_url() != null) { //사용자가 메인이미지를 선택하였을 경우
             changeProfileImage(UserManager.getInstance().getUser_card_url());
             btn0.setBackground(new ShapeDrawable(new OvalShape()));
             btn0.setClipToOutline(true);

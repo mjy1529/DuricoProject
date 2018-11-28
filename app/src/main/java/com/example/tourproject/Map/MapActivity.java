@@ -33,7 +33,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     String mid;
 
     RecyclerView mHorizonView;
-    VerticalAdapter mAdapter;
+    public static VerticalAdapter mAdapter;
 
     ImageView imageViews[];
     FrameLayout layouts[];
