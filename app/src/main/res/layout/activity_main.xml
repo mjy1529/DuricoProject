@@ -17,20 +17,21 @@
         android:padding="10dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+        <ImageButton
+            android:id="@+id/btnCard"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:background="@drawable/main" />
 
-    <ImageButton
-        android:id="@+id/btnCard"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_weight="0"
-        android:gravity="center"
-        android:background="@drawable/main" />
+
 
     <LinearLayout
         style="?android:attr/buttonBarButtonStyle"
@@ -45,7 +46,7 @@
         android:orientation="horizontal"
         android:padding="0dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnCollect"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -55,7 +56,7 @@
             android:background="@drawable/three"
             android:elevation="0dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnStart"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -65,7 +66,7 @@
             android:layout_weight="0"
             android:background="@drawable/two" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnPick"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
