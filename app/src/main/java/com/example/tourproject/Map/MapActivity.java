@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.MainActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
@@ -169,7 +170,8 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
-            onBackPressed();
+//            onBackPressed();
+            finish();
         }
     }
 

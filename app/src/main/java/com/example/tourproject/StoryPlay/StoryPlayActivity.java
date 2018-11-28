@@ -152,19 +152,16 @@ public class StoryPlayActivity extends AppCompatActivity {
                             updateOpenStoryCard(cardData);
                         }
                         cardAlertDialog(cardData);
+                    }
+                    updateMap2State(map2_id);
 
-                        //UserManager의 map2State 업데이트
-                        UserManager userManager = UserManager.getInstance();
-                        for(int i=0; i<userManager.getMap2StateList().size(); i++) {
-                            if (userManager.getMap2StateList().get(i).getMap2_position() == 1) {
-                                userManager.getMap2StateList().get(i).setMap2_state(0);
-                                userManager.getMap2StateList().get(i+2).setMap2_state(1);
-                            }
+                    //UserManager의 map2State 업데이트
+                    UserManager userManager = UserManager.getInstance();
+                    for(int i=0; i<userManager.getMap2StateList().size(); i++) {
+                        if (userManager.getMap2StateList().get(i).getMap2_position() == 1) {
+                            userManager.getMap2StateList().get(i).setMap2_state(0);
+                            userManager.getMap2StateList().get(i+2).setMap2_state(1);
                         }
-                        updateMap2State(map2_id);
-
-                    } else { //해당 이야기에 맞는 카드가 없을 때 종료
-                        finish();
                     }
 
                 } else {
@@ -327,7 +324,7 @@ public class StoryPlayActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                Log.d("맵 상태 변경 실패", t.getMessage());
             }
         });
     }

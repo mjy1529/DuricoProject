@@ -127,7 +127,6 @@ public class Application extends android.app.Application {
     }
 
 
-
     public void getPlaceCard(String user_id) {
         Call<PlaceResult> request = networkService.getPlaceCard(user_id);
         request.enqueue(new Callback<PlaceResult>() {

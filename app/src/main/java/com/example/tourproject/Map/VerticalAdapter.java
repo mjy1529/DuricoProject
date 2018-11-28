@@ -25,14 +25,11 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
     private ArrayList<Map2Data> verticalDatas;
-    private ArrayList<UserMap2Data> userMap2DataList;
 
     public VerticalAdapter(Context context, ArrayList<Map2Data> verticalDatas) {
         this.context = context;
         Collections.sort(verticalDatas, sortByPosition);
         this.verticalDatas = verticalDatas;
-
-        this.userMap2DataList = UserManager.getInstance().getMap2StateList();
     }
 
     @Override
@@ -59,10 +56,10 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(holder.horizon_icon);
         }
 
-        for (int k = 0; k < userMap2DataList.size(); k++) {
-            if (map2Data.getMap2_id() == userMap2DataList.get(k).getMap2_id()) {
-                if (userMap2DataList.get(k).getMap2_state() == 0
-                        || userMap2DataList.get(k).getMap2_state() == 1) {
+        for (int k = 0; k < userManager.getMap2StateList().size(); k++) {
+            if (map2Data.getMap2_id() == userManager.getMap2StateList().get(k).getMap2_id()) {
+                if (userManager.getMap2StateList().get(k).getMap2_state() == 0
+                        || userManager.getMap2StateList().get(k).getMap2_state() == 1) {
                     holder.horizon_icon.clearColorFilter(); //필터 없애기
                     holder.horizon_icon.invalidate();
 
@@ -82,7 +79,7 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     holder.horizon_icon.setColorFilter(cf);
                 }
 
-                if (userMap2DataList.get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
+                if (userManager.getMap2StateList().get(k).getMap2_position() != 3) //포지션이 맨 마지막이 아니면(첫번째와 두번째인 경우) 화살표 띄우기
                     holder.horizon_arrow.setBackgroundResource(R.drawable.c_1);
             }
         }
