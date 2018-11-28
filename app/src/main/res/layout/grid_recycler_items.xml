@@ -6,31 +6,18 @@
     android:paddingTop="15dp">
 
     <ImageView
-        android:src="@drawable/locklayout"
         android:id="@+id/grid_card_image"
         android:layout_width="130dp"
         android:layout_height="200dp"
+        android:background="@drawable/a_6"
+        android:outlineProvider="background"
         android:scaleType="centerInside" />
 
     <ImageView
         android:id="@+id/grid_select"
-<<<<<<< HEAD
-        android:layout_width="129dp"
-        android:layout_height="29dp"
-        android:layout_alignBottom="@+id/grid_card_image"
-        android:layout_alignStart="@+id/grid_card_image"
-        android:layout_marginBottom="0dp"
-        android:layout_marginStart="1dp"
-        android:src="@drawable/locklayout"
-        android:background="@drawable/selected"
-        android:scaleType="centerInside" />
-
-</RelativeLayout>
-=======
         android:layout_width="130dp"
         android:layout_height="29dp"
         android:layout_alignBottom="@+id/grid_card_image"
         android:layout_alignStart="@+id/grid_card_image"
         android:background="@drawable/selected" />
 </RelativeLayout>
->>>>>>> bb780e67fcf5461046bf305d5b91ddcde4addaf5
