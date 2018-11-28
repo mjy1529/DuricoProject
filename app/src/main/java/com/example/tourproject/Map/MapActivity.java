@@ -211,7 +211,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public boolean LocatedPlace(double mapx, double mapy) {
-        Log.i("여기여기ㅇㅇ", "ㅇㅇㅇ");
         double p_mapx, p_mapy;
 
         // ************ 추가 ************ //
@@ -220,6 +219,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         p_mapx = map1Data.getMap1_mapx();
         p_mapy = map1Data.getMap1_mapy();
         // ***************************** //
+        Log.i(TAG, "p_mapx : " + p_mapx + ", p_mapy : " + p_mapy);
 
         double diffmapy = LatitudeInDifference(300);
         double diffmapx = LongitudeInDifference(p_mapy, 300);
