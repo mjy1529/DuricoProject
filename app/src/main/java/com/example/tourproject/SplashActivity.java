@@ -51,7 +51,6 @@ public class SplashActivity extends AppCompatActivity {
 
         if(checkInternet()) {
             initManager();
-
             //카드, 맵1, 맵2, 상세이야기는 여기서 받아오기
             setStoryListManager();
             getCardList();
@@ -64,7 +63,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-            }, 4000);
+            }, 5000);
 
         } else {
             handler.postDelayed(new Runnable() {
@@ -72,8 +71,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     showInternetAlertDialog();
                 }
-            }, 4000);
-
+            }, 3000);
         }
     }
 
