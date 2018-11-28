@@ -178,20 +178,10 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     public void updateMap2(MyJobService b) {
         if (LocatedPlace(b.getMapx(), b.getMapy())) {
             // ***** db에 map2의 상태 1로 update 하기 ****** //
-            //user_id, map1_id, map2_id
-//            Call<String> request = networkService.updateUserMap2(UserManager.getInstance().getUserMacAddress(),
-//                    );
-//            request.enqueue(new Callback<String>() {
-//                @Override
-//                public void onResponse(Call<String> call, Response<String> response) {
-//
-//                }
-//
-//                @Override
-//                public void onFailure(Call<String> call, Throwable t) {
-//
-//                }
-//            });
+
+
+            mAdapter.notifyDataSetChanged();
+            // ****************************************** //
         }
     }
 

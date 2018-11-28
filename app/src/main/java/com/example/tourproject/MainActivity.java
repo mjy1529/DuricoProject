@@ -270,6 +270,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 .load(Application.getInstance().getBaseImageUrl() + card_url)
                 .apply(new RequestOptions().centerCrop())
                 .into(btn0);
+        btn0.setBackground(new ShapeDrawable(new OvalShape()));
+        btn0.setClipToOutline(true);
     }
 
     @Override
