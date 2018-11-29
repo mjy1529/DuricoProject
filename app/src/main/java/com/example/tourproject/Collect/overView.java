@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.Util.Application;
@@ -356,15 +357,17 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
         ImageView cardimage = (ImageView) MyDialog.findViewById(R.id.gacha_card);
         Glide.with(this).load(place_card_url).into(cardimage);
 
+        TextView cardName = (TextView) MyDialog.findViewById(R.id.cardName);
+        cardName.setText(item.getTitle());
         TextView cardContent = (TextView) MyDialog.findViewById(R.id.cardContent);
+
         if(insertPlaceCardMessage.equals("already_exist")) {
-            cardContent.setText("이미 수집 완료된 카드입니다.");
+            cardContent.setText("이미 수집 완료된 카드입니다!");
         } else {
             cardContent.setText("수집 완료!!");
         }
 
         LinearLayout card = (LinearLayout) MyDialog.findViewById(R.id.pickview);
-
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
