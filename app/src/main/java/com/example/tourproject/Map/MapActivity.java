@@ -250,4 +250,15 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
 
         return (diff * 360.0) / (2 * Math.PI * earth * Math.cos(Math.toRadians(_latitude)));
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
+        TextView s = (TextView) findViewById(R.id.scardCnt);
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
+        TextView p = (TextView) findViewById(R.id.pcardCnt);
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
+    }
 }
