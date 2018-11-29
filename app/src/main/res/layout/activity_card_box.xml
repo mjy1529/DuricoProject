@@ -52,7 +52,6 @@
         </android.support.design.widget.TabLayout>
     </RelativeLayout>
     <android.support.v4.view.ViewPager
-        android:background="@drawable/test3"
         android:id="@+id/container"
         android:layout_below="@+id/rel"
         android:layout_width="match_parent"

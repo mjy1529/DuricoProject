@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tourproject.R;
@@ -21,6 +22,7 @@ public class FirstCardFragment extends Fragment {
 
     TextView card_number;
     RecyclerView card_recyclerView;
+    RelativeLayout r;
 
     ArrayList<String> placeCardList;
     public static final String TAG = "FirstCardFragment";
@@ -30,7 +32,9 @@ public class FirstCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_first_card, container, false);
         card_number = (TextView) view.findViewById(R.id.card_number);
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
+        r = (RelativeLayout)view.findViewById(R.id.fragment);
 
+        r.setBackgroundResource(R.drawable.test3_2);
         setPlaceCard();
         return view;
     }
@@ -38,12 +42,13 @@ public class FirstCardFragment extends Fragment {
     public void setPlaceCard() {
         placeCardList = UserManager.getInstance().getPlaceCardList();
 
-        GridAdapter adapter = new GridAdapter(getContext(), placeCardList);
+        GridAdapter adapter = new GridAdapter(getContext(), placeCardList, 0);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
         card_recyclerView.setLayoutManager(layoutManager);
         card_recyclerView.setAdapter(adapter);
 
+        card_number.setTextColor(getResources().getColor(R.color.tab2));
         card_number.setText(String.valueOf(adapter.getItemCount()));
     }
 

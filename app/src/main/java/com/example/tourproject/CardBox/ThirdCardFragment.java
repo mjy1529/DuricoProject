@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tourproject.R;
@@ -21,6 +22,7 @@ public class ThirdCardFragment extends Fragment {
 
     TextView card_number;
     RecyclerView card_recyclerView;
+    RelativeLayout r;
 
     ArrayList<CardData> cardList;
 
@@ -29,7 +31,9 @@ public class ThirdCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_first_card, container, false);
         card_number = (TextView) view.findViewById(R.id.card_number);
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
+        r = (RelativeLayout)view.findViewById(R.id.fragment);
 
+        r.setBackgroundResource(R.drawable.test3);
         setPeopleCard();
         return view;
     }
@@ -38,12 +42,13 @@ public class ThirdCardFragment extends Fragment {
         cardList = CardManager.getInstance().getPeopleCardList(); //인물카드
         ArrayList<Integer> openCardList = UserManager.getInstance().getOpenPeopleCardList();
 
-        GridAdapter adapter = new GridAdapter(getContext(), cardList, openCardList);
+        GridAdapter adapter = new GridAdapter(getContext(), cardList, openCardList, 2);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
         card_recyclerView.setLayoutManager(layoutManager);
         card_recyclerView.setAdapter(adapter);
 
+        card_number.setTextColor(getResources().getColor(R.color.tab1));
         int openCardCnt = UserManager.getInstance().getOpen_people_card_cnt();
         card_number.setText(String.valueOf(openCardCnt));
     }

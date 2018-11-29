@@ -36,19 +36,21 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     private CardData data;
     GridViewHolder holder;
 
-    int s;
+    int s, p;
 
     public static final String TAG = "Card Grid Adapter";
 
-    public GridAdapter(Context context, ArrayList<String> placeCardList) {
+    public GridAdapter(Context context, ArrayList<String> placeCardList, int p) {
         this.context = context;
         this.placeCardList = placeCardList;
+        this.p = p;
     }
 
-    public GridAdapter(Context context, ArrayList<CardData> cardDataList, ArrayList<Integer> openCardList) {
+    public GridAdapter(Context context, ArrayList<CardData> cardDataList, ArrayList<Integer> openCardList, int p) {
         this.context = context;
         this.cardDataList = cardDataList;
         this.openCardList = openCardList;
+        this.p = p;
     }
 
     @Override
@@ -89,6 +91,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                         .into(holder.grid_card_image);
 
                 if (data.getCard_image_url().equals(UserManager.getInstance().getUser_card_url())) {
+                    if(p == 0)
+                        holder.grid_select.setBackgroundResource(R.drawable.selected_2);
+                    else if(p == 1)
+                        holder.grid_select.setBackgroundResource(R.drawable.selected_3);
+                    else
+                        holder.grid_select.setBackgroundResource(R.drawable.selected);
                     holder.grid_select.setVisibility(View.VISIBLE);
                     s = data.getCard_idx();
                 } else {
@@ -108,7 +116,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
             } else {
                 //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
                 holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
-                Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
+                if(p == 0)
+                    Glide.with(context).load(R.drawable.lock_2).into(holder.grid_card_image);
+                else if(p == 1)
+                    Glide.with(context).load(R.drawable.lock_3).into(holder.grid_card_image);
+                else
+                    Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
                 holder.grid_select.setVisibility(View.INVISIBLE);
             }
 
