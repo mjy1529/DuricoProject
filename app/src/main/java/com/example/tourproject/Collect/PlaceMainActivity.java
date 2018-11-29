@@ -143,5 +143,16 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             recreate();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView pe = (TextView) findViewById(R.id.pecardCnt);
+        pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
+        TextView s = (TextView) findViewById(R.id.scardCnt);
+        s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
+        TextView p = (TextView) findViewById(R.id.pcardCnt);
+        p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
+    }
 }//MainActivity class..
 
