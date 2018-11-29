@@ -50,6 +50,6 @@ public class ThirdCardFragment extends Fragment {
 
         card_number.setTextColor(getResources().getColor(R.color.tab1));
         int openCardCnt = UserManager.getInstance().getOpen_people_card_cnt();
-        card_number.setText(String.valueOf(openCardCnt));
+        card_number.setText(String.valueOf(openCardCnt) + " / " + CardManager.getInstance().getPeopleCardList().size());
     }
 }

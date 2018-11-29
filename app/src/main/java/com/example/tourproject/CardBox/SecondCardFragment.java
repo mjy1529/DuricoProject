@@ -49,6 +49,6 @@ public class SecondCardFragment extends Fragment {
 
         card_number.setTextColor(getResources().getColor(R.color.tab3));
         int openCardCnt = UserManager.getInstance().getOpen_story_card_cnt();
-        card_number.setText(String.valueOf(openCardCnt));
+        card_number.setText(String.valueOf(openCardCnt) + " / " + CardManager.getInstance().getStoryCardList().size());
     }
 }

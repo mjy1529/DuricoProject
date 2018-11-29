@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment"
     tools:context=".CardBox.FirstCardFragment">
 
     <TextView
@@ -12,19 +12,20 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/gulim070"
         android:gravity="right"
         android:paddingRight="30dp"
-        android:fontFamily="@font/gulim070"
         android:text="오픈된 카드수 / 총 카드수"
         android:textColor="#ec776c"
         android:textSize="15sp" />
 
     <android.support.v7.widget.RecyclerView
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp"
         android:id="@+id/card_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/card_number" />
+        android:layout_below="@+id/card_number"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" />
 
 </RelativeLayout>

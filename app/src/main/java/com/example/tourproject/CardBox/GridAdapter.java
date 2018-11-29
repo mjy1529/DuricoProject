@@ -1,9 +1,11 @@
 package com.example.tourproject.CardBox;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.StoryPlay.StoryPlayActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.UserManager;
 
@@ -35,6 +41,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
     private ArrayList<String> placeCardList;
     private CardData data;
     GridViewHolder holder;
+    Dialog magnifyCardDialog;
 
     int s, p;
 
@@ -109,6 +116,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                     public void onClick(View view) {
                         if (cardDataList.get(position).getCard_category().equals("people")) {
                             showProfileDialog(cardDataList.get(position)); //메인사진 변경 다이얼로그 띄움
+                        } else if (cardDataList.get(position).getCard_category().equals("story")){
+                            magnifyCard(cardDataList.get(position), null);
                         }
                     }
                 });
@@ -130,6 +139,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
 
         } else {
             Glide.with(context).load(placeCardList.get(position)).into(holder.grid_card_image);
+            holder.grid_card_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    magnifyCard(null, placeCardList.get(position));
+                }
+            });
+
+            GradientDrawable drawable =
+                    (GradientDrawable) context.getDrawable(R.drawable.locklayout2);
+            holder.grid_card_image.setBackground(drawable);
+            holder.grid_card_image.setClipToOutline(true);
         }
     }
 
@@ -179,7 +199,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                     Log.d(TAG, response.body());
                 }
             }
-
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.d(TAG, "실패!!");
@@ -187,6 +206,33 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
         });
 
         UserManager.getInstance().setUser_card_url(data.getCard_image_url());
+    }
+
+    public void magnifyCard(CardData cardData, String placeURL) {
+        magnifyCardDialog = new Dialog(context);
+        magnifyCardDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        magnifyCardDialog.setContentView(R.layout.pick_customdialog3);
+        magnifyCardDialog.setTitle("My Custom Dialog");
+        magnifyCardDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView cardImage = (ImageView) magnifyCardDialog.findViewById(R.id.pickCard_noDesc);
+        LinearLayout card = (LinearLayout) magnifyCardDialog.findViewById(R.id.pickview_noDesc);
+
+        if(placeURL == null) {
+            Glide.with(context)
+                    .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
+                    .into(cardImage);
+        } else {
+            Glide.with(context).load(placeURL).into(cardImage);
+        }
+
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                magnifyCardDialog.dismiss();
+            }
+        });
+        magnifyCardDialog.show();
     }
 }
 

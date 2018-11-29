@@ -185,7 +185,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
             int map2_id = 0;
             for(int i=0; i<map1Data.getMap2List().size(); i++) {
                 if(map1Data.getMap2List().get(i).getMap1_id() == Integer.parseInt(map1Data.getMap_id())
-                        && map1Data.getMap2List().get(i).getMap2_position() == 1) {
+                        && map1Data.getMap2List().get(i).getMap2_position() == 2) {
                     map2_id = map1Data.getMap2List().get(i).getMap2_id();
 
                     UserManager.getInstance().getMap2StateList().get(i).setMap2_state(1);

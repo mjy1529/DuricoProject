@@ -20,4 +20,5 @@
         android:layout_alignBottom="@+id/grid_card_image"
         android:layout_alignStart="@+id/grid_card_image"
         android:visibility="invisible" />
+
 </RelativeLayout>
