@@ -1,6 +1,7 @@
 package com.example.tourproject.Collect;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -49,8 +50,24 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         restart.setOnClickListener(this);
         listView = (ListView)findViewById(R.id.listview300);
         listView2 = (ListView)findViewById(R.id.listview2000);
+        if(data2.size() == 0 && mapy != 0){
+            //Log.i("data2가 없습니다.", ",,");
+            AlertDialog.Builder Check = new AlertDialog.Builder(PlaceMainActivity.this);
+            Check.setTitle("탐색 불가")
+                    .setMessage("검색 가능한 관광지가 없습니다.");
+            Check.setCancelable(true);
+            Check.show();
+            data.clear();
+            data2.clear();
+            //setGps();
+        }
         if(data2.size() == 0 && mapy == 0){
-            Log.i("data2가 없습니다.", ",,");
+            //Log.i("data2가 없습니다.", ",,");
+            AlertDialog.Builder Check = new AlertDialog.Builder(PlaceMainActivity.this);
+            Check.setTitle("탐색 불가")
+                    .setMessage("위치 탐색에 실패하였습니다.\n위치 권한이 허용되어있는지 확인해주세요.");
+            Check.setCancelable(true);
+            Check.show();
             data.clear();
             data2.clear();
             //setGps();
