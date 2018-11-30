@@ -180,6 +180,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void updateMap2(MyJobService b) {
+        Log.d("MAP JOBSERVICE", b.getMapx() +", " + b.getMapy());
         if (LocatedPlace(b.getMapx(), b.getMapy())) {
             // ***** db에 map2의 상태 1로 update 하기 ****** //
             int map2_id = 0;
@@ -189,6 +190,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                     map2_id = map1Data.getMap2List().get(i).getMap2_id();
 
                     UserManager.getInstance().getMap2StateList().get(map2_id).setMap2_state(1);
+                    mAdapter.notifyDataSetChanged();
                     break;
                 }
             }
@@ -204,8 +206,6 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                     Log.d(TAG, "MAP2 두번째 이야기 활성화 실패");
                 }
             });
-
-            mAdapter.notifyDataSetChanged();
             // ****************************************** //
         }
     }

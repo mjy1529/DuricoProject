@@ -247,7 +247,7 @@ public class StoryPlayActivity extends AppCompatActivity {
 
         //인물카드들 중에 검색하여 popUpCards에 추가1
         for (int i = 0; i < peopleCardList.size(); i++) {
-            if (peopleCardList.get(i).getMap2_id() == map2_id) {
+            if (peopleCardList.get(i).getMap2_id() != 0 && peopleCardList.get(i).getMap2_id() == map2_id) {
                 popUpCards.add(peopleCardList.get(i));
             }
         }

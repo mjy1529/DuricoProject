@@ -72,7 +72,8 @@ public class StoryListActivity extends AppCompatActivity {
         mHorizonView.setLayoutManager(mLayoutManger);
         mHorizonView.setHasFixedSize(true);
 
-        if (StoryListManager.getInstance().getStoryList().size() != 0) {
+        if (StoryListManager.getInstance().getStoryList() != null
+                && StoryListManager.getInstance().getStoryList().size() != 0) {
             horizonAdapter = new HorizonAdapter(StoryListActivity.this, StoryListManager.getInstance().getStoryList());
             mHorizonView.setAdapter(horizonAdapter);
         }
