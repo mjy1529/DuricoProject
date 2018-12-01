@@ -10,24 +10,36 @@ import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
+//import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 
 import com.example.tourproject.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -39,12 +51,26 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import static android.content.ContentValues.TAG;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MyJobService extends JobService {
+public class MyJobService extends JobService implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        com.google.android.gms.location.LocationListener {
     JobParameters params;
     DoItTask doIt;
     NotificationCompat.Builder builder;
@@ -54,13 +80,50 @@ public class MyJobService extends JobService {
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
     public static boolean bAppRunned = false;
+    public static boolean finished = false;
+
+    private GoogleApiClient mGoogleApiClient = null;
+    private GoogleMap mGoogleMap = null;
+    private Marker currentMarker = null;
+
+    private static final String TAG = "googlemap_example";
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
+    private static final int UPDATE_INTERVAL_MS = 10800000;  // 5초_1초 60000이 1분
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 10800000; // 1초_0.5초
+
+    private AppCompatActivity mActivity;
+    boolean askPermissionOnceAgain = false;
+    boolean mRequestingLocationUpdates = false;
+    Location mCurrentLocatiion;
+    LatLng currentPosition;
+
+    LocationRequest locationRequest = new LocationRequest()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(UPDATE_INTERVAL_MS)
+            .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS);
+
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         this.params = jobParameters;
-        setGps();
+        finished = false;
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        onStart();
+        //setGps();
+        if (mGoogleApiClient.isConnected()) {
+
+            Log.d(TAG, "onResume : call startLocationUpdates");
+            if (!mRequestingLocationUpdates) startLocationUpdates();
+        }
         doIt = new DoItTask();
         doIt.execute();
+
+
         return true;
     }
 
@@ -68,9 +131,189 @@ public class MyJobService extends JobService {
     public boolean onStopJob(JobParameters jobParameters) {
         if (doIt != null) {
             bAppRunned = false;
+            onStop();
             doIt.cancel(true);
         }
         return true;
+    }
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if ( mRequestingLocationUpdates == false ) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                int hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+
+                if (hasFineLocationPermission == PackageManager.PERMISSION_DENIED) {
+
+                    /*ActivityCompat.requestPermissions(mActivity,
+                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);*/
+
+                } else {
+
+                    Log.d(TAG, "onConnected : 퍼미션 가지고 있음");
+                    Log.d(TAG, "onConnected : call startLocationUpdates");
+                    startLocationUpdates();
+                }
+
+            }else{
+
+                Log.d(TAG, "onConnected : call startLocationUpdates");
+                startLocationUpdates();
+                mGoogleMap.setMyLocationEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "onConnectionSuspended");
+        /*if (cause == CAUSE_NETWORK_LOST)
+            Log.e(TAG, "onConnectionSuspended(): Google Play services " +
+                    "connection lost.  Cause: network lost.");
+        else if (cause == CAUSE_SERVICE_DISCONNECTED)
+            Log.e(TAG, "onConnectionSuspended():  Google Play services " +
+                    "connection lost.  Cause: service disconnected");*/
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed");
+        LatLng DEFAULT_LOCATION = new LatLng(0, 0);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        currentPosition = new LatLng( location.getLatitude(), location.getLongitude());
+        mapy = location.getLatitude();
+        mapx = location.getLongitude();
+        Log.d(TAG, "onLocationChanged : ");
+        String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
+                + " 경도:" + String.valueOf(location.getLongitude());
+        Log.d("onLocationChanged : " , markerSnippet);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                //listView = (ListView)findViewById(R.id.list);
+                Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
+                Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
+                finished = false;
+                find(mapx, mapy, 12);
+                find(mapx, mapy, 14);
+                find2000(mapx, mapy, 12);
+                find2000(mapx, mapy, 14);
+            }
+        }).start();
+        mCurrentLocatiion = location;
+    }
+    //@Override
+    protected void onStart() {
+
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected() == false){
+
+            Log.d(TAG, "onStart: mGoogleApiClient connect");
+            mGoogleApiClient.connect();
+        }
+
+        //super.onStart();
+    }
+
+    protected void onStop() {
+
+        if (mRequestingLocationUpdates) {
+
+            Log.d(TAG, "onStop : call stopLocationUpdates");
+            stopLocationUpdates();
+        }
+
+        if ( mGoogleApiClient.isConnected()) {
+
+            Log.d(TAG, "onStop : mGoogleApiClient disconnect");
+            mGoogleApiClient.disconnect();
+        }
+
+        //super.onStop();
+    }
+    public String getCurrentAddress(LatLng latlng) {
+        //지오코더... GPS를 주소로 변환
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(
+                    latlng.latitude,
+                    latlng.longitude,
+                    1);
+        } catch (IOException ioException) {
+            //네트워크 문제
+            Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
+            return "지오코더 서비스 사용불가";
+        } catch (IllegalArgumentException illegalArgumentException) {
+            Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+            return "잘못된 GPS 좌표";
+
+        }
+        if (addresses == null || addresses.size() == 0) {
+            Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+            return "주소 미발견";
+
+        } else {
+            Address address = addresses.get(0);
+            return address.getAddressLine(0).toString();
+        }
+
+    }
+    private void startLocationUpdates() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d(TAG, "startLocationUpdates : 퍼미션 안가지고 있음");
+            return;
+        }
+        Log.d(TAG, "startLocationUpdates : call FusedLocationApi.requestLocationUpdates");
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+        mRequestingLocationUpdates = true;
+    }
+    public boolean checkLocationServicesStatus() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+
+            case GPS_ENABLE_REQUEST_CODE:
+
+                //사용자가 GPS 활성 시켰는지 검사
+                if (checkLocationServicesStatus()) {
+                    if (checkLocationServicesStatus()) {
+                        Log.d(TAG, "onActivityResult : 퍼미션 가지고 있음");
+
+                        if ( mGoogleApiClient.isConnected() == false ) {
+                            Log.d( TAG, "onActivityResult : mGoogleApiClient connect ");
+                            mGoogleApiClient.connect();
+                        }
+                        return;
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void stopLocationUpdates() {
+
+        Log.d(TAG,"stopLocationUpdates : LocationServices.FusedLocationApi.removeLocationUpdates");
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mRequestingLocationUpdates = false;
     }
 
     private class DoItTask extends AsyncTask<Void, Void, Void> {
@@ -313,6 +556,8 @@ public class MyJobService extends JobService {
             Log.i("catch에러!", String.valueOf(data2.size()));
         }
         Log.i("find2 함수 끝냈다", String.valueOf(data2.size()));
+        if(contentTypeNum == 14)
+            finished = true;
     }//getXmlData method....
 
     static private Bitmap getImageBitmap(String url) {
@@ -332,34 +577,6 @@ public class MyJobService extends JobService {
         return bm;
     }
 
-    public void setGps() {
-        Log.i("잡서비스 함수들어갑니다.", "setGps");
-
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setCostAllowed(false);
-
-        String provider = lm.getBestProvider(criteria, true);
-
-        //String provider = LocationManager.PASSIVE_PROVIDER;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000 * 60 * 180, // 통지사이의 최소 시간간격 (miliSecond)
-                10, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-    }
-
     public double getMapx(){
         return mapx;
     }
@@ -367,39 +584,5 @@ public class MyJobService extends JobService {
         return mapy;
     }
 
-    static private final LocationListener mLocationListener = new LocationListener() {
 
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.i("함수들어갑니다.","onLocationChanged");
-            if (location != null) {
-                mapy = location.getLatitude();
-                mapx = location.getLongitude();
-
-                Log.d("위치테스트", "정확도 : " + location.getAccuracy());
-                Log.d("위치테스트", "제공자 : " + location.getProvider());
-                Log.d("위치테스트", "위도 : " + location.getLatitude());
-                Log.d("위치테스트", "경도 : " + location.getLongitude());
-            }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub
-                    //listView = (ListView)findViewById(R.id.list);
-                    Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
-                    Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
-                    find(mapx, mapy, 12);
-                    find(mapx, mapy, 14);
-                    find2000(mapx, mapy, 12);
-                    find2000(mapx, mapy, 14);
-                }
-            }).start();
-        }
-        public void onProviderDisabled(String provider) {
-        }
-        public void onProviderEnabled(String provider) {
-        }
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
 }

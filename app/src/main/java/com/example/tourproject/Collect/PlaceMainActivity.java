@@ -29,6 +29,7 @@ import com.example.tourproject.Util.UserManager;
 
 import static com.example.tourproject.Collect.MyJobService.data;
 import static com.example.tourproject.Collect.MyJobService.data2;
+import static com.example.tourproject.Collect.MyJobService.mapx;
 import static com.example.tourproject.Collect.MyJobService.mapy;
 
 
@@ -49,7 +50,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
 //        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_main);
-        com.example.tourproject.Collect.MyJobService.bAppRunned = true;
+        MyJobService.bAppRunned = true;
 
         if (MainActivity.progressDialog != null)
             MainActivity.progressDialog.dismiss();
@@ -70,7 +71,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             data2.clear();
             //setGps();
         }
-        if (data2.size() == 0 && mapy == 0) {
+        if(mapx == 0 && mapy == 0){
             //Log.i("data2가 없습니다.", ",,");
             AlertDialog.Builder Check = new AlertDialog.Builder(PlaceMainActivity.this);
             Check.setTitle("탐색 불가")

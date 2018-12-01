@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         TedPermission.with(MainActivity.this)
             .setPermissionListener(permissionlistener)
             .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
-            .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
+            .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.\n")
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
             .check();
 
@@ -270,6 +270,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     public void onClick(DialogInterface dialogInterface, int i) {
                         s = 1;
                         dialogInterface.dismiss();
+                        if(TedPermission.isGranted(MainActivity.this, "Manifest.permission.ACCESS_FINE_LOCATION", "Manifest.permission.ACCESS_COARSE_LOCATION"))
+                        {
+                            while (!MyJobService.finished) ;
+                        }
                         new Handler().postDelayed(new Runnable()
                         {
                             @Override
@@ -407,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         @Override
         public void onPermissionDenied(List<String> deniedPermissions) {
-            Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "권한 거부", Toast.LENGTH_SHORT).show();
             finish();
         }
     };
