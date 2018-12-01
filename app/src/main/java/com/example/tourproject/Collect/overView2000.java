@@ -8,11 +8,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
@@ -57,6 +60,7 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
     Context mContext = null;
     String mapx = "";
     String mapy = "";
+    TextView p_t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +87,10 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
             public void run() {
                 // TODO Auto-generated method stub
 
-                placeTitleView = (TextView)findViewById(R.id.placeTitle);
+                Button home = (Button) findViewById(R.id.home);
+                p_t = (TextView) findViewById(R.id.p_t);
+
+                //placeTitleView = (TextView)findViewById(R.id.placeTitle);
                 imgView = (ImageView)findViewById(R.id.imageview);
                 title1View = (TextView)findViewById(R.id.title1);
                 overviewView = (TextView)findViewById(R.id.overview);
@@ -102,7 +109,8 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        placeTitleView.setText(item.getTitle());
+                        //placeTitleView.setText(item.getTitle());
+                        p_t.setText(item.getTitle());
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
                         useInfoView.setText(item.getUseInfo());
@@ -289,5 +297,12 @@ public class overView2000 extends AppCompatActivity implements TMapGpsManager.on
     @Override
     public void onLocationChange(Location location) {
 
+    }
+    public void clickEvent(View v) {
+        if (v.getId() == R.id.home) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 }
