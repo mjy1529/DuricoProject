@@ -70,7 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         if(checkInternet()) {
             setStoryListManager();
             getCardList();
-            setMapDataManager();
+
             getUserMap2State(userManager.getUserId());
 
             getOpenPeopleCardIdx(userManager.getUserId());
@@ -174,47 +174,6 @@ public class SplashActivity extends AppCompatActivity {
         peopleCardList.clear();
         gachaCardList.clear();
         storyCardList.clear();
-    }
-
-    public void setMapDataManager() {
-        Call<Map1Result> request = networkService.getAllMap1List();
-        request.enqueue(new Callback<Map1Result>() {
-            @Override
-            public void onResponse(Call<Map1Result> call, Response<Map1Result> response) {
-                if (response.isSuccessful()) {
-                    Map1Result map1Result = response.body();
-                    mapManager.setMapList(map1Result.map1);
-                    for (int i = 0; i < mapManager.getMapList().size(); i++) {
-                        getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
-                    }
-                    Log.d(TAG, "MAP 받아오기 성공");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map1Result> call, Throwable t) {
-                Log.d(TAG, "MAP 받아오기 실패");
-            }
-        });
-    }
-
-    public void getMap2(final String map1_id) {
-        Call<Map2Result> request = networkService.getMap2List(map1_id);
-        request.enqueue(new Callback<Map2Result>() {
-            @Override
-            public void onResponse(Call<Map2Result> call, Response<Map2Result> response) {
-                if (response.isSuccessful()) {
-                    Map2Result map2Result = response.body();
-                    ArrayList<Map2Data> map2List = map2Result.map2;
-
-                    mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map2Result> call, Throwable t) {
-            }
-        });
     }
 
     public void setStoryListManager() {
