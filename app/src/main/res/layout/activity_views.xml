@@ -15,7 +15,7 @@
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         android:padding="10dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <FrameLayout
         android:layout_width="match_parent"

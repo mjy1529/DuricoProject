@@ -77,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(SplashActivity.this, "서버와 통신중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashActivity.this, "서버와 통신중입니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
                 }
             }, 3000);
 
