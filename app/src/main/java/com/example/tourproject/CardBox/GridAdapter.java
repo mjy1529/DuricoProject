@@ -93,16 +93,14 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
 
             if (isOpen) { //카드가 오픈되어 있을 때만 카드 이미지 확인 및 클릭 가능
                 holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                holder.grid_card_lock.setScaleType(ImageView.ScaleType.CENTER);
                 Glide.with(context)
                         .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
                         .into(holder.grid_card_image);
+                holder.grid_card_lock.setVisibility(View.INVISIBLE);
 
                 if (data.getCard_image_url().equals(UserManager.getInstance().getUser_card_url())) {
-                    if(p == 0)
-                        holder.grid_select.setBackgroundResource(R.drawable.selected_2);
-                    else if(p == 1)
-                        holder.grid_select.setBackgroundResource(R.drawable.selected_3);
-                    else
+                    if(p == 2)
                         holder.grid_select.setBackgroundResource(R.drawable.selected);
                     holder.grid_select.setVisibility(View.VISIBLE);
                     s = data.getCard_idx();
@@ -124,18 +122,25 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
 
             } else {
                 //holder.grid_card_image.setBackgroundResource(R.drawable.lock);
-                holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER);
+                holder.grid_card_lock.setVisibility(View.VISIBLE);
+                holder.grid_card_image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                Glide.with(context)
+                        .load(Application.getInstance().getBaseImageUrl() + data.getCard_image_url())
+                        .into(holder.grid_card_image);
+                holder.grid_card_lock.setScaleType(ImageView.ScaleType.CENTER);
                 if(p == 0)
-                    Glide.with(context).load(R.drawable.lock_2).into(holder.grid_card_image);
+                    Glide.with(context).load(R.drawable.lock_2).into(holder.grid_card_lock);
                 else if(p == 1)
-                    Glide.with(context).load(R.drawable.lock_3).into(holder.grid_card_image);
+                    Glide.with(context).load(R.drawable.lock_3).into(holder.grid_card_lock);
                 else
-                    Glide.with(context).load(R.drawable.lock).into(holder.grid_card_image);
+                    Glide.with(context).load(R.drawable.lock).into(holder.grid_card_lock);
                 holder.grid_select.setVisibility(View.INVISIBLE);
             }
 
             holder.grid_card_image.setBackground(drawable);
+            holder.grid_card_lock.setBackground(drawable);
             holder.grid_card_image.setClipToOutline(true);
+            holder.grid_card_lock.setClipToOutline(true);
 
         } else {
             Glide.with(context).load(placeCardList.get(position)).into(holder.grid_card_image);

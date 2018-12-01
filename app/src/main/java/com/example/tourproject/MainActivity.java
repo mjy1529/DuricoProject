@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     ImageButton btn1;
     ImageButton btn2;
     ImageButton btn3;
+
+    int s = 0;
+
     public static Context mContext;
 
     public static final String TAG = "MainActivity";
@@ -188,12 +191,15 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
     public void doCollect(){
+        s = 0;
         AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
         Check.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                progressDialog = ProgressDialog.show(MainActivity.this,"잠시 기다려주세요", "위치를 찾고있습니다.", true);
-                progressDialog.onStart();
+                if(s == 1) {
+                    progressDialog = ProgressDialog.show(MainActivity.this, "잠시 기다려주세요", "위치를 찾고있습니다.", true);
+                    progressDialog.onStart();
+                }
             }
         });
         Check.setTitle("사용자 위치 재탐색")
@@ -201,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 .setPositiveButton("탐색하여 관광지 재구성", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        s = 1;
                         recreate();
                         dialog.dismiss();
                         new Handler().postDelayed(new Runnable()
@@ -219,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 .setNegativeButton("재탐색 없이 계속", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        s = 1;
                         dialogInterface.dismiss();
                         new Handler().postDelayed(new Runnable()
                         {
