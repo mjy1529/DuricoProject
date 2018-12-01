@@ -1,12 +1,15 @@
 package com.example.tourproject;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -29,6 +32,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardData;
 import com.example.tourproject.Network.NetworkService;
+import com.example.tourproject.StoryPlay.StoryPlayActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.UserManager;
@@ -116,6 +120,45 @@ public class GachaActivity extends AppCompatActivity{
                 }
             }
         });
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        cm.registerNetworkCallback(
+                builder.build(),
+                new ConnectivityManager.NetworkCallback()
+                {
+                    @Override
+                    public void onAvailable( Network network )
+                    {
+                        //네트워크 연결됨
+                    }
+
+                    @Override
+                    public void onLost( Network network )
+                    {
+                        //네트워크 끊어짐
+                        AlertDialog.Builder alert = new AlertDialog.Builder(GachaActivity.this);
+                        alert.setTitle("네트워크");
+                        alert.setMessage("네트워크가 연결되지 않았습니다.");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = getBaseContext().getPackageManager().
+                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+                        });
+                        try {
+                            alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                } );
     }
 
     public void doActionbar(){
@@ -282,28 +325,6 @@ public class GachaActivity extends AppCompatActivity{
                         startTimer();
                     }
                 }
-            }
-        }
-        else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("네트워크");
-            alert.setMessage("네트워크가 연결되지 않았습니다.");
-            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = getBaseContext().getPackageManager().
-                            getLaunchIntentForPackage(getBaseContext().getPackageName());
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                }
-            });
-            try {
-                alert.show();
-            }
-            catch (WindowManager.BadTokenException e) {
-                //use a log message
             }
         }
     }
