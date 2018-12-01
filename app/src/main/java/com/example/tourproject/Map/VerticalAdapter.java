@@ -149,7 +149,9 @@ public class VerticalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return verticalDatas.size();
+        if(verticalDatas != null) {
+            return verticalDatas.size();
+        } else return 0;
     }
 
     public class Map2ViewHolder extends RecyclerView.ViewHolder {

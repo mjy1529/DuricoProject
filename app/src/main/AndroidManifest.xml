@@ -24,7 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
             android:name=".SplashActivity"
+            android:clearTaskOnLaunch="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,16 +35,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StoryList.StoryListActivity" />
-        <activity android:name=".StoryPlay.StoryPlayActivity" />
-        <activity android:name=".Map.MapActivity" />
-        <activity android:name=".Collect.overView" />
-        <activity android:name=".Collect.overView2000" />
-        <activity android:name=".Collect.PlaceMainActivity" />
+        <activity android:name=".StoryList.StoryListActivity"
+            android:allowBackup="true"/>
+        <activity android:name=".StoryPlay.StoryPlayActivity"
+            android:allowBackup="true"/>
+        <activity android:name=".Map.MapActivity"
+            android:allowBackup="true"/>
+        <activity android:name=".Collect.overView"
+            android:allowBackup="true"/>
+        <activity android:name=".Collect.overView2000"
+            android:allowBackup="true"/>
+        <activity android:name=".Collect.PlaceMainActivity"
+            android:allowBackup="true"/>
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".GachaActivity" />
-        <activity android:name=".CardBox.CardBoxActivity" />
+        <activity android:name=".MainActivity"
+            android:allowBackup="true"/>
+        <activity android:name=".GachaActivity"
+            android:allowBackup="true"/>
+        <activity android:name=".CardBox.CardBoxActivity"
+            android:allowBackup="true"/>
 
         <service
             android:name=".Collect.MyJobService"

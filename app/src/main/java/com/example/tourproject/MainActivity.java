@@ -433,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("아아아", Integer.toString(SplashActivity.state));
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
         pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);

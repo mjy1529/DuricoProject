@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
+import com.example.tourproject.SplashActivity;
 import com.example.tourproject.Util.UserManager;
 
 import retrofit2.http.HEAD;
@@ -90,12 +91,11 @@ public class CardBoxActivity extends AppCompatActivity {
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = getBaseContext().getPackageManager().
-                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                                 finish();
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
+                                dialog.dismiss();
                             }
                         });
                         try {

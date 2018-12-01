@@ -26,6 +26,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.MainActivity;
+import com.example.tourproject.SplashActivity;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Network.NetworkService;
@@ -96,12 +98,18 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                /*
                                 Intent i = getBaseContext().getPackageManager().
                                         getLaunchIntentForPackage(getBaseContext().getPackageName());
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                dialog.dismiss();
                                 finish();
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
+                                startActivity(i);*/
+                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
                                 dialog.dismiss();
                             }
                         });
@@ -213,11 +221,11 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
     }
 
     public void setMap2(int position) {
-        if (selectedStoryMap.size() != 0) {
+        if (selectedStoryMap != null && selectedStoryMap.size() != 0) {
             onBtn(position);
             textView2.setText(selectedStoryMap.get(position).map1_title);
-            mAdapter = new VerticalAdapter(this, selectedStoryMap.get(position).map2List);
-            mHorizonView.setAdapter(mAdapter);
+                mAdapter = new VerticalAdapter(this, selectedStoryMap.get(position).map2List);
+                mHorizonView.setAdapter(mAdapter);
         }
     }
 

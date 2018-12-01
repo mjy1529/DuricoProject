@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.tourproject.CardBox.CardData;
 import com.example.tourproject.CardBox.CardResult;
 import com.example.tourproject.CardBox.OpenPeopleCard;
 import com.example.tourproject.CardBox.OpenStoryCard;
@@ -49,11 +50,14 @@ public class SplashActivity extends AppCompatActivity {
     NetworkService networkService;
 
     public final static String TAG = "SPLASH";
+    public static int state = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        state = 2;
 
         handler = new Handler();
         networkService = Application.getInstance().getNetworkService();
@@ -121,12 +125,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Intent i = getBaseContext().getPackageManager().
-                                getLaunchIntentForPackage(getBaseContext().getPackageName());
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
                     }
                 });
         alert.setCancelable(false);
@@ -134,6 +133,10 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void getCardList() {
+        final ArrayList<CardData> peopleCardList = new ArrayList<>();
+        final ArrayList<CardData> gachaCardList = new ArrayList<>();
+        final ArrayList<CardData> storyCardList = new ArrayList<>();
+
         Call<CardResult> request = networkService.getCard();
         request.enqueue(new Callback<CardResult>() {
             @Override
@@ -143,15 +146,22 @@ public class SplashActivity extends AppCompatActivity {
                     for(int i=0; i<cardResult.card.size(); i++) {
                         switch (cardResult.card.get(i).getCard_category()) {
                             case "people" :
-                                cardManager.getPeopleCardList().add(cardResult.card.get(i));
-                                cardManager.getGachaCardList().add(cardResult.card.get(i));
+                                //cardManager.getPeopleCardList().add(cardResult.card.get(i));
+                                //cardManager.getGachaCardList().add(cardResult.card.get(i));
+                                peopleCardList.add(cardResult.card.get(i));
+                                gachaCardList.add(cardResult.card.get(i));
                                 break;
                             case "story" :
-                                cardManager.getStoryCardList().add(cardResult.card.get(i));
+                                //cardManager.getStoryCardList().add(cardResult.card.get(i));
+                                storyCardList.add(cardResult.card.get(i));
                                 break;
                         }
                     }
+                    cardManager.setPeopleCardList(peopleCardList);
+                    cardManager.setGachaCardList(gachaCardList);
+                    cardManager.setStoryCardList(storyCardList);
                     Log.d(TAG, "PEOPLE, STORY CARD 받아오기 성공");
+
                 }
             }
 
@@ -160,6 +170,10 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(TAG, "PEOPLE, STORY CARD 받아오기 실패");
             }
         });
+
+        peopleCardList.clear();
+        gachaCardList.clear();
+        storyCardList.clear();
     }
 
     public void setMapDataManager() {
