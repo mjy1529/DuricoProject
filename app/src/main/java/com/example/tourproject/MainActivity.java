@@ -13,7 +13,9 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -75,12 +78,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        TedPermission.with(MainActivity.this)
-//                .setPermissionListener(permissionlistener)
-//                .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
-//                .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
-//                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
-//                .check();
+        TedPermission.with(MainActivity.this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
+                .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
+                .check();
 
         mContext = this;
 
@@ -130,6 +133,45 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
 
         backPressCloseHandler = new BackPressCloseHandler(this);
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        cm.registerNetworkCallback(
+                builder.build(),
+                new ConnectivityManager.NetworkCallback()
+                {
+                    @Override
+                    public void onAvailable( Network network )
+                    {
+                        //네트워크 연결됨
+                    }
+
+                    @Override
+                    public void onLost( Network network )
+                    {
+                        //네트워크 끊어짐
+                        android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
+                        alert.setTitle("네트워크");
+                        alert.setMessage("네트워크가 연결되지 않았습니다.");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = getBaseContext().getPackageManager().
+                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+                        });
+                        try {
+                            alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                } );
     }
 
     public boolean onTouch(View v, MotionEvent event){
@@ -349,17 +391,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
 
-//    PermissionListener permissionlistener = new PermissionListener() {
-//        @Override
-//        public void onPermissionGranted() {
-//            //Toast.makeText(MainActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        @Override
-//        public void onPermissionDenied(List<String> deniedPermissions) {
-//            //Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-//        }
-//    };
+    PermissionListener permissionlistener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            //Toast.makeText(MainActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPermissionDenied(List<String> deniedPermissions) {
+            Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+    };
 
     // 뒤로가기 두번 누를 시 앱 종료
     @Override

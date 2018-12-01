@@ -175,9 +175,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         updateUserCard(data);
-
-                        Log.d("그리드 어댑터", data.toString());
-
                         dialog.dismiss();
                         ((MainActivity) MainActivity.mContext).changeProfileImage(data.getCard_image_url());
                         notifyDataSetChanged();

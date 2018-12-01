@@ -15,21 +15,21 @@
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         android:padding="10dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <ImageButton
-            android:id="@+id/btnCard"
-            style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="0"
-            android:gravity="center"
-            android:background="@drawable/main" />
+    <ImageButton
+        android:id="@+id/btnCard"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0"
+        android:background="@drawable/main"
+        android:gravity="center" />
 
     <LinearLayout
         style="?android:attr/buttonBarButtonStyle"
