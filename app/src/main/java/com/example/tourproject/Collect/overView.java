@@ -8,8 +8,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.MainActivity;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
@@ -76,10 +81,30 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
     String imageSrcUrl = "";
     String insertPlaceCardMessage;
 
+    TextView p_t;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_over_view);
+
+        //액션바-------------------------------
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(myToolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        //Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+//        actionBar.setDisplayShowCustomEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(false);            //액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+//        actionBar.setDisplayShowTitleEnabled(false);        //액션바에 표시되는 제목의 표시유무를 설정합니다.
+//        actionBar.setDisplayShowHomeEnabled(false);            //홈 아이콘을 숨김처리합니다.
+//
+//        //layout을 가지고 와서 actionbar에 포팅을 시킵니다.
+//        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar3, null);
+//        actionBar.setCustomView(mCustomView);//\\
+//
+        Button home = (Button) findViewById(R.id.home);
+        p_t = (TextView) findViewById(R.id.p_t);
+        //여기까지------------------------------
 
         mContext = this;
         Intent intent = getIntent();
@@ -102,7 +127,7 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
             public void run() {
                 // TODO Auto-generated method stub
 
-                placeTitleView = (TextView) findViewById(R.id.placeTitle);
+                //placeTitleView = (TextView) findViewById(R.id.placeTitle);
                 imgView = (ImageView) findViewById(R.id.imageview);
                 collectBtn = (Button) findViewById(R.id.collectbtn);
                 title1View = (TextView) findViewById(R.id.title1);
@@ -123,7 +148,8 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
                         // TODO Auto-generated method stub
                         if (imagesrc == null)
                             collectBtn.setVisibility(View.GONE);
-                        placeTitleView.setText(item.getTitle());
+                        p_t.setText(item.getTitle());
+                        //placeTitleView.setText(item.getTitle());
                         imgView.setImageBitmap(item.getImage());
                         overviewView.setText(item.getAddr() + "\n" + item.getOverview());
                         useInfoView.setText(item.getUseInfo());
@@ -375,5 +401,13 @@ public class overView extends AppCompatActivity implements TMapGpsManager.onLoca
             }
         });
         MyDialog.show();
+    }
+
+    public void clickEvent(View v) {
+        if (v.getId() == R.id.home) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 }
