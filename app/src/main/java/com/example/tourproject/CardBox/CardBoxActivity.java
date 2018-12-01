@@ -51,11 +51,11 @@ public class CardBoxActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         View tab1 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(0);
-        tab1.setBackgroundResource(R.drawable.tab_layout2);
+        tab1.setBackgroundResource(R.drawable.tab_layout);
         View tab2 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(1);
         tab2.setBackgroundResource(R.drawable.tab_layout3);
         View tab3 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(2);
-        tab3.setBackgroundResource(R.drawable.tab_layout);
+        tab3.setBackgroundResource(R.drawable.tab_layout2);
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -118,11 +118,11 @@ public class CardBoxActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new FirstCardFragment();
+                    return new ThirdCardFragment();
                 case 1:
                     return new SecondCardFragment();
                 case 2:
-                    return new ThirdCardFragment();
+                    return new FirstCardFragment();
             }
             return null;
         }

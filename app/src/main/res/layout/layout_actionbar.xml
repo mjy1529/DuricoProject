@@ -17,8 +17,9 @@
         android:id="@+id/pecardCnt"
         android:layout_width="60dp"
         android:layout_height="28dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="138dp"
         android:background="@drawable/r"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
@@ -44,15 +45,13 @@
         android:id="@+id/pcardCnt"
         android:layout_width="60dp"
         android:layout_height="28dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="138dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/y"
         android:fontFamily="@font/gulim050"
         android:paddingLeft="36dp"
         android:textColor="#ffce73"
         android:paddingTop="7dp"
         android:text="12" />
-
 
 </RelativeLayout>

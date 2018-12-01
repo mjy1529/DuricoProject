@@ -35,7 +35,7 @@
                 android:id="@+id/tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="장소카드" />
+                android:text="인물카드" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem2"
@@ -47,7 +47,8 @@
                 android:id="@+id/tabItem3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="인물카드" />
+                android:text="장소카드" />
+
         </android.support.design.widget.TabLayout>
 
     </RelativeLayout>
@@ -58,4 +59,5 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/rel"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 </RelativeLayout>
