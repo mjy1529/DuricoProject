@@ -11,7 +11,15 @@
         android:layout_height="200dp"
         android:background="@drawable/a_6"
         android:outlineProvider="background"
-        android:scaleType="centerInside" />
+    android:scaleType="centerInside" />
+
+    <ImageView
+        android:id="@+id/grid_card_image_lock"
+        android:layout_width="130dp"
+        android:layout_height="200dp"
+        android:outlineProvider="background"
+        android:visibility="visible"
+        android:scaleType="center" />
 
     <ImageView
         android:id="@+id/grid_select"
