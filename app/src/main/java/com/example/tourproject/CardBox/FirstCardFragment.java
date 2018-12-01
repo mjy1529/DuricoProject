@@ -34,8 +34,9 @@ public class FirstCardFragment extends Fragment {
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
         r = (RelativeLayout)view.findViewById(R.id.fragment);
 
-        r.setBackgroundResource(R.drawable.test3_2);
+        r.setBackgroundResource(R.drawable.yellow_background);
         setPlaceCard();
+
         return view;
     }
 

@@ -182,80 +182,122 @@ public class StoryPlayActivity extends AppCompatActivity {
         //해당 이야기에 맞는 카드가 있는지 검색하기
         popUpCards = findCard();
 
-//        //해당 이야기에 맞는 카드가 있을 때 처리
-//        if(popUpCards != null) {
-//            for (int i = 0; i < popUpCards.size(); i++) {
-//                if (popUpCards.get(i).getMap2_id() != 0) {
-//                    if (popUpCards.get(i).getCard_category().equals("people")) {
-//                        showPeopleCardDialog(popUpCards.get(i));
-//                        updateOpenPeopleCard(popUpCards.get(i)); //오픈 인물카드 업데이트
-//                    } else if (popUpCards.get(i).getCard_category().equals("story")) {
-//                        showStoryCardDialog(popUpCards.get(i));
-//                        updateOpenStoryCard(popUpCards.get(i)); //오픈 스토리카드 업데이트
+//        tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                i++;
+//                if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
+//                    isName(storyPlayList.get(i).getPerson_name());
+//                    tv.setText(storyPlayList.get(i).getPlay_content());
+//                    log += storyPlayList.get(i).getPlay_content() + "\n\n";
+//                    Glide.with(StoryPlayActivity.this)
+//                            .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(i).getPlay_image_url())
+//                            .into(imageView);
+//
+//                } else if (i == v_cnt) { // 마지막 페이지일 때
+//                    //DB map2 상태 업데이트
+//                    updateMap2State(map2_id);
+//
+//                    //UserManager의 map2State 업데이트
+//                    UserManager userManager = UserManager.getInstance();
+//                    for (int i = 0; i < userManager.getMap2StateList().size(); i++) {
+//                        //첫번째 이야기이고 현재 map2_id와 일치하는 userManager의 map2StateList를 업데이트 시킨다.
+//                        if (userManager.getMap2StateList().get(i).getMap2_id() == map2_id
+//                                && userManager.getMap2StateList().get(i).getMap2_position() == 1) {
+//                            userManager.getMap2StateList().get(i).setMap2_state(0);
+//                            userManager.getMap2StateList().get(i + 2).setMap2_state(1);
+//                            break;
+//                        }
 //                    }
+//                    MapActivity.mAdapter.notifyDataSetChanged();
+//
+//                    if (popUpCards == null) {
+//                        finish();
+//                    } else {
+//                        if (popUpCards.get(0).getCard_category().equals("people")) {
+//                            updateOpenPeopleCard(popUpCards.get(0)); //오픈 인물카드 업데이트
+//                            showPeopleCardDialog(popUpCards.get(0));
+//                        } else if (popUpCards.get(0).getCard_category().equals("story")) {
+//                            updateOpenStoryCard(popUpCards.get(0)); //오픈 스토리카드 업데이트
+//                            showStoryCardDialog(popUpCards.get(0));
+//                        }
+//                    }
+//
+//                } else if (i == (v_cnt + 1)) {
+//                    if (popUpCards.size() == 2) {
+//                        if (popUpCards.get(1).getCard_category().equals("people")) {
+//                            updateOpenPeopleCard(popUpCards.get(1)); //오픈 인물카드 업데이트
+//                            showPeopleCardDialog(popUpCards.get(1));
+//                        } else if (popUpCards.get(1).getCard_category().equals("story")) {
+//                            updateOpenStoryCard(popUpCards.get(1)); //오픈 스토리카드 업데이트
+//                            showStoryCardDialog(popUpCards.get(1));
+//                        }
+//                    } else {
+//                        finish();
+//                    }
+//
+//                } else {
+//                    finish();
 //                }
 //            }
-//        }
+//        });
+    }
 
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                i++;
-                if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
-                    isName(storyPlayList.get(i).getPerson_name());
-                    tv.setText(storyPlayList.get(i).getPlay_content());
-                    log += storyPlayList.get(i).getPlay_content() + "\n\n";
-                    Glide.with(StoryPlayActivity.this)
-                            .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(i).getPlay_image_url())
-                            .into(imageView);
+    public void onClick(View view) {
+        i++;
+        if (i < v_cnt) { // 현재 페이지가 전체 뷰보다 작을 때 다음 view 보여주기
+            isName(storyPlayList.get(i).getPerson_name());
+            tv.setText(storyPlayList.get(i).getPlay_content());
+            log += storyPlayList.get(i).getPlay_content() + "\n\n";
+            Glide.with(StoryPlayActivity.this)
+                    .load(Application.getInstance().getBaseImageUrl() + storyPlayList.get(i).getPlay_image_url())
+                    .into(imageView);
 
-                } else if (i == v_cnt) { // 마지막 페이지일 때
-                    //DB map2 상태 업데이트
-                    updateMap2State(map2_id);
+        } else if (i == v_cnt) { // 마지막 페이지일 때
+            //DB map2 상태 업데이트
+            updateMap2State(map2_id);
 
-                    //UserManager의 map2State 업데이트
-                    UserManager userManager = UserManager.getInstance();
-                    for (int i = 0; i < userManager.getMap2StateList().size(); i++) {
-                        //첫번째 이야기이고 현재 map2_id와 일치하는 userManager의 map2StateList를 업데이트 시킨다.
-                        if (userManager.getMap2StateList().get(i).getMap2_id() == map2_id
-                                && userManager.getMap2StateList().get(i).getMap2_position() == 1) {
-                            userManager.getMap2StateList().get(i).setMap2_state(0);
-                            userManager.getMap2StateList().get(i + 2).setMap2_state(1);
-                            break;
-                        }
-                    }
-                    MapActivity.mAdapter.notifyDataSetChanged();
-
-                    if (popUpCards == null) {
-                        finish();
-                    } else {
-                        if (popUpCards.get(0).getCard_category().equals("people")) {
-                            updateOpenPeopleCard(popUpCards.get(0)); //오픈 인물카드 업데이트
-                            showPeopleCardDialog(popUpCards.get(0));
-                        } else if (popUpCards.get(0).getCard_category().equals("story")) {
-                            updateOpenStoryCard(popUpCards.get(0)); //오픈 스토리카드 업데이트
-                            showStoryCardDialog(popUpCards.get(0));
-                        }
-                    }
-
-                } else if (i == (v_cnt + 1)) {
-                    if (popUpCards.size() == 2) {
-                        if (popUpCards.get(1).getCard_category().equals("people")) {
-                            updateOpenPeopleCard(popUpCards.get(1)); //오픈 인물카드 업데이트
-                            showPeopleCardDialog(popUpCards.get(1));
-                        } else if (popUpCards.get(1).getCard_category().equals("story")) {
-                            updateOpenStoryCard(popUpCards.get(1)); //오픈 스토리카드 업데이트
-                            showStoryCardDialog(popUpCards.get(1));
-                        }
-                    } else {
-                        finish();
-                    }
-
-                } else {
-                    finish();
+            //UserManager의 map2State 업데이트
+            UserManager userManager = UserManager.getInstance();
+            for (int i = 0; i < userManager.getMap2StateList().size(); i++) {
+                //첫번째 이야기이고 현재 map2_id와 일치하는 userManager의 map2StateList를 업데이트 시킨다.
+                if (userManager.getMap2StateList().get(i).getMap2_id() == map2_id
+                        && userManager.getMap2StateList().get(i).getMap2_position() == 1) {
+                    userManager.getMap2StateList().get(i).setMap2_state(0);
+                    userManager.getMap2StateList().get(i + 2).setMap2_state(1);
+                    break;
                 }
             }
-        });
+            MapActivity.mAdapter.notifyDataSetChanged();
+
+            if (popUpCards == null) {
+                finish();
+            } else {
+                if (popUpCards.get(0).getCard_category().equals("people")) {
+                    updateOpenPeopleCard(popUpCards.get(0)); //오픈 인물카드 업데이트
+                    showPeopleCardDialog(popUpCards.get(0));
+                } else if (popUpCards.get(0).getCard_category().equals("story")) {
+                    updateOpenStoryCard(popUpCards.get(0)); //오픈 스토리카드 업데이트
+                    showStoryCardDialog(popUpCards.get(0));
+                }
+            }
+
+        } else if (i == (v_cnt + 1)) {
+            if (popUpCards.size() == 2) {
+                if (popUpCards.get(1).getCard_category().equals("people")) {
+                    updateOpenPeopleCard(popUpCards.get(1)); //오픈 인물카드 업데이트
+                    showPeopleCardDialog(popUpCards.get(1));
+                } else if (popUpCards.get(1).getCard_category().equals("story")) {
+                    updateOpenStoryCard(popUpCards.get(1)); //오픈 스토리카드 업데이트
+                    showStoryCardDialog(popUpCards.get(1));
+                }
+            } else {
+                finish();
+            }
+
+        } else {
+            finish();
+        }
     }
 
     //액션바 홈버튼 동작을 위한 메소드
@@ -361,7 +403,6 @@ public class StoryPlayActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
                 .into(cardimage);
-        Toast.makeText(this, "gacha!", Toast.LENGTH_SHORT).show();
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override

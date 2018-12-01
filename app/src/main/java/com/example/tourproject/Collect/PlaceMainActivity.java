@@ -93,7 +93,6 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         listView2.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), overView.class);

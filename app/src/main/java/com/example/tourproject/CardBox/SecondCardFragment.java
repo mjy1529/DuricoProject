@@ -29,9 +29,9 @@ public class SecondCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_first_card, container, false);
         card_number = (TextView) view.findViewById(R.id.card_number);
         card_recyclerView = (RecyclerView) view.findViewById(R.id.card_recyclerView);
-        r = (RelativeLayout)view.findViewById(R.id.fragment);
+        r = (RelativeLayout) view.findViewById(R.id.fragment);
 
-        r.setBackgroundResource(R.drawable.test3_3);
+        r.setBackgroundResource(R.drawable.green_background);
         setStoryCard();
 
         return view;

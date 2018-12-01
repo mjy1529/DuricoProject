@@ -15,7 +15,7 @@
         android:background="@null"
         android:minHeight="?android:attr/actionBarSize"
         android:padding="10dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,6 +33,7 @@
             android:layout_height="323dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/main_1" />
+
     </FrameLayout>
 
     <RelativeLayout
@@ -71,13 +72,31 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="-4dp"
-                android:background="@drawable/storybar"
-                android:fontFamily="@font/gulim070"
+                android:background="@drawable/storybar2"
+                android:fontFamily="@font/gulim030"
                 android:lineSpacingExtra="5dip"
-                android:padding="10dp"
+                android:onClick="onClick"
+                android:paddingBottom="18dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="18dp"
                 android:text="이야기"
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/playStoryTouchTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/content"
+                android:layout_alignRight="@+id/content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="15dp"
+                android:fontFamily="@font/gulim050"
+                android:onClick="onClick"
+                android:text="터치하여 다음 이야기로 >>"
+                android:textColor="#fff"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 

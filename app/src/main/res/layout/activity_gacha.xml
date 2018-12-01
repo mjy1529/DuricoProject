@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screen"
-    android:orientation="vertical"
     tools:context=".GachaActivity">
 
     <android.support.v7.widget.Toolbar
@@ -21,25 +20,30 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginBottom="35dp"
+        android:layout_below="@+id/toolbar"
         android:layout_marginLeft="15.5dp"
         android:layout_marginRight="15.5dp"
         android:layout_marginTop="30dp"
-        app:srcCompat="@drawable/main" />
+        android:background="@drawable/story_danchung" />
 
     <Button
         android:id="@+id/btn_pick"
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/a" />
+        android:layout_marginBottom="78dp"
+        android:background="@drawable/free_gacha_btn" />
 
     <TextView
         android:id="@+id/txt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_pick"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:fontFamily="@font/gulim050"
         android:text="TextView" />
 
-</LinearLayout>
+</RelativeLayout>
