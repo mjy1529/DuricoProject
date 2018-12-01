@@ -155,4 +155,15 @@ public class StoryListActivity extends AppCompatActivity {
         TextView p = (TextView) findViewById(R.id.pcardCnt);
         p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
     }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.pecardCnt:
+            case R.id.pcardCnt:
+            case R.id.scardCnt:
+                Intent intent = new Intent(StoryListActivity.this, CardBoxActivity.class);
+                startActivity(intent);
+        }
+    }
+
 }

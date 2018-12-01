@@ -32,7 +32,7 @@ import static com.example.tourproject.Collect.MyJobService.data2;
 import static com.example.tourproject.Collect.MyJobService.mapy;
 
 
-public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener{
+public class PlaceMainActivity extends AppCompatActivity implements AdapterView.OnClickListener {
 
     ListView listView;
     ListView listView2;
@@ -51,15 +51,15 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_place_main);
         com.example.tourproject.Collect.MyJobService.bAppRunned = true;
 
-        if(MainActivity.progressDialog != null)
+        if (MainActivity.progressDialog != null)
             MainActivity.progressDialog.dismiss();
         doActionbar();
 
         Button restart = (Button) findViewById(R.id.restart);
         restart.setOnClickListener(this);
-        listView = (ListView)findViewById(R.id.listview300);
-        listView2 = (ListView)findViewById(R.id.listview2000);
-        if(data2.size() == 0 && mapy != 0){
+        listView = (ListView) findViewById(R.id.listview300);
+        listView2 = (ListView) findViewById(R.id.listview2000);
+        if (data2.size() == 0 && mapy != 0) {
             //Log.i("data2가 없습니다.", ",,");
             AlertDialog.Builder Check = new AlertDialog.Builder(PlaceMainActivity.this);
             Check.setTitle("탐색 불가")
@@ -70,7 +70,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             data2.clear();
             //setGps();
         }
-        if(data2.size() == 0 && mapy == 0){
+        if (data2.size() == 0 && mapy == 0) {
             //Log.i("data2가 없습니다.", ",,");
             AlertDialog.Builder Check = new AlertDialog.Builder(PlaceMainActivity.this);
             Check.setTitle("탐색 불가")
@@ -83,11 +83,11 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         }
 
         Log.i("data2 전달됐어요", String.valueOf(data2.size()));
-        adapter=new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
+        adapter = new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        adapter2=new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
+        adapter2 = new com.example.tourproject.Collect.ListviewAdapter(PlaceMainActivity.this, R.layout.item, data2);
         adapter2.notifyDataSetChanged();
         listView2.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
@@ -117,21 +117,18 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             }
         });
 
-        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         cm.registerNetworkCallback(
                 builder.build(),
-                new ConnectivityManager.NetworkCallback()
-                {
+                new ConnectivityManager.NetworkCallback() {
                     @Override
-                    public void onAvailable( Network network )
-                    {
+                    public void onAvailable(Network network) {
                         //네트워크 연결됨
                     }
 
                     @Override
-                    public void onLost( Network network )
-                    {
+                    public void onLost(Network network) {
                         //네트워크 끊어짐
                         android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(PlaceMainActivity.this);
                         alert.setTitle("네트워크");
@@ -149,13 +146,13 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                         });
                         try {
                             alert.show();
-                        }
-                        catch (WindowManager.BadTokenException e) {
+                        } catch (WindowManager.BadTokenException e) {
                             //use a log message
                         }
                     }
-                } );
+                });
     }
+
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
             /*Intent intent = new Intent(PlaceMainActivity.this, MainActivity.class);
@@ -164,7 +161,7 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
-    public void doActionbar(){
+    public void doActionbar() {
         //액션바-------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -195,9 +192,9 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
             case android.R.id.home:
                 Intent intent = new Intent(PlaceMainActivity.this, MainActivity.class);
                 startActivity(intent);
-                return true ;
-            default :
-                return super.onOptionsItemSelected(item) ;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -205,6 +202,14 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
     public void onClick(View v) {
         if (v.getId() == R.id.restart) {
             recreate();
+        }
+        switch (v.getId()) {
+            case R.id.pcardCnt:
+            case R.id.pecardCnt:
+            case R.id.scardCnt:
+                Intent intent = new Intent(PlaceMainActivity.this, CardBoxActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

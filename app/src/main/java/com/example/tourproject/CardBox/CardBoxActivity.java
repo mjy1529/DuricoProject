@@ -14,6 +14,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -28,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tourproject.MainActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.UserManager;
@@ -47,6 +49,9 @@ public class CardBoxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_box);
 
+        Intent intent = getIntent();
+        int selected_fragment = intent.getIntExtra("selected_fragment", 2);
+
         doActionbar();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -59,28 +64,25 @@ public class CardBoxActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        View tab1 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(0);
+        View tab1 = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(0);
         tab1.setBackgroundResource(R.drawable.tab_layout);
-        View tab2 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(1);
+        View tab2 = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(1);
         tab2.setBackgroundResource(R.drawable.tab_layout3);
-        View tab3 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(2);
+        View tab3 = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(2);
         tab3.setBackgroundResource(R.drawable.tab_layout2);
 
-        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         cm.registerNetworkCallback(
                 builder.build(),
-                new ConnectivityManager.NetworkCallback()
-                {
+                new ConnectivityManager.NetworkCallback() {
                     @Override
-                    public void onAvailable( Network network )
-                    {
+                    public void onAvailable(Network network) {
                         //네트워크 연결됨
                     }
 
                     @Override
-                    public void onLost( Network network )
-                    {
+                    public void onLost(Network network) {
                         //네트워크 끊어짐
                         AlertDialog.Builder alert = new AlertDialog.Builder(CardBoxActivity.this);
                         alert.setTitle("네트워크");
@@ -98,12 +100,11 @@ public class CardBoxActivity extends AppCompatActivity {
                         });
                         try {
                             alert.show();
-                        }
-                        catch (WindowManager.BadTokenException e) {
+                        } catch (WindowManager.BadTokenException e) {
                             //use a log message
                         }
                     }
-                } );
+                });
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -131,7 +132,7 @@ public class CardBoxActivity extends AppCompatActivity {
         }
     }
 
-    public void doActionbar(){
+    public void doActionbar() {
         //액션바-------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -158,8 +159,11 @@ public class CardBoxActivity extends AppCompatActivity {
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        FragmentManager fm;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            this.fm = fm;
         }
 
         @Override
@@ -183,7 +187,20 @@ public class CardBoxActivity extends AppCompatActivity {
 
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
+            Intent intent = new Intent(CardBoxActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    public void onClick(View v) { //카드박스에서는 아무 이벤트도 일어나지 않도록
+        switch (v.getId()) {
+            case R.id.pcardCnt:
+            case R.id.pecardCnt:
+            case R.id.scardCnt:
+                break;
         }
     }
 }

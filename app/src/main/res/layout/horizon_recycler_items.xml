@@ -11,11 +11,12 @@
         android:layout_height="300dp"
         android:layout_margin="8dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/horizon_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
+            android:background="@android:color/transparent"
             android:src="@drawable/a_2" />
 
     </FrameLayout>

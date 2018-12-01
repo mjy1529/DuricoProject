@@ -301,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         actionBar.setCustomView(mCustomView);
 
         Button home = (Button) findViewById(R.id.home);
+        home.setVisibility(View.INVISIBLE);
         TextView pe = (TextView) findViewById(R.id.pecardCnt);
         pe.setText(String.valueOf(UserManager.getInstance().getOpen_people_card_cnt()));
         TextView s = (TextView) findViewById(R.id.scardCnt);
@@ -330,6 +331,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 intent = new Intent(MainActivity.this, CardBoxActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.pcardCnt:
+            case R.id.pecardCnt:
+            case R.id.scardCnt:
+                intent = new Intent(MainActivity.this, CardBoxActivity.class);
+                startActivity(intent);
+                break;
+
             /*case R.id.btnCollect:
                 AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
                 Check.setTitle("사용자 위치 재탐색")
@@ -402,7 +410,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
             finish();
         }
-
     };
 
     // 뒤로가기 두번 누를 시 앱 종료

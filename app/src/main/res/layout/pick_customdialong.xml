@@ -16,6 +16,7 @@
     <LinearLayout
         android:layout_width="249dp"
         android:layout_height="116dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/a_1"
         android:orientation="vertical">
 
@@ -29,6 +30,7 @@
             android:gravity="center"
             android:textColor="#6d6053"
             android:textSize="18sp" />
+
         <TextView
             android:id="@+id/cardContent"
             android:layout_width="190dp"

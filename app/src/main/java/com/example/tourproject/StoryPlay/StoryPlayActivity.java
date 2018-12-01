@@ -403,6 +403,7 @@ public class StoryPlayActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
                 .into(cardimage);
+        MyDialog.show();
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,7 +411,6 @@ public class StoryPlayActivity extends AppCompatActivity {
                 MyDialog.dismiss();
             }
         });
-        MyDialog.show();
     }
 
     //map2에 해당하는 스토리카드 팝업 띄우기
@@ -425,6 +425,7 @@ public class StoryPlayActivity extends AppCompatActivity {
         LinearLayout card = (LinearLayout) MyDialog.findViewById(R.id.pickview_noDesc);
         Toast.makeText(this, "gacha!", Toast.LENGTH_SHORT).show();
 
+        MyDialog.show();
         Glide.with(this)
                 .load(Application.getInstance().getBaseImageUrl() + cardData.getCard_image_url())
                 .into(cardImage);
@@ -434,7 +435,7 @@ public class StoryPlayActivity extends AppCompatActivity {
                 MyDialog.dismiss();
             }
         });
-        MyDialog.show();
+
     }
 
     //뽑은 카드 상태(close -> open) 업데이트
@@ -489,5 +490,13 @@ public class StoryPlayActivity extends AppCompatActivity {
                 Log.d("맵 상태 변경 실패", t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(MyDialog != null && MyDialog.isShowing()) {
+            MyDialog.dismiss();
+        }
     }
 }

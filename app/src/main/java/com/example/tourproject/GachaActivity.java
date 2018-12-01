@@ -30,8 +30,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.CardBox.CardData;
 import com.example.tourproject.Network.NetworkService;
+import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.StoryPlay.StoryPlayActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
@@ -455,6 +457,16 @@ public class GachaActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.pecardCnt:
+            case R.id.pcardCnt:
+            case R.id.scardCnt:
+                Intent intent = new Intent(GachaActivity.this, CardBoxActivity.class);
+                startActivity(intent);
+        }
     }
 
 }

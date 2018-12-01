@@ -90,7 +90,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                     public void onLost( Network network )
                     {
                         //네트워크 끊어짐
-                        AlertDialog.Builder alert = new AlertDialog.Builder(MapActivity.this);
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(MapActivity.this);
                         alert.setTitle("네트워크");
                         alert.setMessage("네트워크가 연결되지 않았습니다.");
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -102,6 +102,7 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                                 finish();
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);
+                                dialog.dismiss();
                             }
                         });
                         alert.show();
@@ -131,6 +132,12 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
             case R.id.imageView3:
                 position = 2;
                 break;
+            case R.id.pecardCnt:
+            case R.id.pcardCnt:
+            case R.id.scardCnt:
+                Intent intent = new Intent(MapActivity.this, CardBoxActivity.class);
+                startActivity(intent);
+                return;
         }
         p = position;
         setMap2(position);

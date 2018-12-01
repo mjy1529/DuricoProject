@@ -22,10 +22,11 @@
         android:layout_marginEnd="138dp"
         android:background="@drawable/r"
         android:fontFamily="@font/gulim050"
+        android:onClick="onClick"
         android:paddingLeft="36dp"
         android:paddingTop="7dp"
-        android:textColor="#ec776c"
-        android:text="12" />
+        android:text="12"
+        android:textColor="#ec776c" />
 
     <TextView
         android:id="@+id/scardCnt"
@@ -34,12 +35,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="69dp"
-        android:textColor="#6591d1"
         android:background="@drawable/g"
         android:fontFamily="@font/gulim050"
+        android:onClick="onClick"
         android:paddingLeft="36dp"
         android:paddingTop="7dp"
-        android:text="12" />
+        android:text="12"
+        android:textColor="#6591d1" />
 
     <TextView
         android:id="@+id/pcardCnt"
@@ -49,9 +51,10 @@
         android:layout_marginLeft="10dp"
         android:background="@drawable/y"
         android:fontFamily="@font/gulim050"
+        android:onClick="onClick"
         android:paddingLeft="36dp"
-        android:textColor="#ffce73"
         android:paddingTop="7dp"
-        android:text="12" />
+        android:text="12"
+        android:textColor="#ffce73" />
 
 </RelativeLayout>
