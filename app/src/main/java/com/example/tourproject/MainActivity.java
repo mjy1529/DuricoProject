@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         TedPermission.with(MainActivity.this)
             .setPermissionListener(permissionlistener)
             .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
-            .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
+            .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.\n")
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
             .check();
 
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         JobInfo jobInfo = new JobInfo.Builder(0, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPeriodic(1000 * 60 * 180)
+                .setPeriodic(1000 * 60 * 1)
                 .setPersisted(true)
                 .build();
         jobScheduler.schedule(jobInfo);
