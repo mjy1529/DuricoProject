@@ -1,5 +1,6 @@
 package com.example.tourproject.Collect;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -10,6 +11,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -20,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -76,11 +79,11 @@ public class MyJobService extends JobService {
         protected Void doInBackground(Void... voids) {
 
             Log.d("GPS전 TmapTest", "" + mapx + "," + mapy);
-            while(mapx == 0 || mapy == 0);
+            while (mapx == 0 || mapy == 0) ;
 
-            while(data.size() == 0 && data2.size() == 0);
+            while (data.size() == 0 && data2.size() == 0) ;
 
-            while(data.size() >= data2.size());
+            while (data.size() >= data2.size()) ;
             /*try {
                 Thread.sleep(1000 * 5);
             } catch (InterruptedException e) {
@@ -139,20 +142,22 @@ public class MyJobService extends JobService {
 
 
     }
-    public static String getTopApplicationClassName(Context context){
-        return ((ActivityManager.RunningTaskInfo)((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1).get(0)).topActivity.getClassName();
-    }
-    static void find(double longi, double lati, int contentTypeNum) {
-        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=300&contentTypeId="+contentTypeNum;
-        Log.i("함수들어갑니다.","MyJobService find()");
-        try {
-            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
-            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
 
-            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
-            XmlPullParser xpp= factory.newPullParser();
-            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
+    public static String getTopApplicationClassName(Context context) {
+        return ((ActivityManager.RunningTaskInfo) ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1).get(0)).topActivity.getClassName();
+    }
+
+    static void find(double longi, double lati, int contentTypeNum) {
+        String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
+                "&MobileOS=ETC&MobileApp=AppTest&mapX=" + longi + "&mapY=" + lati + "&radius=300&contentTypeId=" + contentTypeNum;
+        Log.i("함수들어갑니다.", "MyJobService find()");
+        try {
+            URL url = new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
+            InputStream is = url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new InputStreamReader(is, "UTF-8")); //inputstream 으로부터 xml 입력받기
 
             String tag;
             Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
@@ -162,49 +167,43 @@ public class MyJobService extends JobService {
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            if(contentTypeNum == 12)
+            if (contentTypeNum == 12)
                 data.clear();
             xpp.next();
             Listviewitem item1 = null;
-            int eventType= xpp.getEventType();
-            while( eventType != XmlPullParser.END_DOCUMENT ){
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 //Log.i("관련들어왔어요","ddddddd");
-                switch( eventType ){
+                switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
 
                     case XmlPullParser.START_TAG:
-                        tag= xpp.getName();//테그 이름 얻어오기
+                        tag = xpp.getName();//테그 이름 얻어오기
 
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-                        else if(tag.equals("addr1")){
+                        if (tag.equals("item")) ;// 첫번째 검색결과
+                        else if (tag.equals("addr1")) {
                             xpp.next();
                             addr = xpp.getText();
-                        }
-                        else if(tag.equals("firstimage")){
+                        } else if (tag.equals("firstimage")) {
                             xpp.next();
                             imagesrc = getImageBitmap(xpp.getText());
-                        }
-                        else if(tag.equals("contentid")){
+                        } else if (tag.equals("contentid")) {
                             xpp.next();
                             content_id = xpp.getText();
-                        }
-                        else if(tag.equals("contenttypeid")){
+                        } else if (tag.equals("contenttypeid")) {
                             xpp.next();
                             contentType_id = xpp.getText();
-                        }
-                        else if(tag.equals("mapx")){
+                        } else if (tag.equals("mapx")) {
                             xpp.next();
                             mapx = xpp.getText();
-                        }
-                        else if(tag.equals("mapy")){
+                        } else if (tag.equals("mapy")) {
                             xpp.next();
                             mapy = xpp.getText();
-                        }
-                        else if(tag.equals("title")){
+                        } else if (tag.equals("title")) {
                             xpp.next();
                             title = xpp.getText();
-                            if(title != null) {
+                            if (title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data.add(item1);
                                 imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
@@ -216,12 +215,12 @@ public class MyJobService extends JobService {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        tag= xpp.getName(); //테그 이름 얻어오기
-                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
+                        tag = xpp.getName(); //테그 이름 얻어오기
+                        if (tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
 
-                eventType= xpp.next();
+                eventType = xpp.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,17 +230,18 @@ public class MyJobService extends JobService {
 
         Log.i("find 함수 끝냈다", String.valueOf(data.size()));
     }//getXmlData method....
-    static void find2000(double longi, double lati, int contentTypeNum) {
-        String queryUrl="http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+key+
-                "&MobileOS=ETC&MobileApp=AppTest&mapX="+longi+"&mapY="+lati+"&radius=2000&contentTypeId="+contentTypeNum;
-        Log.i("함수들어갑니다.","MyJobService find2000()");
-        try {
-            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
-            InputStream is= url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
 
-            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
-            XmlPullParser xpp= factory.newPullParser();
-            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
+    static void find2000(double longi, double lati, int contentTypeNum) {
+        String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
+                "&MobileOS=ETC&MobileApp=AppTest&mapX=" + longi + "&mapY=" + lati + "&radius=2000&contentTypeId=" + contentTypeNum;
+        Log.i("함수들어갑니다.", "MyJobService find2000()");
+        try {
+            URL url = new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성
+            InputStream is = url.openStream(); //url위치로 입력스트림 연결 -> 에러에러에러
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new InputStreamReader(is, "UTF-8")); //inputstream 으로부터 xml 입력받기
 
             String tag;
             Bitmap imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
@@ -251,49 +251,43 @@ public class MyJobService extends JobService {
             String contentType_id = "";
             String mapx = "";
             String mapy = "";
-            if(contentTypeNum == 12)
+            if (contentTypeNum == 12)
                 data2.clear();
             xpp.next();
             Listviewitem item1 = null;
-            int eventType= xpp.getEventType();
-            while( eventType != XmlPullParser.END_DOCUMENT ){
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 //Log.i("관련들어왔어요","ddddddd");
-                switch( eventType ){
+                switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
 
                     case XmlPullParser.START_TAG:
-                        tag= xpp.getName();//테그 이름 얻어오기
+                        tag = xpp.getName();//테그 이름 얻어오기
 
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-                        else if(tag.equals("addr1")){
+                        if (tag.equals("item")) ;// 첫번째 검색결과
+                        else if (tag.equals("addr1")) {
                             xpp.next();
                             addr = xpp.getText();
-                        }
-                        else if(tag.equals("firstimage")){
+                        } else if (tag.equals("firstimage")) {
                             xpp.next();
                             imagesrc = getImageBitmap(xpp.getText());
-                        }
-                        else if(tag.equals("contentid")){
+                        } else if (tag.equals("contentid")) {
                             xpp.next();
                             content_id = xpp.getText();
-                        }
-                        else if(tag.equals("contenttypeid")){
+                        } else if (tag.equals("contenttypeid")) {
                             xpp.next();
                             contentType_id = xpp.getText();
-                        }
-                        else if(tag.equals("mapx")){
+                        } else if (tag.equals("mapx")) {
                             xpp.next();
                             mapx = xpp.getText();
-                        }
-                        else if(tag.equals("mapy")){
+                        } else if (tag.equals("mapy")) {
                             xpp.next();
                             mapy = xpp.getText();
-                        }
-                        else if(tag.equals("title")){
+                        } else if (tag.equals("title")) {
                             xpp.next();
                             title = xpp.getText();
-                            if(title != null) {
+                            if (title != null) {
                                 item1 = new Listviewitem(imagesrc, title, content_id, addr, contentType_id, mapx, mapy);
                                 data2.add(item1);
                                 imagesrc = getImageBitmap("https://s3.ap-northeast-2.amazonaws.com/smarttourapp/temp/noimage.png");
@@ -306,20 +300,21 @@ public class MyJobService extends JobService {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        tag= xpp.getName(); //테그 이름 얻어오기
-                        if(tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
+                        tag = xpp.getName(); //테그 이름 얻어오기
+                        if (tag.equals("item")) //buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
                             break;
                 }
 
-                eventType= xpp.next();
+                eventType = xpp.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
             //TODO Auto-generated catch blocke.printStackTrace();
-            Log.i("catch에러!",String.valueOf(data2.size()));
+            Log.i("catch에러!", String.valueOf(data2.size()));
         }
-        Log.i("find2 함수 끝냈다",String.valueOf(data2.size()));
+        Log.i("find2 함수 끝냈다", String.valueOf(data2.size()));
     }//getXmlData method....
+
     static private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
         try {
@@ -336,8 +331,9 @@ public class MyJobService extends JobService {
         }
         return bm;
     }
+
     public void setGps() {
-        Log.i("잡서비스 함수들어갑니다.","setGps");
+        Log.i("잡서비스 함수들어갑니다.", "setGps");
 
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -348,6 +344,16 @@ public class MyJobService extends JobService {
         String provider = lm.getBestProvider(criteria, true);
 
         //String provider = LocationManager.PASSIVE_PROVIDER;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         lm.requestLocationUpdates(provider, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
                 1000 * 60 * 180, // 통지사이의 최소 시간간격 (miliSecond)
                 10, // 통지사이의 최소 변경거리 (m)
