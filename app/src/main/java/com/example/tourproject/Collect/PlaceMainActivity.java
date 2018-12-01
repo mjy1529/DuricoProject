@@ -2,7 +2,12 @@ package com.example.tourproject.Collect;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.R;
 import com.example.tourproject.Util.UserManager;
@@ -44,7 +51,8 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_place_main);
         com.example.tourproject.Collect.MyJobService.bAppRunned = true;
 
-        MainActivity.progressDialog.dismiss();
+        if(MainActivity.progressDialog != null)
+            MainActivity.progressDialog.dismiss();
         doActionbar();
 
         Button restart = (Button) findViewById(R.id.restart);
@@ -109,6 +117,45 @@ public class PlaceMainActivity extends AppCompatActivity implements AdapterView.
                 startActivity(intent);
             }
         });
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        cm.registerNetworkCallback(
+                builder.build(),
+                new ConnectivityManager.NetworkCallback()
+                {
+                    @Override
+                    public void onAvailable( Network network )
+                    {
+                        //네트워크 연결됨
+                    }
+
+                    @Override
+                    public void onLost( Network network )
+                    {
+                        //네트워크 끊어짐
+                        android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(PlaceMainActivity.this);
+                        alert.setTitle("네트워크");
+                        alert.setMessage("네트워크가 연결되지 않았습니다.");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = getBaseContext().getPackageManager().
+                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+                        });
+                        try {
+                            alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                } );
     }
     public void clickEvent(View v) {
         if (v.getId() == R.id.home) {
