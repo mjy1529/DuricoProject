@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TourProject</string>
+    <string name="app_name">코스맵스</string>
     <string name="button_cancel">취소</string>
     <string name="button_start">시작하기</string>
 
