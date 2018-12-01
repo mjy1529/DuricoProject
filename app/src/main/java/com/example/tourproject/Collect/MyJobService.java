@@ -80,6 +80,7 @@ public class MyJobService extends JobService implements
     static ArrayList<Listviewitem> data2 = new ArrayList<>();
     static String key = "1KIDanqdFKdfoDXR8r1aCMlvUc6paBjZnI2nAcjLNSv5E7M8Gidmsy%2F9jtYXRbRsPr8sLoQmb7pOyNZS28Af3Q%3D%3D";
     public static boolean bAppRunned = false;
+    public static boolean finished = false;
 
     private GoogleApiClient mGoogleApiClient = null;
     private GoogleMap mGoogleMap = null;
@@ -88,8 +89,8 @@ public class MyJobService extends JobService implements
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
-    private static final int UPDATE_INTERVAL_MS = 60000;  // 5초_1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 60000; // 1초_0.5초
+    private static final int UPDATE_INTERVAL_MS = 10800000;  // 5초_1초 60000이 1분
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 10800000; // 1초_0.5초
 
     private AppCompatActivity mActivity;
     boolean askPermissionOnceAgain = false;
@@ -106,6 +107,7 @@ public class MyJobService extends JobService implements
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         this.params = jobParameters;
+        finished = false;
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -199,6 +201,7 @@ public class MyJobService extends JobService implements
                 //listView = (ListView)findViewById(R.id.list);
                 Log.i("잡서비스 리스너스레드 mapx",Double.toString(mapx));
                 Log.i("잡서비스 리스너스레드 mapy",Double.toString(mapy));
+                finished = false;
                 find(mapx, mapy, 12);
                 find(mapx, mapy, 14);
                 find2000(mapx, mapy, 12);
@@ -553,6 +556,8 @@ public class MyJobService extends JobService implements
             Log.i("catch에러!", String.valueOf(data2.size()));
         }
         Log.i("find2 함수 끝냈다", String.valueOf(data2.size()));
+        if(contentTypeNum == 14)
+            finished = true;
     }//getXmlData method....
 
     static private Bitmap getImageBitmap(String url) {
