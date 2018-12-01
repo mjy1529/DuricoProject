@@ -2,6 +2,7 @@ package com.example.tourproject;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public static Context mContext;
 
     public static final String TAG = "MainActivity";
+
+    public static ProgressDialog progressDialog;
 
     @SuppressLint("ClickableViewAccessibility")
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -186,6 +189,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     }
     public void doCollect(){
         AlertDialog.Builder Check = new AlertDialog.Builder(MainActivity.this);
+        Check.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                progressDialog = ProgressDialog.show(MainActivity.this,"잠시 기다려주세요", "위치를 찾고있습니다.", true);
+                progressDialog.onStart();
+            }
+        });
         Check.setTitle("사용자 위치 재탐색")
                 .setMessage("현재 위치를 탐색하시겠습니까?\n위치 탐색 후 관광지 내역을 재구성합니다.\n선택 후 잠시만 기다려주십시오 :-)")
                 .setPositiveButton("탐색하여 관광지 재구성", new DialogInterface.OnClickListener() {
@@ -210,13 +220,15 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
-                        startActivity(intent);
+                        new Handler().postDelayed(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                Intent intent = new Intent(MainActivity.this, PlaceMainActivity.class);
+                                startActivity(intent);
+                            }
+                        }, 2000);// 0.5초 정도 딜레이를 준 후 시작
                     }
                 });
         Check.setCancelable(true);
