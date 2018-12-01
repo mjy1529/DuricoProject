@@ -45,6 +45,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.http.HEAD;
 
@@ -68,12 +69,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TedPermission.with(MainActivity.this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
-                .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
-                .check();
+//        TedPermission.with(MainActivity.this)
+//                .setPermissionListener(permissionlistener)
+//                .setRationaleMessage("수집 기능을 위해서는 위치 권한이 필요합니다.")
+//                .setDeniedMessage("위치 수집을 원하신다면\n[설정] > [권한] 에서 위치 권한을 허용해 주십시오.")
+//                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE)
+//                .check();
 
         mContext = this;
 
@@ -327,19 +328,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 break;*/
         }
     }
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            //Toast.makeText(MainActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
-        }
 
-        @Override
-        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-            //Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
+//    PermissionListener permissionlistener = new PermissionListener() {
+//        @Override
+//        public void onPermissionGranted() {
+//            //Toast.makeText(MainActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onPermissionDenied(List<String> deniedPermissions) {
+//            //Toast.makeText(MainActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
-
-    };
     // 뒤로가기 두번 누를 시 앱 종료
     @Override
     public void onBackPressed() {

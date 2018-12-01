@@ -10,17 +10,25 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.tourproject.CardBox.CardResult;
+import com.example.tourproject.CardBox.OpenPeopleCard;
+import com.example.tourproject.CardBox.OpenStoryCard;
+import com.example.tourproject.CardBox.PlaceResult;
 import com.example.tourproject.Map.Map1Result;
 import com.example.tourproject.Map.Map2Data;
 import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.Map.UserMap2Result;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.StoryList.StoryResult;
+import com.example.tourproject.StoryPlay.StoryPlayResult;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.CardManager;
 import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Util.StoryListManager;
+import com.example.tourproject.Util.StoryPlayManager;
+import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
 
@@ -33,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
 
     Handler handler;
 
+    private UserManager userManager;
     private CardManager cardManager;
     private MapManager mapManager;
     private StoryListManager storyListManager;
@@ -49,12 +58,28 @@ public class SplashActivity extends AppCompatActivity {
         handler = new Handler();
         networkService = Application.getInstance().getNetworkService();
 
+        userManager = UserManager.getInstance();
+        cardManager = CardManager.getInstance();
+        mapManager = MapManager.getInstance();
+        storyListManager = StoryListManager.getInstance();
+
         if(checkInternet()) {
-            initManager();
-            //카드, 맵1, 맵2, 상세이야기는 여기서 받아오기
             setStoryListManager();
             getCardList();
             setMapDataManager();
+            getUserMap2State(userManager.getUserId());
+
+            getOpenPeopleCardIdx(userManager.getUserId());
+            getOpenStoryCardIdx(userManager.getUserId());
+            getPlaceCard(userManager.getUserId());
+            getStoryPlayDataList();
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(SplashActivity.this, "서버와 통신중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
+                }
+            }, 3000);
 
             handler.postDelayed(new Runnable() {
                 @Override
@@ -63,7 +88,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-            }, 5000);
+            }, 8000);
 
         } else {
             handler.postDelayed(new Runnable() {
@@ -101,17 +126,6 @@ public class SplashActivity extends AppCompatActivity {
                 });
         alert.setCancelable(false);
         alert.show();
-    }
-
-    public void initManager() {
-        cardManager = CardManager.getInstance();
-        cardManager.initialize();
-
-        mapManager = MapManager.getInstance();
-        mapManager.initialize();
-
-        storyListManager = StoryListManager.getInstance();
-        storyListManager.initialize();
     }
 
     public void getCardList() {
@@ -199,6 +213,104 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<StoryResult> call, Throwable t) {
                 Log.d(TAG, "STORY LIST 받아오기 실패");
+            }
+        });
+    }
+
+    public void getStoryPlayDataList() {
+        final StoryPlayManager storyPlayManager = StoryPlayManager.getInstance();
+        storyPlayManager.initialize();
+
+        Call<StoryPlayResult> request = networkService.getStoryPlayList();
+        request.enqueue(new Callback<StoryPlayResult>() {
+            @Override
+            public void onResponse(Call<StoryPlayResult> call, Response<StoryPlayResult> response) {
+                if(response.isSuccessful()) {
+                    StoryPlayResult storyPlayResult = response.body();
+                    storyPlayManager.setStoryPlayList(storyPlayResult.storyPlay);
+                    Log.d(TAG, "STORY PLAY DATA 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StoryPlayResult> call, Throwable t) {
+                Log.d(TAG, "STORY PLAY DATA 받아오기 실패 " + t.getMessage());
+            }
+        });
+    }
+
+    public void getPlaceCard(String user_id) {
+        Call<PlaceResult> request = networkService.getPlaceCard(user_id);
+        request.enqueue(new Callback<PlaceResult>() {
+            @Override
+            public void onResponse(Call<PlaceResult> call, Response<PlaceResult> response) {
+                if(response.isSuccessful()) {
+                    PlaceResult placeResult = response.body();
+                    UserManager.getInstance().setPlaceCardList(placeResult.placeCard);
+                    Log.d(TAG, "PLACE CARD 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceResult> call, Throwable t) {
+                Log.d(TAG, "PLACE CARD 받아오기 실패 " + t.getMessage());
+            }
+        });
+    }
+
+    public void getOpenPeopleCardIdx(String user_id) {
+        Call<OpenPeopleCard> request = networkService.getOpenPeopleCard(user_id);
+        request.enqueue(new Callback<OpenPeopleCard>() {
+            @Override
+            public void onResponse(Call<OpenPeopleCard> call, Response<OpenPeopleCard> response) {
+                if(response.isSuccessful()) {
+                    OpenPeopleCard openPeopleCard = response.body();
+                    userManager.setOpenPeopleCardList(openPeopleCard.openCardList);
+                    Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenPeopleCard> call, Throwable t) {
+                Log.d(TAG, "OPEN PEOPLE CARD LIST 받아오기 실패 " + t.getMessage());
+            }
+        });
+    }
+
+    public void getOpenStoryCardIdx(String user_id) {
+        Call<OpenStoryCard> request = networkService.getOpenStoryCard(user_id);
+        request.enqueue(new Callback<OpenStoryCard>() {
+            @Override
+            public void onResponse(Call<OpenStoryCard> call, Response<OpenStoryCard> response) {
+                if(response.isSuccessful()) {
+                    OpenStoryCard openStoryCard = response.body();
+                    userManager.setOpenStoryCardList(openStoryCard.openCardList);
+                    Log.d(TAG, "OPEN STORY CARD LIST 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenStoryCard> call, Throwable t) {
+                Log.d(TAG, "OPEN STORY CARD LIST 받아오기 실패 " + t.getMessage());
+            }
+        });
+    }
+
+    public void getUserMap2State(String user_id) {
+        Call<UserMap2Result> request = networkService.getMap2State(user_id);
+        request.enqueue(new Callback<UserMap2Result>() {
+            @Override
+            public void onResponse(Call<UserMap2Result> call, Response<UserMap2Result> response) {
+                if(response.isSuccessful()) {
+                    UserMap2Result userMap2Result = response.body();
+                    userManager.setMap2StateList(userMap2Result.map2State);
+                    Log.d(TAG, "MAP2 STATE 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserMap2Result> call, Throwable t) {
+                Log.d(TAG, "MAP2 STATE 받아오기 실패 " + t.getMessage());
             }
         });
     }
