@@ -109,6 +109,8 @@ public class GachaActivity extends AppCompatActivity{
                     resetTimer();
                     startTimer();
                     MyCustomAlertDialog();
+                }else{
+                    Toast.makeText(GachaActivity.this, "24시간에 한번만 뽑기가 가능합니다!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -192,13 +194,13 @@ public class GachaActivity extends AppCompatActivity{
         }.start();
 
         mTimerRunning = true;
-        updateButtons();
+        //updateButtons();
     }
 
     private void resetTimer(){
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
-        updateButtons();
+        //updateButtons();
     }
 
     private void updateCountDownText(){
@@ -263,7 +265,7 @@ public class GachaActivity extends AppCompatActivity{
                 mTimerRunning = prefs.getBoolean("timerRunning", false);
 
                 updateCountDownText();
-                updateButtons();
+                //updateButtons();
 
                 if (mTimerRunning) {
                     EndTime = prefs.getLong("endTime", 0);
