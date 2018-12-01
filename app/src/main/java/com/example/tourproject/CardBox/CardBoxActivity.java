@@ -1,14 +1,22 @@
 package com.example.tourproject.CardBox;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -56,6 +65,45 @@ public class CardBoxActivity extends AppCompatActivity {
         tab2.setBackgroundResource(R.drawable.tab_layout3);
         View tab3 = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(2);
         tab3.setBackgroundResource(R.drawable.tab_layout2);
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        cm.registerNetworkCallback(
+                builder.build(),
+                new ConnectivityManager.NetworkCallback()
+                {
+                    @Override
+                    public void onAvailable( Network network )
+                    {
+                        //네트워크 연결됨
+                    }
+
+                    @Override
+                    public void onLost( Network network )
+                    {
+                        //네트워크 끊어짐
+                        AlertDialog.Builder alert = new AlertDialog.Builder(CardBoxActivity.this);
+                        alert.setTitle("네트워크");
+                        alert.setMessage("네트워크가 연결되지 않았습니다.");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = getBaseContext().getPackageManager().
+                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+                        });
+                        try {
+                            alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                } );
     }
 
     public static class PlaceholderFragment extends Fragment {

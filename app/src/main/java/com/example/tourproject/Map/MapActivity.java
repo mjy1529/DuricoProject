@@ -1,8 +1,14 @@
 package com.example.tourproject.Map;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.MainActivity;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.MapManager;
@@ -27,6 +34,7 @@ import com.example.tourproject.Collect.MyJobService;
 import com.example.tourproject.Util.UserManager;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +73,40 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
         setMap(story_id);
         map1Data = selectedStoryMap.get(0);
         updateMap2(b);
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        cm.registerNetworkCallback(
+                builder.build(),
+                new ConnectivityManager.NetworkCallback()
+                {
+                    @Override
+                    public void onAvailable( Network network )
+                    {
+                        //네트워크 연결됨
+                    }
+
+                    @Override
+                    public void onLost( Network network )
+                    {
+                        //네트워크 끊어짐
+                        AlertDialog.Builder alert = new AlertDialog.Builder(MapActivity.this);
+                        alert.setTitle("네트워크");
+                        alert.setMessage("네트워크가 연결되지 않았습니다.");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = getBaseContext().getPackageManager().
+                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+                        });
+                        alert.show();
+                    }
+                } );
     }
 
     public void onBtn(int position) {
