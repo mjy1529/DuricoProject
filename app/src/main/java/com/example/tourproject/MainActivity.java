@@ -36,11 +36,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.example.tourproject.Map.Map1Result;
+import com.example.tourproject.Map.Map2Data;
+import com.example.tourproject.Map.Map2Result;
+import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.Util.Application;
 import com.example.tourproject.Util.BackPressCloseHandler;
 
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.StoryList.StoryListActivity;
+import com.example.tourproject.Util.MapManager;
 import com.example.tourproject.Util.UserManager;
 import com.example.tourproject.Collect.Listviewitem;
 import com.example.tourproject.Collect.MyJobService;
@@ -51,6 +56,9 @@ import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener, Button.OnTouchListener {
@@ -70,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public static final String TAG = "MainActivity";
 
     public static ProgressDialog progressDialog;
+    NetworkService networkService;
+    MapManager mapManager;
 
     @SuppressLint("ClickableViewAccessibility")
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -93,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         ComponentName componentName = new ComponentName(getApplicationContext(), MyJobService.class);
 
         doActionbar();
+
+        networkService = Application.getInstance().getNetworkService();
+        mapManager = MapManager.getInstance();
+        setMapDataManager();
 
         btn0 = (ImageButton) findViewById(R.id.btnCard);
 
@@ -439,5 +453,46 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         s.setText(String.valueOf(UserManager.getInstance().getOpen_story_card_cnt()));
         TextView p = (TextView) findViewById(R.id.pcardCnt);
         p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
+    }
+
+    public void setMapDataManager() {
+        Call<Map1Result> request = networkService.getAllMap1List();
+        request.enqueue(new Callback<Map1Result>() {
+            @Override
+            public void onResponse(Call<Map1Result> call, Response<Map1Result> response) {
+                if (response.isSuccessful()) {
+                    Map1Result map1Result = response.body();
+                    mapManager.setMapList(map1Result.map1);
+                    for (int i = 0; i < mapManager.getMapList().size(); i++) {
+                        getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
+                    }
+                    Log.d(TAG, "MAP 받아오기 성공");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map1Result> call, Throwable t) {
+                Log.d(TAG, "MAP 받아오기 실패");
+            }
+        });
+    }
+
+    public void getMap2(final String map1_id) {
+        Call<Map2Result> request = networkService.getMap2List(map1_id);
+        request.enqueue(new Callback<Map2Result>() {
+            @Override
+            public void onResponse(Call<Map2Result> call, Response<Map2Result> response) {
+                if (response.isSuccessful()) {
+                    Map2Result map2Result = response.body();
+                    ArrayList<Map2Data> map2List = map2Result.map2;
+
+                    mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map2Result> call, Throwable t) {
+            }
+        });
     }
 }
