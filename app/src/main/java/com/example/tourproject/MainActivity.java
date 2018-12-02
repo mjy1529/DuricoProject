@@ -19,6 +19,7 @@ import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -170,11 +171,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-                                dialog.dismiss();
+                                ActivityCompat.finishAffinity(MainActivity.this);
                             }
                         });
                         try {
