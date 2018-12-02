@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tourproject.CardBox.CardBoxActivity;
+import com.example.tourproject.Collect.PlaceMainActivity;
 import com.example.tourproject.R;
+import com.example.tourproject.SplashActivity;
 import com.example.tourproject.Util.StoryListManager;
 import com.example.tourproject.Util.UserManager;
 
@@ -70,12 +73,7 @@ public class StoryListActivity extends AppCompatActivity {
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = getBaseContext().getPackageManager().
-                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
+                                ActivityCompat.finishAffinity(StoryListActivity.this);
                             }
                         });
                         try {
