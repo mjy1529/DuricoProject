@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -172,12 +173,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = getBaseContext().getPackageManager().
-                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
+                                ActivityCompat.finishAffinity(MainActivity.this);
                             }
                         });
                         try {

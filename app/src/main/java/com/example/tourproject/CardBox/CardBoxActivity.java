@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -29,7 +30,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tourproject.Collect.PlaceMainActivity;
 import com.example.tourproject.MainActivity;
+import com.example.tourproject.Map.MapActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.R;
 import com.example.tourproject.SplashActivity;
@@ -91,15 +94,12 @@ public class CardBoxActivity extends AppCompatActivity {
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-                                dialog.dismiss();
+                                ActivityCompat.finishAffinity(CardBoxActivity.this);
                             }
                         });
                         try {
-                            alert.show();
+                            if(alert != null)
+                                alert.show();
                         } catch (WindowManager.BadTokenException e) {
                             //use a log message
                         }

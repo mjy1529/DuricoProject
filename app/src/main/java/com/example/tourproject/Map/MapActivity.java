@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -106,14 +108,16 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                                 finish();
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);*/
-                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-                                dialog.dismiss();
+                                ActivityCompat.finishAffinity(MapActivity.this);
                             }
                         });
-                        alert.show();
+                        try {
+                            if(alert != null)
+                                alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
                     }
                 } );
     }

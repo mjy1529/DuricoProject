@@ -13,6 +13,7 @@ import android.net.NetworkRequest;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.tourproject.CardBox.CardBoxActivity;
 import com.example.tourproject.CardBox.CardData;
+import com.example.tourproject.Map.MapActivity;
 import com.example.tourproject.Network.NetworkService;
 import com.example.tourproject.StoryList.StoryListActivity;
 import com.example.tourproject.StoryPlay.StoryPlayActivity;
@@ -145,12 +147,7 @@ public class GachaActivity extends AppCompatActivity{
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent i = getBaseContext().getPackageManager().
-                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
+                                ActivityCompat.finishAffinity(GachaActivity.this);
                             }
                         });
                         try {
