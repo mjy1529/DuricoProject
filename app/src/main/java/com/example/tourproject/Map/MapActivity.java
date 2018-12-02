@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -110,7 +111,13 @@ public class MapActivity extends AppCompatActivity implements ImageButton.OnClic
                                 ActivityCompat.finishAffinity(MapActivity.this);
                             }
                         });
-                        alert.show();
+                        try {
+                            if(alert != null)
+                                alert.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
                     }
                 } );
     }

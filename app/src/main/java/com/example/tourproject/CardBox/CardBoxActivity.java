@@ -98,7 +98,8 @@ public class CardBoxActivity extends AppCompatActivity {
                             }
                         });
                         try {
-                            alert.show();
+                            if(alert != null)
+                                alert.show();
                         } catch (WindowManager.BadTokenException e) {
                             //use a log message
                         }
