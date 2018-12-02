@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         networkService = Application.getInstance().getNetworkService();
         mapManager = MapManager.getInstance();
-        setMapDataManager();
+
 
         btn0 = (ImageButton) findViewById(R.id.btnCard);
 
@@ -454,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         p.setText(String.valueOf(UserManager.getInstance().getPlace_card_cnt()));
     }
 
+    /*
     public void setMapDataManager() {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -478,6 +479,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
             }
         }.execute();
+
 
 //        Call<Map1Result> request = networkService.getAllMap1List();
 //        try {
@@ -510,7 +512,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 //            }
 //        });
     }
-
+*/
+    /*
     public void getMap2(final String map1_id) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -557,4 +560,5 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 //            }
 //        });
     }
+    */
 }
