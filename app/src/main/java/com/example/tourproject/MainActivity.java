@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +54,7 @@ import com.example.tourproject.Collect.PlaceMainActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -457,43 +459,106 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     }
 
     public void setMapDataManager() {
-        Call<Map1Result> request = networkService.getAllMap1List();
-        request.enqueue(new Callback<Map1Result>() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            public void onResponse(Call<Map1Result> call, Response<Map1Result> response) {
-                if (response.isSuccessful()) {
-                    Map1Result map1Result = response.body();
+            protected String doInBackground(Void... voids) {
+                Call<Map1Result> request = networkService.getAllMap1List();
+                try {
+                    Map1Result map1Result = request.execute().body();
                     mapManager.setMapList(map1Result.map1);
                     for (int i = 0; i < mapManager.getMapList().size(); i++) {
                         getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
                     }
                     Log.d(TAG, "MAP 받아오기 성공");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                return null;
             }
 
             @Override
-            public void onFailure(Call<Map1Result> call, Throwable t) {
-                Log.d(TAG, "MAP 받아오기 실패");
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
             }
-        });
+        }.execute();
+
+//        Call<Map1Result> request = networkService.getAllMap1List();
+//        try {
+//            Map1Result map1Result = request.execute().body();
+//            mapManager.setMapList(map1Result.map1);
+//            for (int i = 0; i < mapManager.getMapList().size(); i++) {
+//                getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
+//            }
+//            Log.d(TAG, "MAP 받아오기 성공");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        request.enqueue(new Callback<Map1Result>() {
+//            @Override
+//            public void onResponse(Call<Map1Result> call, Response<Map1Result> response) {
+//                if (response.isSuccessful()) {
+//                    Map1Result map1Result = response.body();
+//                    mapManager.setMapList(map1Result.map1);
+//                    for (int i = 0; i < mapManager.getMapList().size(); i++) {
+//                        getMap2(mapManager.getMapList().get(i).getMap_id()); //map_id로 map2 검색
+//                    }
+//                    Log.d(TAG, "MAP 받아오기 성공");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Map1Result> call, Throwable t) {
+//                Log.d(TAG, "MAP 받아오기 실패");
+//            }
+//        });
     }
 
     public void getMap2(final String map1_id) {
-        Call<Map2Result> request = networkService.getMap2List(map1_id);
-        request.enqueue(new Callback<Map2Result>() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            public void onResponse(Call<Map2Result> call, Response<Map2Result> response) {
-                if (response.isSuccessful()) {
-                    Map2Result map2Result = response.body();
+            protected String doInBackground(Void... voids) {
+                Call<Map2Result> request = networkService.getMap2List(map1_id);
+                try {
+                    Map2Result map2Result = request.execute().body();
                     ArrayList<Map2Data> map2List = map2Result.map2;
-
                     mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                return null;
             }
-
             @Override
-            public void onFailure(Call<Map2Result> call, Throwable t) {
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
             }
-        });
+        }.execute();
+
+//        Call<Map2Result> request = networkService.getMap2List(map1_id);
+//        try {
+//            Map2Result map2Result = request.execute().body();
+//            ArrayList<Map2Data> map2List = map2Result.map2;
+//            mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        request.enqueue(new Callback<Map2Result>() {
+//            @Override
+//            public void onResponse(Call<Map2Result> call, Response<Map2Result> response) {
+//                if (response.isSuccessful()) {
+//                    Map2Result map2Result = response.body();
+//                    ArrayList<Map2Data> map2List = map2Result.map2;
+//
+//                    mapManager.getMapList().get(Integer.parseInt(map1_id)).setMap2List(map2List);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Map2Result> call, Throwable t) {
+//            }
+//        });
     }
 }
